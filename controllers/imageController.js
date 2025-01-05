@@ -366,7 +366,7 @@ exports.productPublieVendor = async (req, res) => {
       });
     } catch (err) {
       console.error("Erreur lors de la publication du produit:", err);
-      res.status(500).json({ message: "Une erreur est survenue lors de la publication du produit." });
+      res.status(500).json({ message: "Une erreur est survenue lors de la publication du produit.", err });
     }
   });
 };
