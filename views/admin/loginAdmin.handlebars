@@ -1,0 +1,154 @@
+<html><head><base href="/" />
+<meta charset="UTF-8">
+<title>Page de Connexion</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(45deg, #6b48ff, #1cb5e0);
+}
+
+.login-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 400px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #6b48ff;
+}
+
+button {
+    width: 100%;
+    padding: 0.8rem;
+    background: #6b48ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #5536cc;
+}
+
+.error {
+    color: #ff3333;
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+    display: none;
+}
+</style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Connexion</h1>
+        <form id="loginForm" onsubmit="return validateForm(event)">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+                <div class="error" id="emailError">Veuillez entrer un email valide</div>
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" required>
+                <div class="error" id="passwordError">Le mot de passe doit contenir au moins 6 caractères</div>
+            </div>
+            <button type="submit">Se connecter</button>
+        </form>
+    </div>
+
+<script>
+async function validateForm(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    
+    // Réinitialisation des messages d'erreur
+    emailError.style.display = 'none';
+    passwordError.style.display = 'none';
+    
+    let isValid = true;
+    
+    // Validation de l'email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        emailError.style.display = 'block';
+        isValid = false;
+    }
+    
+    // Validation du mot de passe
+    if (password.length < 6) {
+        passwordError.style.display = 'block';
+        isValid = false;
+    }
+    
+    if (isValid) {
+        try {
+            const response = await fetch('/deliver/api/loginAdmin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                alert(`Erreur: ${errorData.message || 'Une erreur est survenue'}`);
+            } else {
+                const data = await response.json();
+                console.log(`Succès: ${data.message}`);
+                // Vous pouvez rediriger l'utilisateur ici
+                window.location.href = '/deliver/admin/connect/viewUserAdmin';
+            }
+        } catch (error) {
+            console.error('Erreur réseau ou serveur:', error);
+            alert('Erreur réseau : impossible de se connecter au serveur.');
+        }
+    }
+}
+</script>
+</body></html>

@@ -1,0 +1,130 @@
+body{
+    width: 100vw;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    /* min-width: 350px; */
+    overflow-x:hidden ;
+}
+
+.header{
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+.active-tab {
+    background-color: #5BC0BE;
+    color: white;
+}
+.active-tab:hover {
+    background-color: #5bc0bece;
+    color: white;
+}
+.sidebar {
+    min-height: calc(100vh - 64px);
+    transition: all 0.3s ease;
+}
+
+.sidebar ul li{
+    /* min-width: 180px; */
+    width: 100%;
+}
+
+.back-arrow-container {
+    cursor: pointer;
+    display: inline-block;
+    margin: 5px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    width:fit-content;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    font-size: 15px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.back-arrow-container div{
+    width: 20px;
+}
+
+.back-arrow-container:hover {
+    background-color: #e0e0e0;
+}
+
+.back-arrow {
+    border: solid #4a4a4a;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 10px;
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+
+.table-responsive{
+    width: 100%;
+    overflow: scroll;
+}
+
+.paddingD{
+    padding: 20px;
+}
+
+.paddingDtext{
+    padding: 20px;
+    font-size: 15px;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: -100%;
+        z-index: 50;
+        width: 80%;
+        max-width: 300px;
+    }
+    .sidebar.active {
+        left: 0;
+    }
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+    }
+    .overlay.active {
+        display: block;
+    }
+
+    .wrap{
+        flex-wrap: wrap;
+    }
+    .relative{
+        margin-top: 7px;
+    }
+
+    .width{
+        width: 95vw;
+        margin-left: 0px;
+        margin: auto 5px;
+    }
+
+    table thead tr{
+        width: 100%;
+    }
+
+    .overflowScroll{
+        padding: 5px;
+        overflow: scroll;
+    }
+    
+}

@@ -1,0 +1,674 @@
+
+        <style>
+            .divUpdate{
+                border: 1px solid #5bc0be;
+                transition: all 500ms ease;
+                position: relative;
+            }
+
+            .security{
+                border: 1px solid #5bc0be;
+                transition: all 500ms ease;
+                position: relative;
+            }
+            .erreur{
+                border: 1px solid red;
+            }
+
+            .succes{
+                background-color: rgb(159, 235, 159);
+                border: 1px solid green;
+            }
+
+            .messageSucces{
+                position: absolute;
+                top: 5px;
+                right: 10px;
+                color: green;
+                border: 1px solid green;
+                padding: 5px;
+                background-color: rgb(45, 224, 45);
+                border-radius: 25px;
+                transition: all 500ms ease;
+            }
+            .messageError{
+                position: absolute;
+                top: 5px;
+                right: 10px;
+                color: red;
+                border: 1px solid red;
+                padding: 5px;
+                background-color: rgb(240, 153, 153);
+                border-radius: 25px;
+                transition: all 500ms ease;
+            }
+
+            .message{
+                display: flex;
+            }
+
+            .messagePassword{
+                display: flex;
+            }
+
+            .btnSauvegarde{
+                text-align: center;
+            }
+
+            .btnSauvegarde button{
+                background-color: #5bc0be;
+                cursor: pointer;
+            }
+
+            .btnSauvegarde button:hover{
+                background-color: #418f8e;
+                cursor: pointer;
+            }
+              .profile-container {
+                display: flex;
+                gap: 2rem;
+            }
+
+            .preference{
+                outline: #5bc0be;
+            }
+             .profile-sidebar {
+                display:flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                border-radius: 10px;
+                padding: 2rem;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                text-align: center;
+                border: 1px solid #5bc0be;
+                text-align: center;
+            }
+
+            .border{
+                border: 1px solid #5bc0be;
+            }
+            
+    .profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    cursor: pointer;
+  }
+  
+  .marginProfil{
+    margin: 5px;
+  }
+  /* Styles pour la prévisualisation de l'image */
+  .image-preview-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1001;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .image-preview-content {
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .image-preview-content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .image-preview-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  
+  .image-preview-buttons button {
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .image-preview-buttons button.confirm {
+    background-color: #5bc0be;
+    color: white;
+  }
+
+  .image-preview-buttons button.cancel {
+    background-color: #ccc;
+    color: black;
+  }
+  
+  #preview-image{
+    max-height: 450px;
+    max-width:300px ;
+  }
+
+.divPhoto{
+    min-width: 300px;
+    
+}
+            @media (max-width: 768px) {
+                .profile-container {
+                flex-direction: column;
+                }
+                
+                .profile-sidebar, .profile-content {
+                width: 100%;
+                }
+            }
+        </style>
+        <!-- Main Content -->
+        <main class="flex-1 ml-0 md:ml-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Informations Personnelles -->
+                <div class="md:col-span-2">
+                    <div class="divUpdate bg-white rounded-lg shadow p-6 marginProfil">
+                        <div class="message">
+                            
+                        </div>
+                        <h2 class="text-xl font-semibold mb-6">Informations Personnelles</h2>
+                        <form class="space-y-6">
+                            <div class="divUpdateUser grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Nom</label>
+                                    <input type="text" name="companyName " value="{{seller.companyName}}" class="inputUpdate mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                                    <input type="email" name="email" value="{{seller.email}}" class="inputUpdate mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Téléphone</label>
+                                    <input type="tel" name="phone" value="{{seller.phone}}" class="inputUpdate mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Adresse</label>
+                                <input type="text" name="companyAddress" value="{{seller.companyAddress}}" class="inputUpdate mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                            </div>
+                            <div class="btnSauvegarde">
+                                <button type="submit" class="btnUpdateVendor bg-indigo-600 text-white px-4 py-2 rounded-lg ">
+                                    Sauvegarder les modifications
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Sécurité -->
+                    <div class="security bg-white rounded-lg shadow p-6 mt-6 marginProfil">
+                        <div class="messagePassword"></div>
+                        <h2 class="text-xl font-semibold mb-6">Sécurité</h2>
+                        <form class="space-y-6">
+                            <div class="divChangePassword space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Mot de passe actuel</label>
+                                    <input type="password" name="passwordOld" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Nouveau mot de passe</label>
+                                    <input type="password" name="password " class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Confirmer le nouveau mot de passe</label>
+                                    <input type="password" name="confirmPassword " class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                            </div>
+                            <div class="btnSauvegarde">
+                                <button type="submit" class="btnUpdateVendor changePasswordVendor bg-indigo-600 text-white px-4 py-2 rounded-lg ">
+                                    Changer le mot de passe
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                        <!-- Photo de profil et Préférences -->
+                        <div class="divPhoto  md:col-span-1">
+                            <div class="border bg-white rounded-lg shadow p-6 mt-6 marginProfil">
+                                <h2 class="text-xl font-semibold mb-6">Photo de profil</h2>
+                                <div class="flex flex-col items-center space-y-4">
+            {{!--  --}}
+            <form enctype="multipart/form-data">
+            <div class="profile-container">
+            <div class="profile-sidebar">
+                <p>
+                    Cliquer sur la photo pour la changer 
+                </p>
+                <input type="file" name="profilVendor" id="profile-picture-input" accept="image/*" style="display: none;">
+
+            <!-- Overlay pour la prévisualisation de l'image -->
+                <div class="image-preview-overlay" id="image-preview-overlay">
+                    <div class="image-preview-content">
+                    <img id="preview-image" src="" alt="Prévisualisation de l'image de profil">
+                    <div class="image-preview-buttons">
+                        <button class="confirm" id="confirm-image">Confirmer</button>
+                        <button class="cancel" id="cancel-image">Annuler</button>
+                    </div>
+                    </div>
+                </div>
+
+            </form>
+        <!-- Fin Overlay pour la prévisualisation de l'image -->
+
+        <img src="{{vendor.profileImagePath}}" alt="Photo de profil" class="profile-picture" id="profile-picture" width="150" height="150">
+
+            {{!--  --}}
+                        <div>
+                            <p> {{vendor.email}} </p>
+                        </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+                    <div class="border bg-white rounded-lg shadow p-6 mt-6 marginProfil">
+                        <h2 class="text-xl font-semibold mb-6">Préférences</h2>
+                        <form action="">
+                            <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-700">Notifications email</span>
+                                <label class="switch">
+                                    <input onclick="updatePreferences('email')" type="checkbox" class="preference">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-700">Notifications SMS</span>
+                                <label class="switch">
+                                    <input onclick="updatePreferences('sms')"  type="checkbox" class="preference">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+
+
+                <div class="md:col-span-2">
+                    <div class="divUpdate bg-white rounded-lg shadow p-6 marginProfil">
+                        <div class="message">
+                            
+                        </div>
+                        <h2 class="text-xl font-semibold mb-6">Informations Personnelles</h2>
+                        <form class="space-y-6">
+                            <div class="divUpdateUser grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Nom</label>
+                                    <input type="text" name="companyName " value="{{seller.companyName}}" class="inputUpdate mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                                    <input type="email" name="email" value="{{seller.email}}" class="inputUpdate mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Téléphone</label>
+                                    <input type="tel" name="phone" value="{{seller.phone}}" class="inputUpdate mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Adresse</label>
+                                <input type="text" name="companyAddress" value="{{seller.companyAddress}}" class="inputUpdate mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                            </div>
+                            <div class="btnSauvegarde">
+                                <button type="submit" class="btnUpdateVendor bg-indigo-600 text-white px-4 py-2 rounded-lg ">
+                                    Sauvegarder les modifications
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Sécurité -->
+                    <div class="security bg-white rounded-lg shadow p-6 mt-6 marginProfil">
+                        <div class="messagePassword"></div>
+                        <h2 class="text-xl font-semibold mb-6">Déconnexion</h2>
+                        <form action="/deliver/logout/vendor" method="post" class="space-y-6">
+                            <button type="submit" style="background-color: #e74c3c;" type="submit" class="btnUpdateVendor changePasswordVendor bg-red-600 text-white px-4 py-2 rounded-lg">
+                            Se déconnecter
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            
+        </main>
+    </div>
+  
+    <script>
+        // Fonction pour mettre à jour les informations d'un vendeur
+async function updateVendorInfo(updatedInfo) {
+    try {
+        const response = await fetch(`/deliver/vendor/update`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer tonTokenIci' // ajoute le token si une autorisation est requise
+            },
+            body: JSON.stringify(updatedInfo)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erreur: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        document.querySelector('.divUpdate').classList.add('succes')
+        document.querySelector('.message').classList.add('messageSucces')
+        document.querySelector('.message').innerHTML = `
+        
+        Succès
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="green">
+            <circle cx="12" cy="12" r="10" fill="green"/>
+            <path fill="white" d="M9.5 16.5l-3.5-3.5 1.4-1.4L9.5 13.7l5.6-5.6 1.4 1.4z"/>
+        </svg>
+
+        `
+        setTimeout(function(){
+        document.querySelector('.message').innerHTML = ""
+        document.querySelector('.divUpdate').classList.remove('succes')
+        document.querySelector('.message').classList.remove('messageSucces')
+        },1500)
+        console.log('Mise à jour réussie:', data);
+        return data;
+    } catch (error) {
+        document.querySelector('.divUpdate').classList.add('erreur')
+        document.querySelector('.message').classList.add('messageError')
+        document.querySelector('.message').innerHTML = `
+        Erreur lors de la modification
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="red">
+            <circle cx="12" cy="12" r="10" fill="red"/>
+            <path fill="white" d="M15.5 8.5l-1-1L12 10.5 9.5 8l-1 1L10.5 12 8 14.5l1 1L12 13.5l2.5 2.5 1-1L13.5 12z"/>
+        </svg>
+
+        `
+        setTimeout(function(){
+        document.querySelector('.divUpdate').classList.remove('erreur')
+        document.querySelector('.message').innerHTML = ""
+        document.querySelector('.message').classList.remove('messageError')
+
+        },2500)
+        console.error('Erreur lors de la mise à jour des informations du vendeur:', error);
+    }
+}
+
+document.querySelector('.btnUpdateVendor').addEventListener("click", function(e){
+e.preventDefault()
+const inputs = document.querySelectorAll('.inputUpdate')
+const companyName  = inputs[0].value
+const email = inputs[1].value
+const phone = inputs[2].value
+const companyAddress = inputs[3].value
+const updatedInfo = {
+    companyName : companyName,
+    email : email,
+    phone : phone,
+    companyAddress :companyAddress
+    
+};
+// Appelle la fonction pour mettre à jour les informations
+updateVendorInfo(updatedInfo);
+    
+})
+/**********************************************Modifiaction de passe ***********/
+async function updateVendorPassWord(updatedInfo) {
+    try {
+        const response = await fetch(`/deliver/vendor/update-password`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer tonTokenIci' // ajoute le token si une autorisation est requise
+            },
+            body: JSON.stringify(updatedInfo)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erreur: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        document.querySelector('.security').classList.add('succes')
+        document.querySelector('.messagePassword').classList.add('messageSucces')
+        document.querySelector('.messagePassword').innerHTML = `
+        
+        Succès
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="green">
+            <circle cx="12" cy="12" r="10" fill="green"/>
+            <path fill="white" d="M9.5 16.5l-3.5-3.5 1.4-1.4L9.5 13.7l5.6-5.6 1.4 1.4z"/>
+        </svg>
+
+        `
+        setTimeout(function(){
+        document.querySelector('.messagePassword').innerHTML = ""
+        document.querySelector('.security').classList.remove('succes')
+        document.querySelector('.messagePassword').classList.remove('messageSucces')
+        },1500)
+        //console.log('Mise à jour réussie:', data);
+        return data;
+    } catch (error) {
+        document.querySelector('.security').classList.add('erreur')
+        document.querySelector('.messagePassword').classList.add('messageError')
+        document.querySelector('.messagePassword').innerHTML = `
+        Erreur lors de la modification
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="red">
+            <circle cx="12" cy="12" r="10" fill="red"/>
+            <path fill="white" d="M15.5 8.5l-1-1L12 10.5 9.5 8l-1 1L10.5 12 8 14.5l1 1L12 13.5l2.5 2.5 1-1L13.5 12z"/>
+        </svg>
+
+        `
+        setTimeout(function(){
+        document.querySelector('.security').classList.remove('erreur')
+        document.querySelector('.messagePassword').innerHTML = ""
+        document.querySelector('.messagePassword').classList.remove('messageError')
+
+        },2500)
+        console.error('Erreur ', error.message);
+    }
+}
+
+// Exemple d'utilisation de la fonction
+
+
+document.querySelector('.changePasswordVendor').addEventListener("click", function(e){
+e.preventDefault()
+const inputs = document.querySelectorAll('.divChangePassword input')
+const passwordOld  = inputs[0].value
+const password = inputs[1].value
+const confirmPassword = inputs[2].value
+const changePassword = {
+    password : password,
+    passwordOld : passwordOld,
+    confirmPassword : confirmPassword  
+};
+// Appelle la fonction pour mettre à jour les informations
+updateVendorPassWord(changePassword);
+})
+/**********************************************Modification de passe ***********/
+/*************************************** Update Photo Profil *******************/
+      const profilePicture = document.getElementById('profile-picture');
+      const profilePictureInput = document.getElementById('profile-picture-input');
+      const imagePreviewOverlay = document.getElementById('image-preview-overlay');
+      const previewImage = document.getElementById('preview-image');
+      const confirmImageButton = document.getElementById('confirm-image');
+      const cancelImageButton = document.getElementById('cancel-image');
+      
+     
+      // Gestion de la navigation dans le menu du profil
+      const menuLinks = document.querySelectorAll('.profile-menu a');
+      menuLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          menuLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+          
+          const targetId = this.getAttribute('href').slice(1);
+          document.querySelectorAll('.profile-content > div').forEach(div => {
+            div.style.display = div.id === targetId ? 'block' : 'none';
+          });
+        });
+      });
+
+      // Gestion du changement de photo de profil
+      profilePicture.addEventListener('click', function() {
+        profilePictureInput.click();
+      });
+
+      profilePictureInput.addEventListener('change', function(e) {
+        if (e.target.files && e.target.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            imagePreviewOverlay.style.display = 'flex';
+          }
+          
+          reader.readAsDataURL(e.target.files[0]);
+        }
+      });
+
+      confirmImageButton.addEventListener('click', changeProfil);
+
+      async function changeProfil(e){
+        e.preventDefault()
+        console.log(document.querySelector("#profile-picture-input").value)
+        profilePicture.src = previewImage.src;
+        imagePreviewOverlay.style.display = 'none';
+
+        //
+        const fileInput = document.getElementById('profile-picture-input');
+    const file = fileInput.files[0];
+
+    if (!file) {
+      alert("Veuillez sélectionner une image.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("profilVendor", file);
+
+    try {
+      const response = await fetch('/deliver/vendor/updateProfileImage', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message);
+      } else {
+        alert("Erreur : " + result.message);
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'envoi de l'image:", error);
+    }
+        //
+
+      }
+      cancelImageButton.addEventListener('click', function(e) {
+        e.preventDefault()
+        imagePreviewOverlay.style.display = 'none';
+        profilePictureInput.value = '';
+    
+      });
+      /**************************préférence Vendor *****************************/
+    async function Preference(){
+          try {
+            const baseURL =
+          window.location.origin.includes('localhost')
+            ? 'http://localhost:5000'
+            : 'https://deliver-jvwl.onrender.com';
+
+            //const baseURL = "http://192.168.181.14:5000"
+
+
+    const response = await fetch(baseURL+"/deliver/api/preferencVendor");
+    {{!-- const response = await fetch("http://192.168.4.14:5000/deliver/apiProduct"); --}}
+
+    if (!response.ok)
+      throw new Error("Erreur lors de la récupération des produits");
+
+    const preference = await response.json();
+            // Afficher les produits dans le tableau
+        const preferences = document.querySelectorAll(".preference")
+        if (preference.emailNotifications){
+            preferences[0].setAttribute('checked', "checked")
+            
+        }else{
+            preferences[0].removeAttribute('checked')
+
+        }
+        if (preference.smsNotifications){
+            preferences[1].setAttribute('checked', "checked")
+        }else{
+            preferences[1].removeAttribute('checked')
+
+        }
+
+        
+
+    } catch (error) {
+        console.error(error);
+        alert("Erreur lors de la récupération des préférences.");
+    }
+}
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    Preference();
+    });
+
+    async function updatePreferences(prefer){
+        let info = ""
+        if (prefer === "email"){
+            info = {
+                emailNotifications : true
+            }
+        }
+        if (prefer === 'sms'){
+            info = {
+                smsNotifications : true
+            }
+        }
+
+        const data = info
+        console.log(data)
+        //
+             {{!-- const response = await fetch(`/deliver/vendor/update-password`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer tonTokenIci' // ajoute le token si une autorisation est requise
+            },
+            body: JSON.stringify(updatedInfo)
+        }); --}}
+
+        //
+        await fetch("/deliver/api/updatePreferences",{
+            method : 'PUT',
+            headers : {
+                'Content-Type' : "application/json"
+            },
+            body : JSON.stringify(data)
+        })
+        .then( res => res.json())
+        .then( result => {
+            console.log(result)
+        })
+        .catch(err => console.log("Erreur lors de la modification des préférences :"+err))
+    }
+    </script>

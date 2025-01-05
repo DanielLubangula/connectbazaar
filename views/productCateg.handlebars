@@ -1,0 +1,1636 @@
+<link rel="stylesheet" href="/style/acceuil.css">
+<style>
+:root {
+  --primary-color: #3a506b;
+  --secondary-color: #5bc0be;
+  --text-color: #1c2541;
+  --bg-color: #f5f5f5;
+  --card-bg: #ffffff;
+  --hero-bg-color: #1c2541;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem;
+}
+
+.filters {
+  background: var(--card-bg);
+  padding: 2rem;
+  margin-bottom: 3rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  opacity : 1;
+  transform: translateY(0);
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.filter-group {
+  padding: 0.5rem;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+.filter-group select, .filter-group input {
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.filter-group select:hover, .filter-group input:hover {
+  border-color: var(--secondary-color);
+}
+
+.filter-group select:focus, .filter-group input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(58, 80, 107, 0.1);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2.5rem;
+  text-align: center;
+}
+
+.product-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+
+.product-image {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.product-info {
+  padding: 1.5rem;
+}
+
+.product-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.product-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.product-price::before {
+  content: '€';
+  font-size: 1rem;
+  color: var(--secondary-color);
+}
+
+.btn-details {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--secondary-color);
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-details:hover {
+  background-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+/* Style général des boutons */
+.page-btn {
+  font-size: 1rem; /* Taille de base */
+  padding: 0.5rem 1rem; /* Espacement interne */
+  margin: 0 0.25rem; /* Espacement entre les boutons */
+  border: 1px solid #ccc; /* Bordure légère */
+  border-radius: 5px; /* Coins arrondis */
+  background-color: #f8f9fa; /* Couleur de fond */
+  color: #333; /* Couleur du texte */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Bouton actif (page actuelle) */
+.page-btn.active {
+  background-color: #007bff; /* Couleur de fond pour le bouton actif */
+  color: #fff; /* Texte blanc */
+  border-color: #007bff; /* Bordure de la même couleur */
+}
+
+/* Effet hover */
+.page-btn:hover {
+  background-color: #e2e6ea; /* Couleur de fond au survol */
+  color: #007bff; /* Texte bleu au survol */
+}
+
+/* Responsive pour les appareils mobiles */
+@media (max-width: 768px) {
+  .page-btn {
+    font-size: 0.85rem; /* Réduit la taille de la police */
+    padding: 0.4rem 0.8rem; /* Réduit l'espacement interne */
+  }
+
+  .pagination {
+    display: flex;
+    flex-wrap: wrap; /* Permet aux boutons de passer à la ligne si nécessaire */
+    justify-content: center; /* Centre les boutons */
+    gap: 0.5rem; /* Espacement entre les lignes de boutons */
+  }
+}
+
+
+.namePriceLike{
+  position: absolute;
+  bottom: 0px;
+  height: 100%;
+  left: 0px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.namePriceLike div{
+  padding: 5px;
+}
+
+/* Animation de chargement des cartes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.product-card {
+  animation: fadeInUp 0.6s ease backwards;
+}
+
+.product-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.product-card:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.padding5{
+  padding: 5;
+}
+
+.marginCenter{
+  margin: 0 auto;
+}
+
+.maxHeigh{
+  max-height: fit-content;
+  transition: all 500ms ease;
+}
+
+.maxHeighDiv{
+  transition: all 0.5s ease;
+  overflow: hidden;
+
+}
+
+.maxHeighDiv{
+  transition: all 0.5s ease;
+  overflow: hidden;
+
+}
+
+.limitComment{
+  max-height: 300px;
+  overflow: scroll;
+}
+
+.show{
+  max-height: 250px;
+}
+
+.messageSupp{
+  border: 1px solid rgba(241, 1, 1, 0.281);
+  background: rgba(230, 7, 7, 0.13);
+  margin-bottom: 5px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .product-image {
+    height: 220px;
+  }
+
+  .filters{
+    padding : 0;
+  /* position: sticky;
+    left: 0;
+    top: 0;
+    z-index: 999; */
+  }
+
+  .filters-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    grid-template-areas: 
+    "category  trie"
+    "prix prix"
+    ;
+    padding: 10px;
+  }
+
+
+  .filter-group{
+    padding: 0;
+    font-size: 14px;
+  }
+
+  .filter-group select{
+    font-size: 15px;
+    padding: 5px;
+  }
+
+  .filter-group label{
+    margin-bottom: 5px;
+  }
+
+  .filter-group input{
+    padding:5px 0px;
+  }
+
+  .filter-group:nth-child(1){
+    font-size: 15px;
+    grid-area: category;
+  }
+  .filter-group:nth-child(2){
+    grid-area: prix;
+  }
+  .filter-group:nth-child(3){
+    grid-area: trie;
+  }
+
+  .mediaScreen{
+    padding: 5px ;
+  }
+}
+
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+  <section class="filters">
+    <div class="filters-grid">
+      <div class="filter-group">
+        <label for="category">Catégorie</label>
+        <select id="category" data-category="{{category}}">
+          <option value="all">Toutes les Catégories</option>
+          <option value="électronique">Électronique</option>
+          <option value="vêtements">Vêtements</option>
+          <option value="alimentation">alimentation</option>
+          <option value="autres">Autres</option>
+        </select>
+      </div>
+      <div class="filter-group ">
+        <label for="price">Prix maximum: <span id="priceValue">500€</span></label>
+        <input type="range" id="price" min="0" max="1000" value="500" step="10">
+      </div>
+      <div class="filter-group ">
+        <label for="sort">Trier par</label>
+        <select id="sort">
+          <option value="popular">Popularité</option>
+          <option value="price-asc">Prix croissant</option>
+          <option value="price-desc">Prix décroissant</option>
+          <option value="newest">Plus récent</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <main class="products-grid" id="productsGrid">
+    <!-- Les produits seront injectés ici via JavaScript -->
+  </main>
+
+  <div class="pagination">
+    {{!-- Les boutons de navigations seront injectés ici via Javascript --}}
+  </div>
+</div>
+
+<div class="overlay">
+  <div class="modal">
+    <span class="close-btn">&times;</span>
+    <h1 style="font-weight: bold;">Connexion requise</h1>
+    <p>Pour poster un commentaire ou aimer un produit, vous devez être connecté.</p>
+    <p>Veuillez vous connecter en tant que vendeur ou acheteur pour continuer.</p>
+    <div class="modal-links">
+      <a href="/deliver/loginVendor" class="modal-link seller-link">Vendeur</a>
+      <a href="/deliver/registerLogin" class="modal-link buyer-link">Acheteur</a>
+    </div>
+  </div>
+</div>
+
+{{!-- Début User Info Comment --}}
+<div class="modal-overlay" id="overlay"></div>
+<div class="user-modal" id="userModal">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <div class="user-info" id="userInfo">
+        <!-- Le contenu sera injecté dynamiquement -->
+    </div>
+</div>
+{{!-- Fin User Info Comment --}}
+
+
+<script>
+ const socket = io();
+
+   // ************************************** Acceder à la page voir le produit
+  function pageMonoProduit (id) {
+    console.log(id)
+    location.assign(`/deliver/pageMonoProduit/${id}`)
+  }
+
+
+ let map2 = new Map()
+let utilisateurId = ""
+
+map2.set("1",{{{json vendor}}})
+map2.set("2",{{{json user}}})
+
+map2.forEach((value, key) => {
+  if (value){
+    utilisateurId = value._id
+  }
+})
+
+let map = new Map()
+
+// Données exemple de produits
+let prod = "";
+
+function createButtonNavigation(products) {
+  const { totalPages, currentPage } = products; // Assurez-vous que `products` contient `currentPage`
+
+  const ContenairPagination = document.querySelector('.pagination');
+
+  // Si une seule page, pas de pagination nécessaire
+  if (totalPages === 1) {
+    ContenairPagination.innerHTML = "";
+    return;
+  }
+
+  // Réinitialise le conteneur de pagination
+  ContenairPagination.innerHTML = "";
+
+  // Bouton "Précédent"
+  if (currentPage > 1) {
+   ContenairPagination.innerHTML += `<button onclick="btnNavigation(${currentPage - 1})" class="page-btn">‹ Précédent</button>`;
+
+  }
+
+  // Boutons de pages dynamiques (affiche un maximum de 3 boutons)
+  const maxVisibleButtons = 3;
+  let startPage = Math.max(1, currentPage - 1); // Page de début
+  let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1); // Page de fin
+
+  // Ajuster le début si la dernière page dépasse la limite
+  if (endPage - startPage < maxVisibleButtons - 1) {
+    startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    ContenairPagination.innerHTML += i === currentPage
+      ? `<button onclick="btnNavigation(${i})" class="page-btn active">${i}</button>`
+      : `<button onclick="btnNavigation(${i})" class="page-btn">${i}</button>`;
+  }
+
+  // Bouton "Suivant"
+  if (currentPage < totalPages) {
+    ContenairPagination.innerHTML += `<button onclick="btnNavigation(${currentPage + 1})" class="page-btn">Suivant ›</button>`;
+  }
+}
+
+
+// Fonction pour afficher les produits
+function displayProducts(products, resp) {
+  const productsGrid = document.getElementById('productsGrid');
+  const { currentPage } = products;
+
+  // Réinitialiser la grille
+  productsGrid.innerHTML = "";
+
+  // Ajouter chaque produit à la grille
+  products.products.forEach(product => {
+    createProductCard(product); // Fonction pour créer les cartes produit
+  });
+
+  if (resp === "no"){
+    return
+  }
+  // Créer la pagination
+  createButtonNavigation(products);
+}
+
+
+// Fonction pour créer une carte produit avec un carrousel et le format souhaité
+let likeDuButton = null // cette variable permet d'enlever le like au cas où l'utilisateur qui like n'a pas de session
+function updateLikedProduct(productId, likeButton) {
+  event.stopPropagation()
+  likeDuButton = likeButton
+
+  if (likeButton.getAttribute("data-isLiked") !== "yes") {
+    // Appliquer la couleur de remplissage et le trait pour "like"
+    likeButton.querySelector('svg').style.fill = '#ff4444';
+    likeButton.querySelector('svg').style.stroke = '#ff4444';
+    likeButton.setAttribute('data-isLiked', "yes");
+  } else {
+    // Retirer le style de "like"
+    likeButton.querySelector('svg').style.fill = 'none';
+    likeButton.querySelector('svg').style.stroke = '#000000';
+    likeButton.setAttribute('data-isLiked', "no");
+  }
+
+  socket.emit('updatelikedProduct', { productId }); // Envoie l'ID du produit pour mise à jour
+}
+
+// Écouter la réponse de l'événement 'updateLikeResponse' pour mettre à jour le statut du like
+socket.on('updateLikeResponse', (data) => {
+  document.querySelector(`[data-like-product="${data.productId}"]`).innerHTML = data.numberlike;
+
+  const likeButton = document.querySelector(`[data-like-product-button="${data.productId}"]`);
+  
+});
+
+
+function createProductCard(product) {
+  console.log(product)
+const card = document.createElement('div');
+card.className = 'maxHeighDiv maxWeight maxHeigh card padding5 bg-white rounded-xl shadow-lg overflow-hidden relative transition-transform duration-300 hover:-translate-y-1 w-full sm:w-80';
+
+const hasMultipleImages = product.images.length > 1;
+card.innerHTML = `
+    <div class="relative h-[200px] sm:h-[280px] overflow-hidden">
+        <div class="carousel-images flex transition-transform duration-500 ease-in-out">
+            ${product.images.map(img => `<img src="${img.path}" alt="Product image" loading="lazy" class="w-80 h-[280px] object-cover">`).join('')}
+        </div>
+        ${hasMultipleImages ? `
+            <div style="z-index:1001;" class="carousel-controls absolute top-1/2 w-full -translate-y-1/2 flex justify-between px-2">
+                <button style="box-shadow : 0px 0px 3px black" class="prev-btn bg-white/80 border-none rounded-full w-8 h-8 flex items-center justify-center cursor-pointer transition-colors hover:bg-white">
+                    <svg class="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button style="box-shadow : 0px 0px 3px black" class="next-btn bg-white/80 border-none rounded-full w-8 h-8 flex items-center justify-center cursor-pointer transition-colors hover:bg-white">
+                    <svg class="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+            <div style="z-index:20" class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
+                ${product.images.map((_, i) => `
+                    <div class="carousel-dot w-2.5 h-2.5 rounded-full ${i === 0 ? 'bg-white' : 'bg-white/50'} cursor-pointer" data-index="${i}"></div>
+                `).join('')}
+            </div>
+        ` : ''}
+       <div class="namePriceLike" onclick="pageMonoProduit('${product._id}')">
+  <div class="flex justify-between items-center mb-2">
+    <!-- Nom du produit -->
+    <h2
+      style="font-size : 15px"
+      class="text-lg font-semibold text-gray-800 truncate bg-white bg-opacity-75 px-2 py-1 rounded shadow-sm"
+      title="${product.name}">
+      ${product.name}
+    </h2>
+
+    <!-- Section des likes -->
+    <div class="flex items-center gap-2">
+      <!-- Compteur de likes -->
+      <span data-like-product="${product._id}" style="color : white; text-shadow : 0px 0px 5px black" class="likes-count text-sm text-gray-600"></span>
+
+      <!-- Bouton de like -->
+      <button
+        data-like-product-button="${product._id}"
+        class="like-button transition-transform hover:scale-110 text-gray-600 hover:text-red-500"
+        data-like-product="${product._id}"
+        data-isLiked="no"
+        onclick="updateLikedProduct('${product._id}', this)"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+   <div class="flex items-center justify-between w-full my-4 px-6 py-4 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+  <!-- Prix du produit -->
+  <p class="text-lg font-semibold text-primary bg-white bg-opacity-70 rounded-md px-2 py-1 shadow-md">
+  ${product.price} €
+</p>
+
+  <!-- Bouton pour discuter -->
+      ${utilisateurId ? 
+      `<a href="/deliver/chat/${product.infoUser.userId}/${product._id}" 
+    style="background-color : rgba(5, 5, 255, 0.5); font-size : 15px"
+     class="mediaScreen text-white px-6 py-2 rounded-full shadow-lg hover:bg-primary/80 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary/70 focus:ring-opacity-50 transition-transform duration-300">
+      Discuter avec le vendeur
+    ` :
+      `<a onclick='showLoginModal()' " 
+    style="background-color : rgba(5, 5, 255, 0.5); font-size : 15px"
+     class="mediaScreen text-white px-6 py-2 rounded-full shadow-lg hover:bg-primary/80 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary/70 focus:ring-opacity-50 transition-transform duration-300">
+     Discuter avec le vendeur
+    `
+   }
+  </a>
+</div>
+
+        </div>
+</div>
+
+    </div>
+
+    <div style="padding:0px 15px; ">
+
+        <div class="flex items-center border-t border-gray-100">
+            <img src="${product.infoUser.profileImagePath}" data-user="${product.infoUser.userId}"  onclick="showUserInfo(this)"alt="Seller avatar" class="w-10 h-10 rounded-full mr-3">
+            <div>
+                <div style="text-align:left" class="font-medium text-gray-800">${product.seller.name}</div>
+                {{!-- <div class="text-secondary">★★★★★ (${product.seller.rating})</div> --}}
+            </div>
+        </div>
+
+        <div class="border-t border-gray-100">
+          <button class="w-full py-2 text-primary hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-center gap-2 comments-btn"
+                  onclick="toggleComments(this)"
+                  data-show-comments="false" data-product-id="${product._id}">
+              <span>View Comments</span>
+              <span class="text-sm text-gray-600 nbrComment" data-nbrcomment="${product._id}"></span>
+          </button>
+          <div class="comments-section space-y-3 overflow-y-auto limitComment"></div>
+
+          <div class="mt-3">
+            <div class="reply-preview" style="position : relative">
+             <span class="close-btn-comment" onclick='hiddenReplyPreview(this)'>&times;</span>
+            </div>
+
+            <textarea class="comment-input w-full p-2 border border-gray-200 rounded-lg resize-none" rows="2" placeholder="Add a comment..."></textarea>
+            <button style="margin-bottom : 5px" class="mt-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors block"
+              onclick="submitComment('${product._id}', this)">
+              Comment
+            </button>
+          </div>
+        </div>
+    </div>
+`;
+
+setInterval(function(){
+      fetch('/deliver/api/numberComment/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: product._id }),
+    })
+      .then(response => response.json())
+      .then(data => {
+       // console.log('Réponse du serveur:', data.commentObjet.id.id)
+        if (!document.querySelector(`[data-nbrcomment="${data.commentObjet.id.id}"]`)) {
+          //console.log("bloque")
+          return
+        }
+        document.querySelector(`[data-nbrcomment="${data.commentObjet.id.id}"]`).innerHTML = `(${data.commentObjet.comment})`
+        
+      })
+      .catch(error => console.error('Erreur:', error));
+    },5000)
+
+
+function getLikedProduct(productId) {
+  //console.log("function get",productId)
+  socket.emit('likedProduct', { productId }); // Envoie l'ID du produit au serveur
+}
+// Envoyer une demande pour obtenir les likes d'un produit
+
+let countSocket = 0
+let lastMessageId = null
+
+    // Écouter la réponse de l'événement 'likedProductResponse' pour afficher les likes
+socket.off('likedProductResponse'); // Retire l'ancien écouteur
+socket.on('likedProductResponse', (data) => {
+let trueOrFalse = true // Cette variable permet de vérifier si il y a duplication
+map.forEach((value, key) => { // parcourir la map
+    if (value.productId == data.productId){
+      trueOrFalse = false
+      return 
+    }
+  })
+
+  if(!trueOrFalse){ // Arrête si la variable trueOrFalse est égal à false
+    return
+  }
+
+    map.set(countSocket,data) // Ajout d'une nouvelle relation
+
+  // Mise à jour du nombre de likes sur l'élément correspondant
+  let val = map.get(countSocket).numberlike
+
+  const elementBalise = map.get(countSocket).productId
+  const me = map.get(countSocket).me
+
+  countSocket++
+  
+  if (!document.querySelector(`[data-like-product="${elementBalise}"]`)){
+    return
+  }
+    document.querySelector(`[data-like-product="${elementBalise}"]`).innerHTML = val;
+
+
+   document.querySelector(`[data-like-product-button="${elementBalise}"]`).setAttribute("data-isLiked","no")
+  if (me === "yes") {
+    //console.log('Utilisateur a aimé ce produit');
+    const likeButton = document.querySelector(`[data-like-product-button="${elementBalise}"]`);
+    // Appliquer la couleur de remplissage et le trait
+    likeButton.querySelector('svg').style.fill = '#ff4444';
+    likeButton.querySelector('svg').style.stroke = '#ff4444';
+    likeButton.setAttribute('data-isLiked', "yes");
+  }
+
+  
+});
+/*********/
+// Écouter la réponse de l'événement 'updateLikeResponse' pour mettre à jour le statut du like
+socket.on('updateLikeResponse', (data) => {
+
+  document.querySelector(`[data-like-product="${data.productId}"]`).innerHTML = data.numberlike;
+
+  const likeButton = document.querySelector(`[data-like-product-button="${data.productId}"]`);
+  
+});
+
+// Utilisation de la fonction pour récupérer et mettre à jour les likes
+const productId = product._id; // Par exemple, l'ID du produit
+getLikedProduct(productId); // Pour obtenir les likes actuels
+
+/*********/
+    //socket.emit("likedProduct",product._id)
+
+    if (hasMultipleImages) {
+        setupCarousel(card, product.images.length);
+    }
+    setupLikeButton(card.querySelector('.like-button'));
+
+
+const productsGrid = document.getElementById('productsGrid');
+
+productsGrid.appendChild(card)
+}
+
+// Fonction pour configurer le bouton "like" avec un effet de clic
+function setupLikeButton(likeButton) {
+    likeButton.addEventListener('click', () => {
+        likeButton.classList.toggle('liked');
+    });
+}
+
+// Fonction pour configurer le carrousel avec les boutons de navigation et les dots
+function setupCarousel(card, imageCount) {
+    const carouselImages = card.querySelector('.carousel-images');
+    const prevBtn = card.querySelector('.prev-btn');
+    const nextBtn = card.querySelector('.next-btn');
+    const dots = card.querySelectorAll('.carousel-dot');
+    let currentSlide = 0;
+    let interval;
+
+    // Fonction pour changer de slide
+    function changeSlide(index) {
+        currentSlide = (index + imageCount) % imageCount;
+        carouselImages.style.transform = `translateX(-${currentSlide * 100}%)`;
+        updateDots();
+    }
+
+    // Fonction pour mettre à jour la classe active des dots
+    function updateDots() {
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('bg-white', i === currentSlide);
+            dot.classList.toggle('bg-white/50', i !== currentSlide);
+        });
+    }
+
+    // Gestion des boutons de navigation
+    prevBtn.addEventListener('click', () => {
+        clearInterval(interval);
+        changeSlide(currentSlide - 1);
+    });
+    nextBtn.addEventListener('click', () => {
+        clearInterval(interval);
+        changeSlide(currentSlide + 1);
+    });
+
+    // Gestion des clics sur les dots
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+            clearInterval(interval);
+            changeSlide(i);
+        });
+    });
+
+    // Défilement automatique
+    interval = setInterval(() => {
+        changeSlide(currentSlide + 1);
+    }, 3000);
+}
+
+//***
+let openCard = null; // Variable pour garder la trace de la carte ouverte
+let commentsSection = "";
+
+function toggleComments(button) {
+    event.stopPropagation();
+
+    const allCommentsSections = document.querySelectorAll('.comments-section');
+    const allMaxHeightSections = document.querySelectorAll('.maxHeighDiv');
+
+    // Fermer toutes les sections ouvertes
+    allCommentsSections.forEach(section => section.classList.remove("show"));
+    allMaxHeightSections.forEach(section => section.classList.add("maxHeigh"));
+
+    const isShown = button.getAttribute("data-show-comments") === "true";
+    const card = button.closest('.card');
+    const maxHeightSection = button.closest('.maxHeighDiv');
+    commentsSection = card.querySelector('.comments-section');
+    const mt3 = commentsSection.nextElementSibling;
+    //console.log("card haut de haut", card)
+    const hautCard = card
+    // Si une autre carte est ouverte, fermer l'ancienne carte
+    //console.log("openCard",openCard,"card", card)
+    if (openCard && openCard !== card) {
+      //console.log("open")
+        const previousButton = openCard.querySelector('[data-show-comments="true"]');
+        if (previousButton) {
+            previousButton.querySelector("span").textContent = "View Comments";
+            previousButton.setAttribute("data-show-comments", "false");
+        }
+        const previousCommentsSection = openCard.querySelector('.comments-section');
+        const previousMaxHeightSection = openCard.querySelector('.maxHeighDiv');
+        previousCommentsSection.classList.remove("show");
+        if (previousMaxHeightSection) {
+            previousMaxHeightSection.classList.add("maxHeigh");
+        }
+    }
+
+    if (isShown) {
+      //console.log("isShow")
+        // Fermer la carte actuelle
+        mt3.style.maxHeight = '';
+        commentsSection.classList.remove("show");
+        button.querySelector("span").textContent = "View Comments";
+        button.setAttribute("data-show-comments", "false");
+
+        commentsSection.style.display = 'none';
+        openCard = null; // Réinitialiser la carte ouverte
+    } else {
+      //console.log("else show")
+       commentsSection.style.display = 'block';
+        // Ouvrir la carte actuelle
+        maxHeightSection.classList.remove("maxHeigh");
+        commentsSection.classList.add("show");
+        mt3.style.maxHeight = '230px';
+
+        socket.emit('loadComments', button.getAttribute("data-product-id"));
+
+        commentsSection.innerHTML = `
+            <div style="display: flex; align-items:center; justify-content:center">
+                <img style="width: 200px;" src="/images/spinner.gif" alt="">
+            </div>
+        `;
+        button.querySelector("span").textContent = "Hide Comments";
+        button.setAttribute("data-show-comments", "true");
+
+        // Mettre à jour la carte actuellement ouverte
+        openCard = card;
+
+        document.addEventListener("click", function handleOutsideClick(event) {
+          event.stopPropagation()
+          //console.log('contient-il l\'element cliqué ? ', card.contains(event.target))ici
+          //console.log("card", card)
+          //console.log("cardHaut", hautCard)
+          //console.log('contient-il l\'element cliqué ? ', hautCard.contains(event.target))
+          //console.log("élément cliqué", event.target)
+          //console.log("event.target : ", event.target, "button", button)
+            if (!hautCard.contains(event.target)) { // Pour accéder à l'intérieur il faut que la variable card et le bouton ne puisse pas contenir l'élément cliqué (event.target)
+                commentsSection.classList.remove("show");
+                button.querySelector("span").textContent = "View Comments";
+                button.setAttribute("data-show-comments", "false");
+                document.removeEventListener("click", handleOutsideClick);
+                openCard = null; // Réinitialiser la carte ouverte
+            }
+
+            if(hautCard.contains(event.target) == true) {
+              //console.log("intérieur super true")
+              commentsSection.style.display = 'block';
+              // Ouvrir la carte actuelle
+              maxHeightSection.classList.remove("maxHeigh");
+              commentsSection.classList.add("show");
+              mt3.style.maxHeight = '230px';
+            }
+        });
+
+        document.querySelectorAll('.comments-btn, .comment-input, .close-btn-comment').forEach(element => {
+            element.addEventListener('click', (event) => {
+                event.stopPropagation(); // Empêche le clic de remonter et de déclencher la fermeture
+            });
+        });
+
+
+        document.addEventListener('click', (event) => {
+            const openCard = document.querySelector('.card.open'); // Sélectionnez la carte actuellement ouverte
+            if (openCard && !openCard.contains(event.target)) {
+                // Fermer la carte uniquement si le clic est en dehors
+                openCard.classList.remove('open');
+            }
+        });
+
+
+        socket.off("commentsLoaded");
+        socket.on('commentsLoaded', (comments) => {
+            if (comments.length === 0) {
+                commentsSection.innerHTML = `
+                    <div style="display: flex; align-items:center; justify-content:center">
+                        <img style="width: 950px;" src="/images/nomsg.png" alt="">
+                    </div>
+                `;
+                return;
+            }
+            commentsSection.innerHTML = "";
+            comments.forEach(comment => {
+                displayComment(comment);
+            });
+        });
+    }
+}
+
+
+// Début Affichage de commentaire dans le produit
+function displayComment(comment) {
+    const commentElement = document.createElement('div');
+    const isAuthor = utilisateurId === comment.userId;
+    const commentClass = isAuthor ? "own message" : "other message";
+    
+    //commentElement.classList.add('p-2'); 
+    commentElement.innerHTML = `
+        <div style="position : relative;  ${comment.isDeleted ?"border: 1px solid rgba(241, 1, 1, 0.281);background: rgba(230, 7, 7, 0.13);" : ""}" class="isComment bg-gray-50 ${commentClass} p-3 rounded-lg " id="comment-${comment._id}">
+            <div class="flex items-center justify-between mb-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <img src="${comment.profileImagePath}" data-user="${comment.userId}" alt="User avatar" class="profile-pic" onclick="showUserInfo(this)" class="rounded-full">
+                    <span class="font-medium text-sm username" data-productId="${comment.productId}" data-commentId="${comment._id}">${comment.username}</span>
+                </div>
+                <button data-commentId="${comment._id}" onclick="panneauReplyReset(this)" class="comment-actions-btn opacity-100 group-hover:opacity-100 transition-opacity">
+                    <svg class="w-5 h-5" style="height:20px" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="6" r="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <circle cx="12" cy="18" r="2"/>
+                    </svg>
+                </button>
+              <div style="z-index: 1001;top: 30px;right: 25px;height: 115px;overflow: scroll;" class="hidden comment-actions absolute right-0 top-8 bg-white shadow-lg rounded-lg z-10 py-1 w-32">
+                    <button class="reply-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm" onclick="showReplyPreview(this)">Reply</button>
+                    <button class="report-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-500">Report</button>
+                    ${isAuthor ? `<button  class="delete-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-500" onclick="deleteComment('${comment._id}')">Delete</button>` : ""}
+              </div>
+             </div>
+
+
+            <p class="text-gray-600 text-sm messageTxt" style="text-align: left">${comment.isDeleted ? "<p style='font-style : italic'>Ce commentaire a été supprimé.</p>" : comment.comment}</p>
+            <p class="created-at">${comment.formattedDate}</p>
+
+
+        </div>
+        ${comment.replies ? `<p class="respComment" data-open="false" data-commentId="${comment._id}" onclick="loadReplies(this,${comment.replies})">voir réponse(s) (${comment.replies})</p>` : ""}
+        <div data-open="false" class="replies-section hidden repondre-${comment._id}" id="replies-${comment._id}">
+          <div class="spinnerResp">
+            <img style="width: 50px;" src="/images/spinner.gif" alt="">
+          </div>
+        </div>
+    `;
+    commentsSection.prepend(commentElement);
+}
+
+
+function loadReplies(btn,nbrResp) {
+
+
+    const ContResp =  btn.nextElementSibling
+
+    if (ContResp.getAttribute('data-open') !== "false") { // if data-open est false, on ferme
+      ContResp.style.maxHeight = "0px" 
+      ContResp.style.opacity = "0" 
+      btn.innerHTML = `Voir réponses (${nbrResp})`
+      btn.style.backgroundColor = ""
+      ContResp.setAttribute('data-open', "false")
+
+    }else{
+      ContResp.style.maxHeight = "" 
+      ContResp.style.opacity = "1" 
+      btn.innerHTML = `Fermer les réponses`
+      btn.style.backgroundColor = "#5bc0be96"
+      ContResp.setAttribute('data-open', "true")
+
+    }
+
+
+
+
+  const datacommentId = btn.getAttribute('data-commentId')
+  document.getElementById(`replies-${datacommentId}`).classList.remove("hidden")
+
+  document.getElementById(`replies-${datacommentId}`).querySelector('.spinnerResp').style.display.display = "block"
+
+  socket.emit("loadReplies", datacommentId);
+}
+
+
+// Fin Affichage de commentaire dans le produit
+
+
+// Fonction pour créer une carte de chargement (spinner)
+function createLoadingCard() {
+    const card = document.createElement('div');
+    card.className = 'w-full h-[400px] bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 bg-[length:200%_100%] animate-loading rounded-xl';
+    return card;
+}
+
+function loadingCards(){
+    // Ajoute le conteneur en grille pour les cartes de chargement
+  const loadingContainer = document.createElement('div');
+  loadingContainer.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5 loadCard';
+
+  document.getElementById('productsGrid').style.display = "block"
+
+  // Ajoute 9 cartes de chargement pour simuler l'attente des données
+  for (let i = 0; i < 4; i++) {
+  const loadingCard = createLoadingCard();
+  loadingContainer.appendChild(loadingCard);
+  }
+
+  document.querySelector('main').appendChild(loadingContainer);
+}
+
+function recuperationProduits(category, page){
+  
+  
+    // Récupération des produits 
+    const objectCategory = {
+      categoryDetail : category,
+      page : page
+    }
+
+    fetch('/deliver/apiProductDetail/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(objectCategory),
+    })
+      .then(response => response.json())
+      .then(data => {
+        document.querySelector('main').style.display = "grid"
+        document.querySelector('main').innerHTML = ""
+
+        prod = data
+        allProducts = data.products; // Stocker les produits dans la variable
+        displayProducts(data);
+        //document.querySelector(`[data-nbrcomment="${data.commentObjet.id.id}"]`).innerHTML = `(${data.commentObjet.comment})`
+        
+      })
+      .catch(error => console.error('Erreur:', error));
+}
+
+let category
+
+// Initialisation
+document.addEventListener('DOMContentLoaded', () => {
+  // spinner de chargement des cartes
+  loadingCards()
+
+  // Début Affichage de la category dans l'input trie par catégorie
+  category = document.getElementById('category').getAttribute('data-category')
+  const selectedCategory = document.getElementById('category')
+  const tabOption = selectedCategory.querySelectorAll("option")
+
+  for (let i = 0; i < tabOption.length ; i++){
+    if (tabOption[i].innerHTML.toLocaleLowerCase() == category.toLocaleLowerCase()){
+      tabOption[i].setAttribute("selected", "selected")
+      break;
+    }
+  }
+  // Fin Affichage de la category dans l'input trie par catégorie
+
+  // fetch récuperation
+ 
+
+  recuperationProduits(category)
+ 
+  // Mise à jour de l'affichage du prix
+  const priceInput = document.getElementById('price');
+  const priceValue = document.getElementById('priceValue');
+  
+  priceInput.addEventListener('input', function(e) {
+    priceValue.textContent = `${e.target.value}€`;
+    const maxPrice = parseFloat(e.target.value);
+    const filteredProducts = prod.products.filter(p => p.price <= maxPrice);
+    const objectfilteredProducts = {
+      products : filteredProducts
+    }
+
+    map.clear()
+    displayProducts(objectfilteredProducts, "no");
+  });
+
+  // Gestionnaires d'événements pour les filtres
+  document.getElementById('category').addEventListener('change', function(e) {
+    // spinner de chargement des cartes
+    loadingCards()
+    category = e.target.value;
+
+    // Initialisation de valeur
+    document.getElementById('sort').selected = "Popularité"
+    document.getElementById('price').value = ""
+    document.getElementById('priceValue').textContent = '500€'
+
+    
+    map.clear(); // Effacer le contenu de map pour initialiser les nombres de like 
+    // Récupération des produits 
+    recuperationProduits(category)
+    //displayProducts(filteredProducts);
+  });
+
+  document.getElementById('sort').addEventListener('change', function(e) {
+    const sortValue = e.target.value;
+
+
+    let sortedProducts = [...prod.products];
+    
+    switch(sortValue) {
+      case 'price-asc':
+        sortedProducts.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        sortedProducts.sort((a, b) => b.price - a.price);
+        break;
+      // Ajoutez d'autres cas de tri si nécessaire
+    }
+
+    const objectsortedProducts = {
+      products : sortedProducts
+    }
+
+    map.clear()
+    displayProducts(objectsortedProducts);
+  });
+});
+
+// Exemple d'utilisation : appeler showLoginModal() lorsqu'un utilisateur non connecté
+// tente de poster un commentaire
+    // Fonction pour afficher le modal
+function showLoginModal() {
+    document.querySelector('.overlay').style.display = 'block';
+    //document.querySelector('.modal').style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Empêche le défilement
+}
+
+function handleCommentSubmit(event) {
+    const isLoggedIn = false; // À remplacer par votre logique de vérification de connexion
+    
+    if (!isLoggedIn) {
+        showLoginModal();
+    } else {
+        // Logique pour poster le commentaire
+    }
+}
+
+socket.on('noIdentifier', (res) => {
+    if (likeDuButton){
+      // Retirer le style de "like"
+      likeDuButton.querySelector('svg').style.fill = 'none';
+      likeDuButton.querySelector('svg').style.stroke = '#000000';
+      likeDuButton.setAttribute('data-isLiked', "no");
+    }
+
+  handleCommentSubmit()
+
+})
+
+
+let objectResponseComment = ""
+
+// Fonction pour répondre au commentaire
+function showReplyPreview(button) {
+  event.stopPropagation();
+  const commentActions = button.closest('.comment-actions')
+  const comment = button.closest('.isComment');
+  const preview = comment.closest(".comments-section").nextElementSibling.querySelector('.reply-preview') // Conteneur pour afficher le commentaire
+  preview.style.display = "block"
+  const commentText = comment.querySelector('.messageTxt').textContent; // Texte sélectionner
+  const username = comment.querySelector('.username').textContent; // Texte sélectionner
+  
+  const commentId = comment.querySelector('.username').getAttribute('data-commentId')
+  const productId = comment.querySelector('.username').getAttribute('data-productId')
+  commentActions.classList.add("hidden")
+  
+  if (preview.querySelector(".preview-child") ? true : false){
+    preview.querySelector(".preview-child").remove()
+  
+  }
+
+
+  objectResponseComment = {
+    parentCommentId : commentId,
+    productId : productId
+  }
+
+
+  // Envoyer les données via Socket.IO
+  //socket.emit("replyComment", { parentCommentId, productId, commentValue });
+  preview.innerHTML += `<div class="preview-child">Répondre à <strong>${username}</strong> : ${commentText}</div>`;
+  preview.classList.add('active');
+  //console.log(  comment.closest(".comments-section").nextElementSibling.querySelector('.reply-preview').nextElementSibling)
+  comment.closest(".comments-section").nextElementSibling.querySelector('.reply-preview').nextElementSibling.focus();
+}
+
+function hiddenReplyPreview(button){
+  const preview = button.closest('.reply-preview')
+  const previewChild = button.nextElementSibling
+  previewChild.innerHTML = ""
+  preview.classList.remove('active');
+}
+
+
+//Bouton envoie message commentaire produit
+
+function submitComment(productId, button) {
+  // Récupérer l'input de commentaire associé à ce bouton
+  const commentInput = button.closest('.mt-3').querySelector('.comment-input');
+  const commentValue = commentInput.value;
+
+  // Répondre à un commentaire 
+    const preview = button.closest(".mt-3").querySelector(".reply-preview")
+  if(objectResponseComment){   
+    preview.style.display = "none"
+    
+    objectResponseComment.commentValue = commentValue.trim()
+
+
+
+    // Envoyer les données via Socket.IO
+    socket.emit("replyComment", objectResponseComment);
+    objectResponseComment = ""
+    commentInput.value = '';
+
+    return
+  }
+
+  // Afficher l'ID du produit et la valeur du commentaire dans la console
+  if (commentValue.trim()) {
+    const productIdcommentValueObjet= {productId, commentValue}
+    
+    
+        socket.emit('newComment', productIdcommentValueObjet);
+        // Réinitialiser la valeur de l'input après l'envoi
+        commentInput.value = '';
+    }
+
+}
+
+// Afficher le commentaire ajouté en temps réel
+socket.on('commentAdded', (comment) => {
+  const Ismessages = commentsSection.querySelector('.isComment')
+
+  if (Ismessages === null){
+  commentsSection.innerHTML = ""
+  }
+        
+displayComment(comment);
+});
+
+
+socket.on("repliesLoaded", (objectResponseComment) => {
+  
+  // Fin spinner
+  document.getElementById(`replies-${objectResponseComment.parentCommentId}`).querySelector('.spinnerResp').style.display = "none"
+
+  const repliesSection = document.getElementById(`replies-${objectResponseComment.parentCommentId}`);
+
+  repliesSection.innerHTML = ""
+  objectResponseComment.replies.forEach((reply) => {
+    const replyElement = document.createElement('div');
+
+    // Vérifier si l'utilisateur connecté est l'auteur du commentaire
+    const isAuthor = utilisateurId === reply.userId;
+
+    // Ajouter la classe "msgMe" si l'utilisateur est l'auteur
+    const commentClass = isAuthor ? "own message" : "other message";
+
+    replyElement.className = "reply rounded-lg";
+    replyElement.innerHTML = `
+     
+      <div style="position : relative; translateX : 15px" class="isComment bg-gray-50 p-3 rounded-lg ${commentClass}" id="comment-${reply._id}">
+            <div class="flex items-center justify-between mb-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <img src="${reply.profileImagePath}" data-user="${reply.userId}" alt="User avatar" class="profile-pic minSize" onclick="showUserInfo(this)" class="rounded-full">
+                    <span class="font-medium text-sm username" data-productId="${reply.productId}" data-commentId="${reply._id}">${reply.username}</span>
+                </div>
+                <button data-commentId="${reply._id}" onclick="panneauReplyReset(this)" class="comment-actions-btn opacity-100 group-hover:opacity-100 transition-opacity">
+                    <svg class="w-5 h-5" style="height:20px" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="6" r="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <circle cx="12" cy="18" r="2"/>
+                    </svg>
+                </button>
+                <div style="z-index: 1001;top: 30px;right: 25px;height: 115px;overflow: scroll;" class="hidden comment-actions absolute right-0 top-8 bg-white shadow-lg rounded-lg z-10 py-1 w-32">
+                    <button class="reply-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm" onclick="showReplyPreview(this)">Reply</button>
+                    <button class="report-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-500">Report</button>
+                    ${isAuthor ? `<button  class="delete-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-500" onclick="deleteComment('${reply._id}')">Delete</button>` : ""}
+                </div>
+            </div>
+            <p class="text-gray-600 text-sm messageTxt" style="text-align: left">${reply.isDeleted ? "Ce commentaire a été supprimé." : reply.comment}</p>
+            <p class="created-at">${reply.formattedDate}</p>
+        </div>
+
+        ${reply.replies ? `<p class="respComment" data-ouvertResp="false" data-commentId="${reply._id}" onclick="loadReplies(this,${reply.replies})">voir réponse(s) (${reply.replies})</p>` : ""}
+        <div data-open="false" class="replies-section hidden repondre-${reply._id}" id="replies-${reply._id}">
+          <div class="spinnerResp">
+            <img style="width: 50px;" src="/images/spinner.gif" alt="">
+          </div>
+        </div>
+    `;
+    repliesSection.appendChild(replyElement);
+  });
+  repliesSection.classList.remove("hidden");
+});
+socket.on("replyAdded", (newReply) => {
+  // Trouver la section des réponses
+  const repliesSection = document.getElementById(`replies-${newReply.parentCommentId}`);
+
+  {{!-- console.log("repliesSection",repliesSection)
+  console.log("repliesSection bool",repliesSection.getAttribute("data-open"))
+  console.log("repliesSection type",typeof(repliesSection.getAttribute("data-open"))) --}}
+
+  if (repliesSection.getAttribute("data-open") == 'true'){
+    const now = new Date();
+
+    const formattedDate = now.toLocaleString('fr-Fr',{
+      day : '2-digit',
+      month : '2-digit',
+      year : 'numeric',
+      hour : '2-digit',
+      minute : '2-digit',
+    })
+    // Ajouter la nouvelle réponse dans la section des réponses
+  
+    const replyElement = document.createElement('div');
+
+    // Vérifier si l'utilisateur connecté est l'auteur du commentaire
+    const isAuthor = utilisateurId === newReply.userId;
+
+    // Ajouter la classe "msgMe" si l'utilisateur est l'auteur
+    const commentClass = isAuthor ? "own message" : "other message";
+
+    replyElement.className = "reply rounded-lg";
+    replyElement.innerHTML = `
+     
+      <div style="position : relative; translateX : 15px" class="isComment bg-gray-50 p-3 rounded-lg ${commentClass}" id="comment-${newReply._id}">
+            <div class="flex items-center justify-between mb-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <img src="${newReply.profileImagePath}" data-user="${newReply.userId}" alt="User avatar" class="profile-pic minSize" onclick="showUserInfo(this)" class="rounded-full">
+                    <span class="font-medium text-sm username" data-productId="${newReply.productId}" data-commentId="${newReply._id}">${newReply.username}</span>
+                </div>
+                <button data-commentId="${newReply._id}" onclick="panneauReplyReset(this)" class="comment-actions-btn opacity-100 group-hover:opacity-100 transition-opacity">
+                    <svg class="w-5 h-5" style="height:20px" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="6" r="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <circle cx="12" cy="18" r="2"/>
+                    </svg>
+                </button>
+                <div style="z-index: 1001; top: 30px; right: 25px" class="hidden comment-actions absolute right-0 top-8 bg-white shadow-lg rounded-lg z-10 py-1 w-32">
+                    <button class="reply-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm" onclick="showReplyPreview(this)">Reply</button>
+                    <button class="report-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-500">Report</button>
+                    ${isAuthor ? `<button  class="delete-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-500" onclick="deleteComment('${newReply._id}')">Delete</button>` : ""}
+                </div>
+            </div>
+            <p class="text-gray-600 text-sm messageTxt" style="text-align: left">${newReply.comment}</p>
+            <p class="created-at">${formattedDate}</p>
+        </div>
+
+    `;
+  //console.log(repliesSection, newReply)
+
+
+
+  repliesSection.prepend(replyElement);
+  repliesSection.classList.remove("hidden"); // Afficher la section des réponses
+    return
+  }
+  // Créer le contenu pour la nouvelle réponse
+  if (newReply.replies) {
+
+    if(repliesSection.closest('.replies-section').parentNode.querySelector(".respComment")) {
+      repliesSection.closest('.replies-section').parentNode.querySelector(".respComment").textContent = `voir réponse(s) (${newReply.replies})`;
+     // Ajouter repliesDiv au-dessus de repliesSection
+      return
+    }
+
+    const responseLink = document.createElement("p");
+    responseLink.className = "respComment";
+    responseLink.setAttribute("data-ouvertResp", "false");
+    responseLink.setAttribute("data-commentId", newReply.parentCommentId);
+    responseLink.textContent = `voir réponse(s) (${newReply.replies})`;
+    responseLink.onclick = () => loadReplies(responseLink, newReply.replies);
+  //  repliesSection.appendChild(responseLink);
+
+
+     // Ajouter repliesDiv au-dessus de repliesSection
+  repliesSection.closest('.replies-section').parentNode.insertBefore(responseLink, repliesSection.closest('.replies-section'));
+
+  }
+
+  // Ajouter une section pour afficher les réponses
+  const repliesDiv = document.createElement("div");
+  repliesDiv.className = `replies-section hidden repondre-${newReply._id}`;
+  repliesDiv.setAttribute("data-open", "false");
+  repliesDiv.id = `replies-${newReply.parentCommentId}`;
+
+  // Ajouter un spinner à la section
+  const spinnerDiv = document.createElement("div");
+  spinnerDiv.className = "spinnerResp";
+  const spinnerImg = document.createElement("img");
+  spinnerImg.style.width = "50px";
+  spinnerImg.src = "/images/spinner.gif";
+  spinnerImg.alt = "very good";
+  spinnerDiv.appendChild(spinnerImg);
+  repliesDiv.appendChild(spinnerDiv);
+
+
+  //console.log(repliesSection, repliesDiv)
+
+  
+  // Ajouter le tout à la section des réponses
+  repliesSection.appendChild(repliesDiv);
+
+  repliesSection.classList.remove("hidden"); // Afficher la section des réponses
+});
+
+function deleteComment(commentId) {
+    // Envoyer une requête DELETE à l'API
+    fetch(`/deliver/api/comments/delete-comment/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Inclure les cookies pour les sessions
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "ok") {
+              console.log("Commentaire supprimé", document.getElementById(`comment-${commentId}`))
+
+                // Retirer le commentaire du DOM
+                document.getElementById(`comment-${commentId}`).innerHTML = "Ce commentaire a été supprimé."
+
+            } else {
+              //  alert(data.message || "Impossible de supprimer le commentaire.");
+            }
+        })
+        .catch(error => {
+            console.error("Erreur :", error);
+           // alert("Une erreur est survenue.");
+        });
+}
+
+
+    // Variable pour stocker le dernier panneau ouvert
+let lastOpenedPanel = null;
+
+function panneauReplyReset(infoBtn) {
+    // Sélectionner le panneau correspondant au bouton cliqué
+    const btnReplyReset = infoBtn.nextElementSibling;
+
+
+    // Fermer le dernier panneau ouvert s'il est différent de celui-ci
+    if (lastOpenedPanel && lastOpenedPanel !== btnReplyReset) {
+        lastOpenedPanel.classList.add("hidden");
+    }
+
+    // Basculer la visibilité du panneau actuel
+    btnReplyReset.classList.toggle("hidden");
+
+    // Mettre à jour le dernier panneau ouvert
+    lastOpenedPanel = btnReplyReset.classList.contains("hidden") ? null : btnReplyReset;
+}
+
+// Fermer tous les panneaux si on clique en dehors
+document.addEventListener("click", function(event) {
+    const isClickInside = event.target.closest('.isComment') !== null;
+    
+    if (!isClickInside && lastOpenedPanel) {
+        lastOpenedPanel.classList.add("hidden");
+        lastOpenedPanel = null;
+    }
+});
+
+
+    /************************ Fin Section pour gérer l'apparition du panneau reply et report *****/
+
+    // Fonction pour cacher le modal
+function hideLoginModal() {
+    document.querySelector('.overlay').style.display = 'none';
+    document.body.style.overflow = 'auto'; // Réactive le défilement
+}
+
+// Gestionnaire d'événement pour le bouton de fermeture
+document.querySelector('.close-btn').addEventListener('click', hideLoginModal);
+
+   /************************ Fin Section pour gérer l'apparition du panneau reply et report *****/
+
+    /*********************** début User information commentaire *****************************/
+    
+function showUserInfo(info) {
+
+  const id = info.getAttribute('data-user')
+    const userModal = document.getElementById('userModal');
+    const overlay = document.getElementById('overlay');
+    const userInfo = document.getElementById('userInfo');
+    userModal.style.display = 'block';
+    overlay.style.display = 'block';
+    // fetch 
+    fetch('/deliver/api/userinfo/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: id }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        //console.log('Réponse du serveur:', data)
+
+        // Réajuster le nom au cas où il s'agit d'un acheteur
+        if (data.infoUser.companyName === undefined){
+          data.infoUser.companyName = data.infoUser.username
+        }
+
+        let mois = ["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]
+
+        let date = data.infoUser.date.split('-')
+        const numberMois = +date[1]
+
+        date = mois[numberMois] +" "+date[0]
+
+        userInfo.innerHTML = `
+        <a href="${data.infoUser.profileImagePath}">
+          <img style='margin: 0px auto' src="${data.infoUser.profileImagePath}" alt="Photo de profil de ${data.infoUser.companyName}">
+        </a>
+        <h2 style='font-weight : bold;'>${data.infoUser.companyName}</h2>
+        <p>Passionné de technologie et amateur de bonnes affaires</p>
+        <p>${data.infoUser.email}</p>
+         <div class="user-stats">
+            <div>
+                <strong>0</strong>
+                <div>Avis</div>
+            </div>
+            <div>
+                <strong>${date}</strong>
+                <div>Membre depuis</div>
+            </div>
+        </div>
+        `
+      })
+      .catch(error => console.error('Erreur:', error));
+
+}
+
+function closeModal() {
+    const userModal = document.getElementById('userModal');
+    const overlay = document.getElementById('overlay');
+    userModal.style.display = 'none';
+    overlay.style.display = 'none';
+}
+
+// Fermer la modal en cliquant sur l'overlay
+document.getElementById('overlay').addEventListener('click', closeModal);
+
+// Fermer la modal avec la touche Escape
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeModal();
+    }
+});
+
+    /*********************** fin User information commentaire *****************************/
+/****************************** Début Bouton navigation pour les produits ************/
+// Fonction pour gérer les clics de navigation
+function btnNavigation(page) {
+  map.clear()
+  // Mettre à jour la page actuelle
+  const currentPage = page;
+
+  // Récupérer ou filtrer les produits en fonction de la page actuelle
+  const paginatedProducts = getProductsByPage(currentPage);
+
+
+  recuperationProduits(category, page)
+  // Afficher les produits et mettre à jour la pagination
+  displayProducts(paginatedProducts);
+
+}
+
+
+//Fonction pour récupérer les produits par page
+//Ajoutez une fonction qui divise les produits en pages (si ce n'est pas déjà fait) :
+
+function getProductsByPage(page) {
+  const productsPerPage = 3; // Définir le nombre de produits par page
+  const startIndex = (page - 1) * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+
+  // Exemple d'objet `products`
+  return {
+    totalPages: Math.ceil(allProducts.length / productsPerPage),
+    currentPage: page,
+    products: allProducts.slice(startIndex, endIndex),
+  };
+}
+
+/****************************** Fin Bouton navigation pour les produits ************/
+</script>

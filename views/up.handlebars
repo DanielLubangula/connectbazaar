@@ -1,0 +1,35 @@
+<h1>Upload d'Images</h1>
+<form id="data-form">
+    <input type="text" id="name-input" placeholder="Nom">
+    <input type="number" id="age-input" placeholder="Âge">
+    <input type="file" id="image-input" name="images" multiple accept="image/*" /> <!-- Choix multiple pour jusqu'à 3 images -->
+    <button type="button" id="submit-button">Envoyer</button>
+</form>
+    <script>
+     document.querySelector('#submit-button').addEventListener('click', function() {
+    const formData = new FormData();
+    
+    // Récupérer les fichiers choisis (jusqu'à 3)
+    const images = document.querySelector('#image-input').files;
+    for (let i = 0; i < images.length && i < 3; i++) {
+        formData.append('images', images[i]);  // 'images' est le nom du champ que le serveur attend
+    }
+    
+    // Ajouter d'autres données si nécessaire
+    formData.append('name', document.querySelector('#name-input').value);
+    formData.append('age', document.querySelector('#age-input').value);
+
+    fetch('/deliver/up', {
+        method: 'POST',
+        body: formData  // Pas de Content-Type nécessaire pour FormData
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log('Success:', result);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+    </script>

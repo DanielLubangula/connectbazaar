@@ -1,0 +1,339 @@
+<html><head>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f5f5f5;
+  padding: 1rem;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.search-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.search-form {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.input-group {
+  flex: 1;
+  min-width: 250px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.search-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.search-btn:hover {
+  background: #2980b9;
+}
+
+.status-display {
+  margin-top: 2rem;
+  padding: 2rem;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  display: none;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.status-item:last-child {
+  border-bottom: none;
+}
+
+.status-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: white;
+}
+
+.status-icon.pending {
+  background: #f1c40f;
+}
+
+.status-icon.verified {
+  background: #2ecc71;
+}
+
+.status-icon.completed {
+  background: #3498db;
+}
+
+.status-details {
+  flex: 1;
+}
+
+.status-details h3 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.status-details p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.status-date {
+  color: #95a5a6;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 90%;
+    }
+
+    .status-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .status-icon {
+        margin-bottom: 10px;
+    }
+
+    .status-details h3 {
+        font-size: 1.2rem;
+    }
+
+    .status-details p {
+        font-size: 1rem;
+    }
+
+    .status-date {
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    #phone{
+      width: 80%;
+    }
+}
+
+
+@media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .search-form {
+    flex-direction: column;
+  }
+  
+  .input-group {
+    width: 100%;
+  }
+  
+  .search-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.show {
+  display: block !important;
+  animation: fadeIn 0.3s ease-out;
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  
+<div class="container">
+    <h1><i class="fas fa-search-dollar fa-lg"></i>Suivi de Paiement</h1>
+    
+    <div class="search-section">
+        <div class="search-form">
+           
+            <div class="input-group">
+                <label><i class="fas fa-phone"></i> Numéro de téléphone</label>
+                <input type="tel" id="phone" placeholder="Ex: +243 800 000 000">
+            </div>
+            <button class="search-btn" onclick="checkStatus()">
+                <i class="fas fa-search"></i>
+                Vérifier le statut
+            </button>
+        </div>
+    </div>
+
+    <div class="status-display" id="statusDisplay">
+        <div class="status-item">
+            <div class="status-icon pending">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="status-details">
+                <h3>Paiement Reçu</h3>
+                <p>Nous avons reçu votre paiement et il est en cours de traitement.</p>
+            </div>
+            <div class="status-date">22/02/2024 10:30</div>
+        </div>
+        
+        <div class="status-item">
+            <div class="status-icon verified">
+                <i class="fas fa-check"></i>
+            </div>
+            <div class="status-details">
+                <h3>Vérification Complète</h3>
+                <p>Le paiement a été vérifié avec succès.</p>
+            </div>
+            <div class="status-date">22/02/2024 11:45</div>
+        </div>
+        
+        <div class="status-item">
+            <div class="status-icon completed">
+                <i class="fas fa-flag-checkered"></i>
+            </div>
+            <div class="status-details">
+                <h3>Transaction Finalisée</h3>
+                <p>Votre paiement a été entièrement traité et validé.</p>
+            </div>
+            <div class="status-date">22/02/2024 12:00</div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function checkStatus() {
+    const phone = document.getElementById('phone').value.trim();
+    const statusDisplay = document.getElementById('statusDisplay');
+    statusDisplay.innerHTML = ''; // Réinitialiser l'affichage
+
+    if (!phone) {
+        alert('Veuillez entrer un numéro de téléphone valide.');
+        return;
+    }
+
+    console.log(phone)
+
+ try { 
+    const response = await fetch(`/deliver/api/verificationpayement?phone=${encodeURIComponent(phone)}`);
+    const result = await response.json();
+
+    if (!result.success) {
+        alert(result.message || 'Erreur lors de la récupération des données.');
+        return;
+    }
+
+    // Afficher dynamiquement les données
+    const payments = result.data;
+    console.log(payments);
+    payments.forEach(payment => {
+        const statusItem = document.createElement('div');
+        statusItem.className = 'status-item';
+
+        // Définir les icônes et les classes en fonction du statut
+        const statusIcon = document.createElement('div');
+        statusIcon.className = `status-icon ${payment.status.toLowerCase()}`;
+        statusIcon.innerHTML = `<i class="fas ${
+            payment.status === 'Pending' ? 'fa-clock' :
+            payment.status === 'approved' ? 'fa-check' :
+            payment.status === 'rejected' ? 'fa-times' :
+            'fa-info-circle' // Icône par défaut
+        }"></i>`;
+
+        const statusDetails = document.createElement('div');
+        statusDetails.className = 'status-details';
+        statusDetails.innerHTML = `
+            <h3>${payment.status === 'rejected' ? 'Rejeté' : payment.status}</h3>
+            <p>${payment.notes || 'Aucune note fournie.'}</p>
+        `;
+
+        const statusDate = document.createElement('div');
+        statusDate.className = 'status-date';
+        statusDate.textContent = new Date(payment.createdAt).toLocaleString();
+
+        // Ajouter des styles ou comportements spécifiques pour les produits rejetés
+        if (payment.status === 'rejected') {
+            statusItem.style.backgroundColor = '#ffdddd'; // Rouge clair pour signaler un rejet
+            statusDetails.style.color = '#a00'; // Texte en rouge
+        }
+
+        statusItem.appendChild(statusIcon);
+        statusItem.appendChild(statusDetails);
+        statusItem.appendChild(statusDate);
+
+        statusDisplay.appendChild(statusItem);
+        statusDisplay.style.display = "block";
+    });
+} catch (error) {
+    console.error(error);
+    alert('Une erreur est survenue. Veuillez réessayer plus tard.');
+}
+
+}
+</script>
+
+</body></html>

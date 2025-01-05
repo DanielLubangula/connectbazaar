@@ -1,0 +1,332 @@
+
+    <style>
+                  :root {
+    --primary: #2c3e50;
+    --secondary: #34495e;
+    --success: #27ae60;
+    --danger: #e74c3c;
+    --warning: #f39c12;
+  }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6fa;
+        }
+
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .nav-link {
+            color: #bdc3c7;
+            text-decoration: none;
+            padding: 0.5rem;
+        }
+
+        .nav-link.active {
+            color: white;
+            border-bottom: 2px solid white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-title {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 0.5rem;
+        }
+
+        .table-container {
+            margin: 1rem;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .search-container {
+            padding: 1rem;
+            background: white;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #e3fcef;
+            color: #00b341;
+        }
+
+        .status-inactive {
+            background: #fee7e7;
+            color: #ff4444;
+        }
+
+        .badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+  }
+
+  .badge-buyer {
+    background-color: #e8f5fe;
+    color: #2196f3;
+  }
+
+  .badge-seller {
+    background-color: #fef4e8;
+    color: #ff9800;
+  }
+
+  .action-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    transition: opacity 0.3s;
+  }
+
+  .action-btn:hover {
+    opacity: 0.8;
+  }
+  .btn-block {
+    background-color: var(--warning);
+    color: white;
+  }
+
+  .btn-delete {
+    background-color: var(--danger);
+    color: white;
+  }
+
+  
+  .red{
+    color: red;
+  }
+
+  .blue{
+    color: blue;
+  }
+
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            th, td {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .table-container {
+                margin: 0.5rem;
+                overflow-x: auto;
+            }
+        }
+    </style>
+
+    <header class="header">
+        <h1>Admin Dashboard</h1>
+        <nav class="nav">
+            <a href="#" class="nav-link active">Tableau de bord</a>
+            <a href="/deliver/admin/connect/viewProduct" class="nav-link">voir les produits</a>
+            <a href="/deliver/admin/connect/payement" class="nav-link">voir les payements</a>
+        </nav>
+    </header>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-title">Total Utilisateurs</div>
+            <div class="stat-value" id="totalUsers"></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">Acheteurs</div>
+            <div class="stat-value" id="totalBuyers"></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">Vendeurs</div>
+            <div class="stat-value" id="totalSellers"></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">Utilisateurs connectés</div>
+            <div class="stat-value" id="userConnect"></div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <div class="search-container">
+            <input type="email" placeholder="Filtrer par email..." class="search-input" id="emailFilter">
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Type</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+                <!-- Les données seront injectées ici par JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+     
+<script>
+    const API_URL = "http://localhost:5000/deliver/api/findAlluser";
+    //const API_URL = "http://192.168.43.14:5000/deliver/api/findAlluser";
+    const socket = io()
+    
+    socket.on('userConnect', (nbrUser) => {
+        console.log(nbrUser)
+      document.getElementById('userConnect').innerHTML = nbrUser
+    })
+    // Charger les utilisateurs
+    async function loadUsers() {
+      const response = await fetch(`${API_URL}`);
+      const users = await response.json();
+    
+      // Statistiques
+      const totalUsers = users.length;
+      const totalBuyers = users.filter(u => u.type === "Acheteur").length;
+      const totalSellers = users.filter(u => u.type === "vendeur").length;
+    
+      document.getElementById("totalUsers").textContent = totalUsers;
+      document.getElementById("totalBuyers").textContent = totalBuyers;
+      document.getElementById("totalSellers").textContent = totalSellers;
+    
+      // Tableau des utilisateurs
+      const tbody = document.getElementById("userTableBody");
+      tbody.innerHTML = "";
+    
+      users.forEach((user, index) => {
+    
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${user._id}</td>
+          <td>${user.username || user.companyName}</td>
+          <td>${user.email}</td>
+          <td><span class="badge ${user.type==="vendeur" ? "badge-seller" : "badge-buyer"}">${user.type === "vendeur" ? "Vendeur" :  "Acheteur"}</span></td>
+          <td class="${user.status === "active" ? "blue" : "red"}">${user.status === "active" ? "Actif" : "Bloqué"}</td>
+          <td>
+            <button onclick="toggleUserStatus('${user._id}')" class="action-btn ${user.status === "active" ? "btn-block" : ""}">
+              ${user.status === "active" ? "Bloquer" : "Débloquer"}
+            </button>
+            <button onclick="deleteUser('${user._id}')" class="action-btn btn-delete">Supprimer</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    
+    // Bloquer/Débloquer un utilisateur
+    async function toggleUserStatus(userId) {
+      console.log('ICI', userId)
+      await fetch(`${API_URL}/users/${userId}/toggle-status`, { method: "PUT" });
+      loadUsers();
+    }
+    
+    // Supprimer un utilisateur
+    async function deleteUser(userId) {
+      if (confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
+        await fetch(`${API_URL}/users/${userId}`, { method: "DELETE" });
+        loadUsers();
+      }
+    }
+    
+    // Charger les données au démarrage
+    document.addEventListener("DOMContentLoaded", loadUsers);
+
+      // Événement sur le champ de saisie
+    emailFilter.addEventListener('input', () => {
+      const filterValue = emailFilter.value.trim().toLowerCase(); // Récupère la valeur du champ
+      const rows = document.querySelector('table').getElementsByTagName('tr'); // Toutes les lignes du tableau
+
+      for (let row of rows) {
+        const emailCell = row.cells[2]; // Colonne des e-mails
+        if (emailCell) {
+          const emailText = emailCell.textContent.trim().toLowerCase(); // Valeur de l'email dans la cellule
+          // Afficher la ligne si l'e-mail contient la valeur saisie
+          if (emailText.includes(filterValue)) {
+            row.style.display = ''; // Affiche la ligne
+          } else {
+            row.style.display = 'none'; // Masque la ligne
+          }
+        }
+      }
+    });
+    </script>

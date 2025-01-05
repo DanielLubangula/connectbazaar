@@ -1,0 +1,53 @@
+
+ <style>
+    :root {
+    --primary-color: #3A506B;
+    --secondary-color: #5BC0BE;
+    --text-color: #1C2541;
+    --bg-color: #F5F5F5;
+    --card-bg: #FFFFFF;
+    --hero-bg-color: #1C2541; 
+  }
+    .headerVendor{
+        position: sticky;
+        top: 0;
+        left: 0;
+        z-index: 3;
+        background-color: var(--primary-color);
+    }
+ </style>
+ <header class="headerVendor  text-white p-4">
+    {{!-- <a class="back-arrow-container" style="color:#4a4a4a ;" href="/deliver">
+          <div class="back-arrow"></div>
+              <span class="text">Retour</span>
+      </a> --}}
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <button id="menuToggle" class="md:hidden mr-4">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <h1 class="text-xl md:text-2xl font-bold">{{titre}}</h1>
+            </div>
+            <div class="flex items-center space-x-2 md:space-x-4">
+                {{!-- <div class="relative">
+                    <i class="fas fa-bell text-xl cursor-pointer"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                </div> --}}
+                <div class="flex items-center space-x-2">
+
+                    <img
+                        {{#if vendor.profileImagePath}}
+                            src="{{vendor.profileImagePath}}" 
+                            {{else}}
+                                src="/images/defaultUserProfil.jpg"
+                        {{/if}}
+                     
+                     alt="Photo de profil vendeur" class="rounded-full w-8 h-8 md:w-10 md:h-10">
+                    <span class="hidden md:inline">{{vendor.email}}</span>
+                </div>
+            </div>
+        </div>
+</header>
+<script>
+    console.log({{{json vendor}}})
+</script>

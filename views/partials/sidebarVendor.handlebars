@@ -1,0 +1,77 @@
+<style>
+    :root {
+    --primary-color: #3A506B;
+    --secondary-color: #5BC0BE;
+    --text-color: #1C2541;
+    --bg-color: #F5F5F5;
+    --card-bg: #FFFFFF;
+    --hero-bg-color: #1C2541; 
+  }
+    #sidebar{
+        /*position: fixed;*/
+        background-color: rgba(28, 37, 65, 0.7);
+    }
+    .logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo img {
+    width: 180px;
+    height: auto;
+  }
+
+  nav ul li a{
+    color: #F5F5F5;
+  }
+
+  .sidebar {
+    border: 1px solid #5BC0BE;
+    border-left: none;
+  }
+
+
+</style>
+<aside id="sidebar" class="sidebar bg-white shadow-lg rounded-lg p-4">
+    <div class="logo">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50'%3E%3Ctext x='10' y='35' font-family='Arial, sans-serif' font-size='30' font-weight='bold' fill='%23FFFFFF'%3EDeliverEase%3C/text%3E%3Cpath d='M180 25 L190 15 L200 25 L190 35 Z' fill='%235BC0BE'/%3E%3C/svg%3E" alt="DeliverEase Logo" width="180" height="45">
+      </div>
+    <a class="back-arrow-container" style="color:#4a4a4a ;" href="/deliver">
+          <div class="back-arrow"></div>
+              <span class="text">Retour</span>
+      </a>
+    <nav>
+        <ul class="space-y-2">
+            {{!-- <li>
+                <a href="/deliver/DashbordVendor"  class="{{#if activeongletdas}}active-tab{{/if}} flex items-center space-x-2 p-3 rounded-lg">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Tableau de Bord</span>
+                </a>
+            </li> --}}
+            <li>
+                <a href="/deliver/productVendor" class="{{#if activeongletprod}}active-tab{{/if}} flex items-center space-x-2 p-3 rounded-lg">
+                    <i class="fas fa-box"></i>
+                    <span>Produits</span>
+                </a>
+            </li>
+            {{!-- <li>
+                <a href="/deliver/commandeVendor" class="{{#if activeongletcom}}active-tab{{/if}} flex items-center space-x-2 p-3 rounded-lg ">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Commandes</span>
+                </a>
+            </li> --}}
+            <li>
+                <a href="/deliver/profilVendor" class="{{#if activeongletpro}}active-tab{{/if}} flex items-center space-x-2 p-3 rounded-lg">
+                    <i class="fas fa-user"></i>
+                    <span>Profil</span>
+                </a>
+            </li>
+            {{!-- <li>
+                <a href="/deliver/livraisonVendor" class="{{#if activeongletliv}}active-tab{{/if}} flex items-center space-x-2 p-3 rounded-lg">
+                    <i class="fas fa-truck"></i>
+                    <span>Livraisons</span>
+                </a>
+            </li> --}}
+        </ul>
+    </nav>
+</aside>

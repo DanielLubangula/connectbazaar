@@ -1,0 +1,1659 @@
+<script src="https://cdn.tailwindcss.com"></script>
+{{!-- <script src="./js/tailwind.js"></script> --}}
+<link rel="stylesheet" href="/style/acceuil.css">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#2196F3',
+        secondary: '#FFC107',
+      },
+      animation: {
+        'loading': 'loading 1.5s infinite',
+        'heart': 'heart 0.3s ease-in-out',
+      },
+      keyframes: {
+        loading: {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
+        },
+        heart: {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.2)' },
+          '100%': { transform: 'scale(1)' },
+        }
+      }
+    }
+  }
+}
+</script>
+</head>
+<body>
+  
+
+<nav class="navbar">
+ <div class="logo">
+  <a href="/deliver">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 250 50'%3E%3Ctext x='10' y='35' font-family='Arial, sans-serif' font-size='30' font-weight='bold' fill='%23FFFFFF'%3EConnectBazaar%3C/text%3E%3Cpath d='M230 25 L240 15 L250 25 L240 35 Z' fill='%235BC0BE'/%3E%3C/svg%3E" alt="ConnectBazaar Logo">
+  </a>
+</div>
+
+
+  <!-- Bouton du menu burger -->
+  <button id="burgerMenu" class="burger-menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- Menu principal -->
+  <div id="menu" class="menu">
+    <ul>
+      <!-- Notifications -->
+      {{#if user}}
+      <!-- <li>
+        <div class="notification-icon">
+          <a href="/deliver/notifications">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon">
+              <path d="M12 2C8.686 2 6 4.686 6 8v5c0 .265-.105.52-.293.707L4.414 15H19.586l-1.293-1.293A1 1 0 0 1 18 13V8c0-3.314-2.686-6-6-6zM12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2z"/>
+            </svg>
+            <span class="notification-count">3</span>
+            {{!-- <span class="notification-text">Notification</span> --}}
+          </a>
+        </div>
+      </li> -->
+      {{/if}}
+
+      {{#if vendor}}
+      <!-- <li>
+        <div class="notification-icon">
+          <a href="/deliver/notifications">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon">
+              <path d="M12 2C8.686 2 6 4.686 6 8v5c0 .265-.105.52-.293.707L4.414 15H19.586l-1.293-1.293A1 1 0 0 1 18 13V8c0-3.314-2.686-6-6-6zM12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2z"/>
+            </svg>
+            <span class="notification-count">3</span>
+            {{!-- <span class="notification-text">Notification</span> --}}
+          </a>
+        </div>
+      </li> -->
+      {{/if}}
+
+      <!-- Profil utilisateur ou espace vendeur -->
+      <li>
+        {{#if user}}
+        <div id="userStatus" class="user-status">
+          <a href="/deliver/profil">
+            <img src="{{user.profileImagePath}}" alt="Photo de profil" class="user-avatar" onerror="this.src='/images/defaultUserProfil.jpg';">
+          </a>
+          <span class="status-indicator"></span>&nbsp;&nbsp;
+          <span style="color: whitesmoke;">{{user.username}}</span>
+        </div>
+        {{else if vendor}}
+        <a href="/deliver/productVendor" class="vendor-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+          </svg>
+          <span>Espace Vendeur</span>
+        </a>
+        {{else}}
+        <a href="/deliver/registerLogin" id="loginBtn">Connexion / Inscription</a>
+        {{/if}}
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+
+
+
+
+  <!-- Début Présentation du site -->
+ <section class="hero" role="img" aria-label="Image générée par IA d'un vendeur et d'un acheteur discutant avec enthousiasme">
+  <div class="hero-content">
+    <h1>Bienvenue sur ConnectBazaar</h1>
+    <p class="hero-subtitle">La plateforme qui rapproche vendeurs et acheteurs</p>
+    <p class="hero-description">Découvrez un espace où vendeurs et acheteurs peuvent échanger directement pour conclure des affaires en toute simplicité et sans intermédiaires.</p>
+    <div class="hero-features">
+      <div class="hero-feature">
+        <i class="fas fa-store"></i>
+        <h3>Vendeurs authentiques</h3>
+        <p>Accédez à des vendeurs locaux proposant des produits uniques et de qualité.</p>
+      </div>
+      <div class="hero-feature">
+        <i class="fas fa-comments"></i>
+        <h3>Communication directe</h3>
+        <p>Discutez instantanément avec les vendeurs pour poser vos questions et négocier vos achats.</p>
+      </div>
+      <div class="hero-feature">
+        <i class="fas fa-handshake"></i>
+        <h3>Achats simplifiés</h3>
+        <p>Concluez vos transactions en toute transparence, directement avec les vendeurs.</p>
+      </div>
+    </div>
+    <a href="#explore" class="cta-button">Découvrir nos vendeurs</a>
+  </div>
+</section>
+
+  <!-- Fin présentation du site -->
+
+  <!-- SECTION RESTAURANT -->
+  <main>
+
+    <!-- DEBUT SECTION CATEGORIES -->
+    <section id="categories" class="category-showcase">
+  <h2 class="section-title">Nos Catégories</h2>
+  <div class="category-grid">
+    <!-- Catégorie Alimentation -->
+    <div class="category-card animate-fadeInUp">
+      <i class="fas fa-apple-alt"></i>
+      <h3>Alimentation</h3>
+      <p>Explorez notre sélection de produits alimentaires frais et variés.</p>
+      <a href="/deliver/productCateg/alimentation" class="category-btn">Explorer</a>
+    </div>
+
+    <!-- Catégorie Vêtements -->
+    <div class="category-card animate-fadeInUp">
+      <i class="fas fa-tshirt"></i>
+      <h3>Vêtements</h3>
+      <p>Trouvez les dernières tendances et styles dans notre collection de vêtements.</p>
+      <a href="/deliver/productCateg/v%C3%AAtements" class="category-btn">Explorer</a>
+    </div>
+
+    <!-- Catégorie Électronique -->
+    <div class="category-card animate-fadeInUp">
+      <i class="fas fa-tv"></i>
+      <h3>Électronique</h3>
+      <p>Découvrez les meilleurs appareils électroniques pour toutes vos envies technologiques.</p>
+      <a href="/deliver/productCateg/électronique" class="category-btn">Explorer</a>
+    </div>
+  </div>
+</section>
+
+    <!-- FIN SECTION CAFES -->
+     <!-- SECTION D'INSCRIPTION DES CLIENTS -->
+  <section class="auth-cta-section">
+  <div class="auth-cta-container" style="padding: 5px;">
+    <h2>Rejoignez ConnectBazaar dès aujourd'hui !</h2>
+    <p>Créez votre compte pour explorer les offres des vendeurs près de chez vous et échanger directement avec eux.</p>
+    <a href="/deliver/registerVendor" id="bodyLoginBtn" class="auth-btn cta-button">Inscription / Connexion</a>
+  </div>
+</section>
+
+<!-- FIN SECTION D'INSCRIPTION -->
+<!-- SECTION PROFIL UTILISATEUR -->
+<section id="userProfile" style="display:none;">
+  <h2 class="section-title">Profil Utilisateur</h2>
+  <div class="profile-container">
+    <div class="profile-info">
+      <h3>Informations personnelles</h3>
+      <p><strong>Nom:</strong> <span id="userName"></span></p>
+      <p><strong>Email:</strong> <span id="userEmail"></span></p>
+    </div>
+    <div class="order-history">
+      <h3>Historique des transactions</h3>
+      <ul id="orderList">
+        <!-- Order history will be populated dynamically -->
+      </ul>
+    </div>
+  </div>
+</section>
+<!-- FIN SECTION PROFIL UTILISATEUR -->
+<div id="product-container"></div>
+</main>
+
+<!-- SECTION VOUS ÊTES COMMERCANT -->
+<section class="vendor-cta-section">
+  <div class="vendor-cta-container">
+    <h2>Vous êtes un vendeur ?</h2>
+    <p>Rejoignez ConnectBazaar et élargissez votre clientèle dès aujourd'hui !</p>
+    <div class="vendor-benefits">
+      <h3>Pourquoi choisir notre plateforme :</h3>
+      <ul>
+        <li><i class="fas fa-store"></i> Publiez vos produits et services</li>
+        <li><i class="fas fa-comments"></i> Communiquez directement avec vos clients</li>
+        <li><i class="fas fa-clock"></i> Gagnez en visibilité et en efficacité</li>
+        <li><i class="fas fa-chart-line"></i> Analysez vos ventes grâce à des statistiques détaillées</li>
+        <li><i class="fas fa-bullhorn"></i> Créez des promotions pour attirer encore plus d'acheteurs</li>
+      </ul>
+    </div>
+    <p>Notre plateforme facilite vos échanges et vous aide à développer votre activité en toute simplicité.</p>
+    {{#if vendor.companyName}}
+      <a href="/deliver/productVendor" id="vendorLoginBtn" class="cta-button">Espace Vendeur</a>
+    {{/if}}
+  </div>
+</section>
+
+    <!-- FIN SECTION VOUS COMMERCANT -->
+
+  {{!-- début section premium --}}
+  
+  {{#if vendor.companyName}}
+     {{#unless (eq CheckStatus "approved")}}
+     
+
+  <section class="premiumSection">
+      <div id="premium-panel" class="premium-panel">
+      <div class="premium-title">✨ Passez en Premium ✨</div>
+      <div class="premium-content">
+          Découvrez tous les avantages de notre abonnement Premium :
+          <ul class="premiumPanneau">
+              <li>Mise en avant de vos produits sur la page d'accueil</li>
+              <li>Augmentation du nombre d'annonces de publication.</li>
+              <li>Accès prioritaire au support technique.</li>
+          </ul>
+      </div>
+      <button class="premium-button" onclick="window.location.href='/deliver/payement'">
+          Passer en Premium maintenant
+      </button>
+  </div>
+
+  </section>
+    {{/unless}}
+  {{/if}}
+  {{!-- fin section premium --}}
+  
+  <!-- SECTION POURQUOI CHOISIR NOTRE SITE -->
+<section class="featured-section">
+  <h2 class="featured-title">Pourquoi choisir ConnectBazaar ?</h2>
+  <div class="featured-grid">
+    <div class="featured-item">
+      <div class="featured-icon">🤝</div>
+      <h3>Communication directe</h3>
+      <p>Discutez instantanément avec les vendeurs pour poser vos questions et finaliser vos achats.</p>
+    </div>
+    <div class="featured-item">
+      <div class="featured-icon">🛍️</div>
+      <h3>Offres variées</h3>
+      <p>Explorez une large gamme de produits et services proposés par des vendeurs locaux.</p>
+    </div>
+    <div class="featured-item">
+      <div class="featured-icon">🌟</div>
+      <h3>Expérience simplifiée</h3>
+      <p>Un espace intuitif pour trouver, comparer et acheter ce que vous cherchez.</p>
+    </div>
+  </div>
+</section>
+
+
+    <!-- FIN CHOIX DU SITE -->
+  <footer>
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>Communication et Support</h3>
+      <p><i class="fas fa-phone"></i> Téléphone: +243 99 14 64 230</p>
+      <p><i class="fas fa-envelope"></i> Email: support@ConnectBazaar.com</p>
+      <p><i class="fas fa-clock"></i> Horaires: 7j/7, 8h-22h</p>
+    </div>
+   
+    </div>
+    <div class="footer-section">
+      <h3>Suivez-nous</h3>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 ConnectBazaar . Tous droits réservés.</p>
+  </div>
+</footer>
+
+  {{#if isMessage}}
+
+    <a href="/deliver/listChatUser" class="linkListChatUser">
+    <div class="chat-button">
+      {{#if p}}
+        <span class="numberNotif" style="padding : 5px; background : rgb(233, 65, 65); color : white;">{{p}}</span>
+      {{/if}}
+
+    <svg style="position : relative" class="chat-icon" viewBox="0 0 24 24" fill="white">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+        </svg>
+        Mes Discussions
+      </div>
+    </a>
+
+  {{/if}}
+
+
+
+<div class="overlay">
+  <div class="modal">
+    <span class="close-btn">&times;</span>
+    <h1 style="font-weight: bold;">Connexion requise</h1>
+    <p>Pour poster un commentaire, aimer un produit ou discuter avec le vendeur, vous devez être connecté.</p>
+    <p>Veuillez vous connecter en tant que vendeur ou acheteur pour continuer.</p>
+    <div class="modal-links">
+      <a href="/deliver/loginVendor" class="modal-link seller-link">Vendeur</a>
+      <a href="/deliver/registerLogin" class="modal-link buyer-link">Acheteur</a>
+    </div>
+  </div>
+</div>
+
+{{!-- Début User Info Comment --}}
+<div class="modal-overlay" id="overlay"></div>
+<div class="user-modal" id="userModal">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <div class="user-info" id="userInfo">
+        <!-- Le contenu sera injecté dynamiquement -->
+    </div>
+</div>
+
+<div class="notification" id="notification">
+  <div class="profile-pic">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+    </svg>
+  </div>
+  <div class="notification-content">
+    <div class="notification-header" id="notification-name"></div>
+    <div class="notification-message" id="notification-text"></div>
+    <div class="notification-time"></div>
+  </div>
+  <button class="close-button" onclick="hideNotification()">×</button>
+</div>
+
+{{!-- Fin User Info Comment --}}
+
+{{!-- Lien pour acceder à la liste des utilisateur pour le chat --}}
+{{{chatMessage}}}
+
+  <script>
+
+    document.getElementById("burgerMenu").addEventListener("click", function () {
+      console.log("ici")
+  const menu = document.getElementById("menu");
+  menu.classList.toggle("open");
+});
+
+
+
+    const socket = io();
+
+let map2 = new Map()
+let utilisateurId = ""
+map2.set("1",{{{json vendor}}})
+map2.set("2",{{{json user}}})
+
+map2.forEach((value, key) => {
+  if (value){
+    console.log(value)
+    utilisateurId = value._id
+  }
+})
+
+socket.on("userStatus", async (data) => {
+  console.log(data)
+})
+
+/************** Début Affichage de notification ***************************/ 
+let notificationTimeout;
+
+function showNotification(name, message, link, imagePath) {
+  const notification = document.getElementById('notification');
+  const notificationName = document.getElementById('notification-name');
+  const notificationText = document.getElementById('notification-text');
+  const notificationTime = document.querySelector('.notification-time');
+  const profilePic = document.querySelector('.profile-pic svg');
+
+  // Mettre à jour le contenu de la notification
+  notificationName.textContent = name;
+  notificationText.textContent = message;
+  notificationTime.textContent = "À l'instant";
+
+  // Afficher l'image de profil si elle est disponible
+  if (imagePath) {
+    console.log('.profile-pic', document.querySelector('.profile-pic'))
+    //profilePic.style.display = "none";
+    notification.querySelector('.profile-pic').innerHTML = `<img src="${imagePath}" alt="${name}" />`;
+  } else {
+    profilePic.style.display = "block";
+  }
+
+  // Ajouter le lien autour de la notification
+  if (link) {
+    notification.onclick = () => {
+      window.location.href = link;
+    };
+    notification.style.cursor = "pointer";
+  } else {
+    notification.onclick = null;
+    notification.style.cursor = "default";
+  }
+
+  // Afficher la notification
+  notification.classList.add('show');
+
+  // Masquer la notification après 10 secondes
+  if (notificationTimeout) {
+    clearTimeout(notificationTimeout);
+  }
+  notificationTimeout = setTimeout(() => {
+    hideNotification();
+  }, 10000);
+}
+
+function hideNotification() {
+  const notification = document.getElementById('notification');
+  notification.classList.remove('show');
+  
+  // Clear timeout
+  if (notificationTimeout) {
+    clearTimeout(notificationTimeout);
+  }
+}
+
+// Détection du type de contenu
+function detectContentType(notification) {
+  if (notification.content) return "text";
+  if (notification.images && notification.images.length > 0) return "image";
+  if (notification.audios && notification.audios.length > 0) return "audio";
+  return "unknown";
+}
+
+// Formatage du message
+function formatMessage(notification, type) {
+  switch (type) {
+    case "text":
+      return notification.content;
+    case "image":
+      return "Une image a été envoyée.";
+    case "audio":
+      return "Un message audio a été envoyé.";
+    default:
+      return "Notification inconnue.";
+  }
+}
+/************** Fin Affichage de notification ***************************/ 
+
+    /************************ Début Section pour gérer l'apparition du panneau reply et report *****/
+
+
+    // Variable pour stocker le dernier panneau ouvert
+let lastOpenedPanel = null;
+
+function panneauReplyReset(infoBtn) {
+    // Sélectionner le panneau correspondant au bouton cliqué
+    const btnReplyReset = infoBtn.nextElementSibling;
+
+
+    // Fermer le dernier panneau ouvert s'il est différent de celui-ci
+    if (lastOpenedPanel && lastOpenedPanel !== btnReplyReset) {
+        lastOpenedPanel.classList.add("hidden");
+    }
+
+    // Basculer la visibilité du panneau actuel
+    btnReplyReset.classList.toggle("hidden");
+
+    // Mettre à jour le dernier panneau ouvert
+    lastOpenedPanel = btnReplyReset.classList.contains("hidden") ? null : btnReplyReset;
+}
+
+// Fermer tous les panneaux si on clique en dehors
+document.addEventListener("click", function(event) {
+    const isClickInside = event.target.closest('.isComment') !== null;
+    
+    if (!isClickInside && lastOpenedPanel) {
+        lastOpenedPanel.classList.add("hidden");
+        lastOpenedPanel = null;
+    }
+});
+
+
+    /************************ Fin Section pour gérer l'apparition du panneau reply et report *****/
+
+    /*********************** début User information commentaire *****************************/
+    
+function showUserInfo(info) {
+
+  const id = info.getAttribute('data-user')
+    const userModal = document.getElementById('userModal');
+    const overlay = document.getElementById('overlay');
+    const userInfo = document.getElementById('userInfo');
+    userModal.style.display = 'block';
+    overlay.style.display = 'block';
+    // fetch 
+    fetch('/deliver/api/userinfo/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: id }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        //console.log('Réponse du serveur:', data)
+
+        // Réajuster le nom au cas où il s'agit d'un acheteur
+        if (data.infoUser.companyName === undefined){
+          data.infoUser.companyName = data.infoUser.username
+        }
+
+        let mois = ["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]
+
+        let date = data.infoUser.date.split('-')
+        const numberMois = +date[1]
+
+        date = mois[numberMois] +" "+date[0]
+
+        userInfo.innerHTML = `
+        <a href="${data.infoUser.profileImagePath}">
+          <img style='margin: 0px auto' src="${data.infoUser.profileImagePath}" alt="Photo de profil de ${data.infoUser.companyName}">
+        </a>
+        <h2 style='font-weight : bold;'>${data.infoUser.companyName}</h2>
+        <p>Passionné de technologie et amateur de bonnes affaires</p>
+        <p>${data.infoUser.email}</p>
+         <div class="user-stats">
+            <div>
+                <strong>0</strong>
+                <div>Avis</div>
+            </div>
+            <div>
+                <strong>${date}</strong>
+                <div>Membre depuis</div>
+            </div>
+        </div>
+        `
+      })
+      .catch(error => console.error('Erreur:', error));
+
+}
+
+function closeModal() {
+    const userModal = document.getElementById('userModal');
+    const overlay = document.getElementById('overlay');
+    userModal.style.display = 'none';
+    overlay.style.display = 'none';
+}
+
+// Fermer la modal en cliquant sur l'overlay
+document.getElementById('overlay').addEventListener('click', closeModal);
+
+// Fermer la modal avec la touche Escape
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeModal();
+    }
+});
+
+    /*********************** fin User information commentaire *****************************/
+
+    /*********************** Connectez vous avant d'envoyer un commentaire ********************/
+    // Fonction pour afficher le modal
+function showLoginModal() {
+    event.stopPropagation()
+    document.querySelector('.overlay').style.display = 'block';
+    //document.querySelector('.modal').style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Empêche le défilement
+}
+
+// Fonction pour cacher le modal
+function hideLoginModal() {
+    document.querySelector('.overlay').style.display = 'none';
+    document.body.style.overflow = 'auto'; // Réactive le défilement
+}
+
+// Gestionnaire d'événement pour le bouton de fermeture
+document.querySelector('.close-btn').addEventListener('click', hideLoginModal);
+
+// Fermer le modal en cliquant sur l'overlay
+document.querySelector('.overlay').addEventListener('click', function(e) {
+    if (e.target === this) {
+        hideLoginModal();
+    }
+});
+
+// Exemple d'utilisation : appeler showLoginModal() lorsqu'un utilisateur non connecté
+// tente de poster un commentaire
+function handleCommentSubmit(event) {
+    const isLoggedIn = false; // À remplacer par votre logique de vérification de connexion
+    
+    if (!isLoggedIn) {
+        showLoginModal();
+    } else {
+        // Logique pour poster le commentaire
+    }
+}
+
+socket.on('noIdentifier', (res) => {
+  // Retirer le style de "like"
+    likeDuButton.querySelector('svg').style.fill = 'none';
+    likeDuButton.querySelector('svg').style.stroke = '#000000';
+    likeDuButton.setAttribute('data-isLiked', "no");
+
+  handleCommentSubmit()
+})
+
+    /*********************** Fin Connectez vous avant d'envoyer un commentaire ********************/
+    /********************************************* Début Affichage des produit****************************/
+// Fonction pour récupérer le catalogue et afficher les produits
+async function fetchCatalogue() {
+    try {
+        const container = document.getElementById('product-container');
+
+         // Ajoute le conteneur en grille pour les cartes de chargement
+        const loadingContainer = document.createElement('div');
+        loadingContainer.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5';
+
+        // Ajoute 9 cartes de chargement pour simuler l'attente des données
+        for (let i = 0; i < 9; i++) {
+            const loadingCard = createLoadingCard();
+            loadingContainer.appendChild(loadingCard);
+        }
+
+        container.appendChild(loadingContainer);
+
+        const baseURL =
+          window.location.origin.includes('localhost')
+            ? 'http://localhost:5000'
+            : 'https://deliver-jvwl.onrender.com';
+            //const baseURL = "http://192.168.181.14:5000"
+
+        
+        // Requête pour obtenir le catalogue depuis l'API
+        const response = await fetch(`${baseURL}/deliver/allCatalogue`);
+        //const response = await fetch('http://192.168.43.14:5000/deliver/allCatalogue'); 
+        if (!response.ok) throw new Error('Erreur lors de la récupération du catalogue');
+
+        const data = await response.json();
+        container.innerHTML = ''; // Efface le contenu pour éviter la duplication
+
+        // Itère sur chaque catégorie pour créer les cartes de produits
+        data.forEach(category => {
+            createCategorySection(category, container);
+        });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des produits:', error);
+    }
+}
+
+let objectResponseComment = ""
+
+// Fonction pour répondre au commentaire
+function showReplyPreview(button) {
+  event.stopPropagation();
+  const commentActions = button.closest('.comment-actions')
+  const comment = button.closest('.isComment');
+  const preview = comment.closest(".comments-section").nextElementSibling.querySelector('.reply-preview') // Conteneur pour afficher le commentaire
+  preview.style.display = "block"
+  const commentText = comment.querySelector('.messageTxt').textContent; // Texte sélectionner
+  const username = comment.querySelector('.username').textContent; // Texte sélectionner
+  
+  const commentId = comment.querySelector('.username').getAttribute('data-commentId')
+  const productId = comment.querySelector('.username').getAttribute('data-productId')
+  commentActions.classList.add("hidden")
+  
+  if (preview.querySelector(".preview-child") ? true : false){
+    preview.querySelector(".preview-child").remove()
+  
+  }
+
+
+  objectResponseComment = {
+    parentCommentId : commentId,
+    productId : productId
+  }
+
+
+  // Envoyer les données via Socket.IO
+  //socket.emit("replyComment", { parentCommentId, productId, commentValue });
+  preview.innerHTML += `<div class="preview-child">Répondre à <strong>${username}</strong> : ${commentText}</div>`;
+  preview.classList.add('active');
+  //console.log(  comment.closest(".comments-section").nextElementSibling.querySelector('.reply-preview').nextElementSibling)
+  comment.closest(".comments-section").nextElementSibling.querySelector('.reply-preview').nextElementSibling.focus();
+}
+
+function hiddenReplyPreview(button){
+  const preview = button.closest('.reply-preview')
+  const previewChild = button.nextElementSibling
+  previewChild.innerHTML = ""
+  preview.classList.remove('active');
+}
+
+// Fonction pour répondre au commentaire
+
+// Fonction pour créer une carte de chargement (spinner)
+function createLoadingCard() {
+    const card = document.createElement('div');
+    card.className = 'w-full h-[400px] bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 bg-[length:200%_100%] animate-loading rounded-xl';
+    return card;
+}
+// Fonction pour créer une section pour chaque catégorie
+async function createCategorySection(category, container) {
+    const section = document.createElement('section');
+    section.className = 'category-showcase';
+
+    section.innerHTML = `
+        <h2 class="section-title">${category.category}</h2>
+        <div class="category-grid" id="${category.category.toLowerCase()}-grid"></div>
+        <div class="mt-4 flex justify-end">
+            <a href="/deliver/productCateg/${category.category.toLowerCase()}" style="position : relative; z-index : 100" class="text-sm text-primary hover:underline">
+                Voir plus de produits de cette catégorie
+            </a>
+        </div>
+    `;
+
+    // Ajouter chaque produit dans la grille de catégorie
+    category.products.forEach(product => {
+        section.querySelector('.category-grid').appendChild(createProductCard(product));
+    });
+
+    // Ajouter la section au conteneur principal
+    container.appendChild(section);
+}
+
+
+// Mettre à jour les likes d'un produit
+// Fonction pour créer une carte produit avec un carrousel et le format souhaité
+let likeDuButton = null // cette variable permet d'enlever le like au cas où l'utilisateur qui like n'a pas de session
+function updateLikedProduct(productId, likeButton) {
+event.stopPropagation()
+likeDuButton = likeButton
+  if (likeButton.getAttribute("data-isLiked") !== "yes") {
+    // Appliquer la couleur de remplissage et le trait pour "like"
+    likeButton.querySelector('svg').style.fill = '#ff4444';
+    likeButton.querySelector('svg').style.stroke = '#ff4444';
+    likeButton.setAttribute('data-isLiked', "yes");
+  } else {
+    // Retirer le style de "like"
+    likeButton.querySelector('svg').style.fill = 'none';
+    likeButton.querySelector('svg').style.stroke = '#000000';
+    likeButton.setAttribute('data-isLiked', "no");
+  }
+
+  socket.emit('updatelikedProduct', { productId }); // Envoie l'ID du produit pour mise à jour
+}
+let map = new Map()
+function createProductCard(product) {
+
+const card = document.createElement('div');
+card.className = 'maxHeighDiv maxWeight maxHeigh card padding5 bg-white rounded-xl shadow-lg overflow-hidden relative transition-transform duration-300 hover:-translate-y-1 w-full sm:w-80';
+
+const hasMultipleImages = product.images.length > 1;
+card.innerHTML = `
+    <div class="relative h-[200px] sm:h-[280px] overflow-hidden">
+        <div class="carousel-images flex transition-transform duration-500 ease-in-out">
+            ${product.images.map(img => `<img src="${img.path}" alt="Product image" loading="lazy" class="w-80 h-[280px] object-cover">`).join('')}
+        </div>
+        ${hasMultipleImages ? `
+            <div style="z-index:1001;" class="carousel-controls absolute top-1/2 w-full -translate-y-1/2 flex justify-between px-2">
+                <button style="box-shadow : 0px 0px 3px black" class="prev-btn bg-white/80 border-none rounded-full w-8 h-8 flex items-center justify-center cursor-pointer transition-colors hover:bg-white">
+                    <svg class="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button style="box-shadow : 0px 0px 3px black" class="next-btn bg-white/80 border-none rounded-full w-8 h-8 flex items-center justify-center cursor-pointer transition-colors hover:bg-white">
+                    <svg class="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+            <div style="z-index:20" class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
+                ${product.images.map((_, i) => `
+                    <div class="carousel-dot w-2.5 h-2.5 rounded-full ${i === 0 ? 'bg-white' : 'bg-white/50'} cursor-pointer" data-index="${i}"></div>
+                `).join('')}
+            </div>
+        ` : ''}
+       <div class="namePriceLike" onclick="pageMonoProduit('${product.id}')">
+  <div class="flex justify-between items-center mb-2">
+    <!-- Nom du produit -->
+    <h2 style="font-size : 15px"
+      class="text-lg font-semibold text-gray-800 truncate bg-white bg-opacity-75 px-2 py-1 rounded shadow-sm"
+      title="${product.name}">
+      ${product.name}
+    </h2>
+
+    <!-- Section des likes -->
+    <div class="flex items-center gap-2">
+      <!-- Compteur de likes -->
+      <span data-like-product="${product.id}" style="color : white; text-shadow : 0px 0px 5px black" class="likes-count text-sm text-gray-600"></span>
+
+      <!-- Bouton de like -->
+      <button
+        data-like-product-button="${product.id}"
+        class="like-button transition-transform hover:scale-110 text-gray-600 hover:text-red-500"
+        data-like-product="${product.id}"
+        data-isLiked="no"
+        onclick="updateLikedProduct('${product.id}', this)"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+   <div class="flex items-center justify-between w-full my-4 px-6 py-4 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+  <!-- Prix du produit -->
+  <p class="text-2xl font-bold text-primary" style="font-size : 1.1em">
+    ${product.price}
+  </p>
+
+  <!-- Bouton pour discuter -->
+  
+    ${utilisateurId ? 
+      `<a href="/deliver/chat/${product.seller._id}/${product.id}" 
+    style="background-color : rgba(5, 5, 255, 0.5); font-size : 15px"
+     class="mediaScreen text-white px-6 py-2 rounded-full shadow-lg hover:bg-primary/80 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary/70 focus:ring-opacity-50 transition-transform duration-300">
+      Discuter avec le vendeur
+    ` :
+      `<a onclick='showLoginModal()' " 
+    style="background-color : rgba(5, 5, 255, 0.5); font-size : 15px"
+     class="mediaScreen text-white px-6 py-2 rounded-full shadow-lg hover:bg-primary/80 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary/70 focus:ring-opacity-50 transition-transform duration-300">
+     Discuter avec le vendeur
+    `
+   }
+  </a>
+</div>
+
+        </div>
+</div>
+
+    </div>
+
+    <div style="padding:0px 15px; ">
+
+        <div class="flex items-center border-t border-gray-100">
+            <img src="${product.seller.profileImagePath}" data-user="${product.seller._id}"  onclick="showUserInfo(this)"alt="Seller avatar" class="w-10 h-10 rounded-full mr-3">
+            <div>
+                <div style="text-align:left" class="font-medium text-gray-800">${product.seller.name}</div>
+                {{!-- <div class="text-secondary">★★★★★ (${product.seller.rating})</div> --}}
+            </div>
+        </div>
+
+        <div class="border-t border-gray-100">
+          <button class="w-full py-2 text-primary hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-center gap-2 comments-btn"
+                  onclick="toggleComments(this)"
+                  data-show-comments="false" data-product-id="${product.id}">
+              <span>View Comments</span>
+              <span class="text-sm text-gray-600 nbrComment" data-nbrcomment="${product.id}"></span>
+          </button>
+          <div class="comments-section space-y-3 overflow-y-auto limitComment"></div>
+
+          <div class="mt-3">
+            <div class="reply-preview" style="position : relative">
+             <span class="close-btn-comment" onclick='hiddenReplyPreview(this)'>&times;</span>
+            </div>
+
+            <textarea class="comment-input w-full p-2 border border-gray-200 rounded-lg resize-none" rows="2" placeholder="Add a comment..."></textarea>
+            <button style="margin-bottom : 5px" class="mt-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors block"
+              onclick="submitComment('${product.id}', this)">
+              Comment
+            </button>
+          </div>
+        </div>
+    </div>
+`;
+
+setInterval(function(){
+      fetch('/deliver/api/numberComment/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: product.id }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        //console.log('Réponse du serveur:', data.commentObjet)
+        document.querySelector(`[data-nbrcomment="${data.commentObjet.id.id}"]`).innerHTML = `(${data.commentObjet.comment})`
+        
+      })
+      .catch(error => console.error('Erreur:', error));
+    },5000)
+
+
+// Envoyer une demande pour obtenir les likes d'un produit
+function getLikedProduct(productId) {
+  socket.emit('likedProduct', { productId }); // Envoie l'ID du produit au serveur
+}
+
+let countSocket = 0
+let lastMessageId = null
+
+    // Écouter la réponse de l'événement 'likedProductResponse' pour afficher les likes
+//socket.off('likedProductResponse'); // Retire l'ancien écouteur
+socket.on('likedProductResponse', (data) => {
+
+let trueOrFalse = true // Cette variable permet de vérifier si il y a duplication
+
+map.forEach((value, key) => { // parcourir la map
+    if (value.productId == data.productId){
+      trueOrFalse = false
+      return 
+    }
+  })
+
+  if(!trueOrFalse){ // Arrête si la variable trueOrFalse est égal à false
+    return
+  }
+
+    map.set(countSocket,data) // Ajour d'une nouvelle relation
+
+  // Mise à jour du nombre de likes sur l'élément correspondant
+  const val = map.get(countSocket).numberlike
+  const elementBalise = map.get(countSocket).productId
+  const me = map.get(countSocket).me
+
+  countSocket++
+
+  document.querySelector(`[data-like-product="${elementBalise}"]`).innerHTML = val;
+
+   document.querySelector(`[data-like-product-button="${elementBalise}"]`).setAttribute("data-isLiked","no")
+  if (me === "yes") {
+    //console.log('Utilisateur a aimé ce produit');
+    const likeButton = document.querySelector(`[data-like-product-button="${elementBalise}"]`);
+    // Appliquer la couleur de remplissage et le trait
+    likeButton.querySelector('svg').style.fill = '#ff4444';
+    likeButton.querySelector('svg').style.stroke = '#ff4444';
+    likeButton.setAttribute('data-isLiked', "yes");
+  }
+
+  
+});
+/*********/
+// Écouter la réponse de l'événement 'updateLikeResponse' pour mettre à jour le statut du like
+socket.on('updateLikeResponse', (data) => {
+
+  document.querySelector(`[data-like-product="${data.productId}"]`).innerHTML = data.numberlike;
+
+  const likeButton = document.querySelector(`[data-like-product-button="${data.productId}"]`);
+  
+});
+
+// Utilisation de la fonction pour récupérer et mettre à jour les likes
+const productId = product.id; // Par exemple, l'ID du produit
+getLikedProduct(productId); // Pour obtenir les likes actuels
+
+/*********/
+   // socket.emit("likedProduct",product.id)
+
+    if (hasMultipleImages) {
+        setupCarousel(card, product.images.length);
+    }
+    setupLikeButton(card.querySelector('.like-button'));
+
+    return card;
+}
+
+//Bouton envoie message commentaire produit
+
+function submitComment(productId, button) {
+  // Récupérer l'input de commentaire associé à ce bouton
+  const commentInput = button.closest('.mt-3').querySelector('.comment-input');
+  const commentValue = commentInput.value;
+
+  // Répondre à un commentaire 
+    const preview = button.closest(".mt-3").querySelector(".reply-preview")
+  if(objectResponseComment){   
+    preview.style.display = "none"
+    
+    objectResponseComment.commentValue = commentValue.trim()
+
+
+
+    // Envoyer les données via Socket.IO
+    socket.emit("replyComment", objectResponseComment);
+    objectResponseComment = ""
+    commentInput.value = '';
+
+    return
+  }
+
+  // Afficher l'ID du produit et la valeur du commentaire dans la console
+  if (commentValue.trim()) {
+    const productIdcommentValueObjet= {productId, commentValue}
+    console.log(productIdcommentValueObjet)
+    
+    
+        socket.emit('newComment', productIdcommentValueObjet);
+        // Réinitialiser la valeur de l'input après l'envoi
+        commentInput.value = '';
+    }
+
+}
+
+// Afficher le commentaire ajouté en temps réel
+socket.on('commentAdded', (comment) => {
+  const Ismessages = commentsSection.querySelector('.isComment')
+
+  if (Ismessages === null){
+  commentsSection.innerHTML = ""
+  }
+        
+displayComment(comment);
+});
+
+
+//Fin bouton envoie message commentaire produit
+//***
+let openCard = null; // Variable pour garder la trace de la carte ouverte
+let commentsSection = "";
+
+function toggleComments(button) {
+    event.stopPropagation();
+
+    const allCommentsSections = document.querySelectorAll('.comments-section');
+    const allMaxHeightSections = document.querySelectorAll('.maxHeighDiv');
+
+    // Fermer toutes les sections ouvertes
+    allCommentsSections.forEach(section => section.classList.remove("show"));
+    allMaxHeightSections.forEach(section => section.classList.add("maxHeigh"));
+
+    const isShown = button.getAttribute("data-show-comments") === "true";
+    const card = button.closest('.card');
+    const maxHeightSection = button.closest('.maxHeighDiv');
+    commentsSection = card.querySelector('.comments-section');
+    const mt3 = commentsSection.nextElementSibling;
+    //console.log("card haut de haut", card)
+    const hautCard = card
+    // Si une autre carte est ouverte, fermer l'ancienne carte
+    //console.log("openCard",openCard,"card", card)
+    if (openCard && openCard !== card) {
+      //console.log("open")
+        const previousButton = openCard.querySelector('[data-show-comments="true"]');
+        if (previousButton) {
+            previousButton.querySelector("span").textContent = "View Comments";
+            previousButton.setAttribute("data-show-comments", "false");
+        }
+        const previousCommentsSection = openCard.querySelector('.comments-section');
+        const previousMaxHeightSection = openCard.querySelector('.maxHeighDiv');
+        previousCommentsSection.classList.remove("show");
+        if (previousMaxHeightSection) {
+            previousMaxHeightSection.classList.add("maxHeigh");
+        }
+    }
+
+    if (isShown) {
+      //console.log("isShow")
+        // Fermer la carte actuelle
+        mt3.style.maxHeight = '';
+        commentsSection.classList.remove("show");
+        button.querySelector("span").textContent = "View Comments";
+        button.setAttribute("data-show-comments", "false");
+
+        commentsSection.style.display = 'none';
+        openCard = null; // Réinitialiser la carte ouverte
+    } else {
+      //console.log("else show")
+       commentsSection.style.display = 'block';
+        // Ouvrir la carte actuelle
+        maxHeightSection.classList.remove("maxHeigh");
+        commentsSection.classList.add("show");
+        mt3.style.maxHeight = '230px';
+
+        socket.emit('loadComments', button.getAttribute("data-product-id"));
+
+        commentsSection.innerHTML = `
+            <div style="display: flex; align-items:center; justify-content:center">
+                <img style="width: 200px;" src="/images/spinner.gif" alt="">
+            </div>
+        `;
+        button.querySelector("span").textContent = "Hide Comments";
+        button.setAttribute("data-show-comments", "true");
+
+        // Mettre à jour la carte actuellement ouverte
+        openCard = card;
+
+        document.addEventListener("click", function handleOutsideClick(event) {
+          event.stopPropagation()
+          //console.log('contient-il l\'element cliqué ? ', card.contains(event.target))
+          //console.log("card", card)
+          //console.log("cardHaut", hautCard)
+          //console.log('contient-il l\'element cliqué ? ', hautCard.contains(event.target))
+          //console.log("élément cliqué", event.target)
+          //console.log("event.target : ", event.target, "button", button)
+            if (!hautCard.contains(event.target)) { // Pour accéder à l'intérieur il faut que la variable card et le bouton ne puisse pas contenir l'élément cliqué (event.target)
+                commentsSection.classList.remove("show");
+                //console.log("entré ",button)
+                button.querySelector("span").textContent = "View Comments";
+                button.setAttribute("data-show-comments", "false");
+                document.removeEventListener("click", handleOutsideClick);
+                openCard = null; // Réinitialiser la carte ouverte
+            }
+
+            if(hautCard.contains(event.target) == true) {
+              //console.log("intérieur super true")
+              commentsSection.style.display = 'block';
+              // Ouvrir la carte actuelle
+              maxHeightSection.classList.remove("maxHeigh");
+              commentsSection.classList.add("show");
+              mt3.style.maxHeight = '230px';
+            }
+        });
+
+        document.querySelectorAll('.comments-btn, .comment-input, .close-btn-comment').forEach(element => {
+            element.addEventListener('click', (event) => {
+                event.stopPropagation(); // Empêche le clic de remonter et de déclencher la fermeture
+            });
+        });
+
+
+        document.addEventListener('click', (event) => {
+            const openCard = document.querySelector('.card.open'); // Sélectionnez la carte actuellement ouverte
+            if (openCard && !openCard.contains(event.target)) {
+                // Fermer la carte uniquement si le clic est en dehors
+                openCard.classList.remove('open');
+            }
+        });
+
+
+        socket.off("commentsLoaded");
+        socket.on('commentsLoaded', (comments) => {
+            if (comments.length === 0) {
+                commentsSection.innerHTML = `
+                    <div style="display: flex; align-items:center; justify-content:center">
+                        <img style="width: 950px;" src="/images/nomsg.png" alt="">
+                    </div>
+                `;
+                return;
+            }
+            commentsSection.innerHTML = "";
+            comments.forEach(comment => {
+                displayComment(comment);
+            });
+        });
+    }
+}
+
+function displayComment(comment) {
+
+    console.log("comment", comment.isDeleted)
+
+    const commentElement = document.createElement('div');
+    const isAuthor = utilisateurId === comment.userId;
+    const commentClass = isAuthor ? "own message" : "other message";
+
+    //commentElement.classList.add('p-2');
+    commentElement.innerHTML = `
+        <div style="position : relative;  ${comment.isDeleted ?"border: 1px solid rgba(241, 1, 1, 0.281);background: rgba(230, 7, 7, 0.13);font-style : italic" : ""}" class="isComment bg-gray-50 p-3 rounded-lg ${commentClass}" id="comment-${comment._id}">
+            <div class="flex items-center justify-between mb-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <img src="${comment.profileImagePath}" data-user="${comment.userId}" alt="User avatar" class="profile-pic" onclick="showUserInfo(this)" class="rounded-full">
+                    <span class="font-medium text-sm username" data-productId="${comment.productId}" data-commentId="${comment._id}">${comment.username}</span>
+                </div>
+                <button data-commentId="${comment._id}" onclick="panneauReplyReset(this)" class="comment-actions-btn opacity-100 group-hover:opacity-100 transition-opacity">
+                    <svg class="w-5 h-5" style="height:20px" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="6" r="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <circle cx="12" cy="18" r="2"/>
+                    </svg>
+                </button>
+              <div style="z-index: 1001;top: 30px;right: 25px;height: 115px;overflow: scroll;" class="hidden comment-actions absolute right-0 top-8 bg-white shadow-lg rounded-lg z-10 py-1 w-32">
+                    <button class="reply-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm" onclick="showReplyPreview(this)">Reply</button>
+                    <button class="report-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-500">Report</button>
+                    ${isAuthor ? `<button  class="delete-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-500" onclick="deleteComment('${comment._id}')">Delete</button>` : ""}
+              </div>
+             </div>
+
+
+            <p class="text-gray-600 text-sm messageTxt" style="text-align: left">${comment.comment}</p>
+            <p class="created-at">${comment.formattedDate}</p>
+
+
+        </div>
+        ${comment.replies ? `<p class="respComment" data-open="false" data-commentId="${comment._id}" onclick="loadReplies(this,${comment.replies})">voir réponse(s) (${comment.replies})</p>` : ""}
+        <div data-open="false" class="replies-section hidden repondre-${comment._id}" id="replies-${comment._id}">
+          <div class="spinnerResp">
+            <img style="width: 50px;" src="/images/spinner.gif" alt="">
+          </div>
+        </div>
+    `;
+    commentsSection.prepend(commentElement);
+}
+
+
+//***
+
+function loadReplies(btn,nbrResp) {
+
+
+    const ContResp =  btn.nextElementSibling
+
+    if (ContResp.getAttribute('data-open') !== "false") { // if data-open est false, on ferme
+      ContResp.style.maxHeight = "0px" 
+      ContResp.style.opacity = "0" 
+      btn.innerHTML = `Voir réponses (${nbrResp})`
+      btn.style.backgroundColor = ""
+      ContResp.setAttribute('data-open', "false")
+
+    }else{
+      ContResp.style.maxHeight = "" 
+      ContResp.style.opacity = "1" 
+      btn.innerHTML = `Fermer les réponses`
+      btn.style.backgroundColor = "#5bc0be96"
+      ContResp.setAttribute('data-open', "true")
+
+    }
+
+
+
+
+  const datacommentId = btn.getAttribute('data-commentId')
+  document.getElementById(`replies-${datacommentId}`).classList.remove("hidden")
+
+  document.getElementById(`replies-${datacommentId}`).querySelector('.spinnerResp').style.display.display = "block"
+
+  socket.emit("loadReplies", datacommentId);
+}
+
+
+socket.on("repliesLoaded", (objectResponseComment) => {
+  
+  // Fin spinner
+  document.getElementById(`replies-${objectResponseComment.parentCommentId}`).querySelector('.spinnerResp').style.display = "none"
+
+  const repliesSection = document.getElementById(`replies-${objectResponseComment.parentCommentId}`);
+
+  repliesSection.innerHTML = ""
+  objectResponseComment.replies.forEach((reply) => {
+    const replyElement = document.createElement('div');
+
+    // Vérifier si l'utilisateur connecté est l'auteur du commentaire
+    const isAuthor = utilisateurId === reply.userId;
+
+    // Ajouter la classe "msgMe" si l'utilisateur est l'auteur
+    const commentClass = isAuthor ? "own message" : "other message";
+
+    replyElement.className = "reply rounded-lg";
+    replyElement.innerHTML = `
+     
+      <div style="position : relative; translateX : 15px" class="isComment bg-gray-50 p-3 rounded-lg ${commentClass}" id="comment-${reply._id}">
+            <div class="flex items-center justify-between mb-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <img src="${reply.profileImagePath}" data-user="${reply.userId}" alt="User avatar" class="profile-pic minSize" onclick="showUserInfo(this)" class="rounded-full">
+                    <span class="font-medium text-sm username" data-productId="${reply.productId}" data-commentId="${reply._id}">${reply.username}</span>
+                </div>
+                <button data-commentId="${reply._id}" onclick="panneauReplyReset(this)" class="comment-actions-btn opacity-100 group-hover:opacity-100 transition-opacity">
+                    <svg class="w-5 h-5" style="height:20px" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="6" r="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <circle cx="12" cy="18" r="2"/>
+                    </svg>
+                </button>
+                <div style="z-index: 1001;top: 30px;right: 25px;height: 115px;overflow: scroll;" class="hidden comment-actions absolute right-0 top-8 bg-white shadow-lg rounded-lg z-10 py-1 w-32">
+                    <button class="reply-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm" onclick="showReplyPreview(this)">Reply</button>
+                    <button class="report-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-500">Report</button>
+                    ${isAuthor ? `<button  class="delete-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-500" onclick="deleteComment('${reply._id}')">Delete</button>` : ""}
+                </div>
+            </div>
+            <p class="text-gray-600 text-sm messageTxt" style="text-align: left">${reply.comment}</p>
+            <p class="created-at">${reply.formattedDate}</p>
+        </div>
+
+        ${reply.replies ? `<p class="respComment" data-ouvertResp="false" data-commentId="${reply._id}" onclick="loadReplies(this,${reply.replies})">voir réponse(s) (${reply.replies})</p>` : ""}
+        <div data-open="false" class="replies-section hidden repondre-${reply._id}" id="replies-${reply._id}">
+          <div class="spinnerResp">
+            <img style="width: 50px;" src="/images/spinner.gif" alt="">
+          </div>
+        </div>
+    `;
+    repliesSection.appendChild(replyElement);
+  });
+  repliesSection.classList.remove("hidden");
+
+});
+
+
+socket.on("replyAdded", (newReply) => {
+console.log(newReply)
+  // Trouver la section des réponses
+  const repliesSection = document.getElementById(`replies-${newReply.parentCommentId}`);
+
+  {{!-- console.log("repliesSection",repliesSection)
+  console.log("repliesSection bool",repliesSection.getAttribute("data-open"))
+  console.log("repliesSection type",typeof(repliesSection.getAttribute("data-open"))) --}}
+
+  if (repliesSection.getAttribute("data-open") == 'true'){
+    const now = new Date();
+
+    const formattedDate = now.toLocaleString('fr-Fr',{
+      day : '2-digit',
+      month : '2-digit',
+      year : 'numeric',
+      hour : '2-digit',
+      minute : '2-digit',
+    })
+    // Ajouter la nouvelle réponse dans la section des réponses
+  
+    const replyElement = document.createElement('div');
+
+    // Vérifier si l'utilisateur connecté est l'auteur du commentaire
+    const isAuthor = utilisateurId === newReply.userId;
+
+    // Ajouter la classe "msgMe" si l'utilisateur est l'auteur
+    const commentClass = isAuthor ? "own message" : "other message";
+
+    replyElement.className = "reply rounded-lg";
+    replyElement.innerHTML = `
+     
+      <div style="position : relative; translateX : 15px" class="isComment bg-gray-50 p-3 rounded-lg ${commentClass}" id="comment-${newReply._id}">
+            <div class="flex items-center justify-between mb-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <img src="${newReply.profileImagePath}" data-user="${newReply.userId}" alt="User avatar" class="profile-pic minSize" onclick="showUserInfo(this)" class="rounded-full">
+                    <span class="font-medium text-sm username" data-productId="${newReply.productId}" data-commentId="${newReply._id}">${newReply.username}</span>
+                </div>
+                <button data-commentId="${newReply._id}" onclick="panneauReplyReset(this)" class="comment-actions-btn opacity-100 group-hover:opacity-100 transition-opacity">
+                    <svg class="w-5 h-5" style="height:20px" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="6" r="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <circle cx="12" cy="18" r="2"/>
+                    </svg>
+                </button>
+                <div style="z-index: 1001; top: 30px; right: 25px" class="hidden comment-actions absolute right-0 top-8 bg-white shadow-lg rounded-lg z-10 py-1 w-32">
+                    <button class="reply-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm" onclick="showReplyPreview(this)">Reply</button>
+                    <button class="report-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-500">Report</button>
+                    ${isAuthor ? `<button  class="delete-btn w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-500" onclick="deleteComment('${newReply._id}')">Delete</button>` : ""}
+                </div>
+            </div>
+            <p class="text-gray-600 text-sm messageTxt" style="text-align: left">${newReply.comment}</p>
+            <p class="created-at">${formattedDate}</p>
+        </div>
+
+    `;
+  //console.log(repliesSection, newReply)
+
+
+
+  repliesSection.prepend(replyElement);
+  repliesSection.classList.remove("hidden"); // Afficher la section des réponses
+    return
+  }
+  // Créer le contenu pour la nouvelle réponse
+  if (newReply.replies) {
+
+    if(repliesSection.closest('.replies-section').parentNode.querySelector(".respComment")) {
+      repliesSection.closest('.replies-section').parentNode.querySelector(".respComment").textContent = `voir réponse(s) (${newReply.replies})`;
+     // Ajouter repliesDiv au-dessus de repliesSection
+      return
+    }
+
+    const responseLink = document.createElement("p");
+    responseLink.className = "respComment";
+    responseLink.setAttribute("data-ouvertResp", "false");
+    responseLink.setAttribute("data-commentId", newReply.parentCommentId);
+    responseLink.textContent = `voir réponse(s) (${newReply.replies})`;
+    responseLink.onclick = () => loadReplies(responseLink, newReply.replies);
+  //  repliesSection.appendChild(responseLink);
+
+
+     // Ajouter repliesDiv au-dessus de repliesSection
+  repliesSection.closest('.replies-section').parentNode.insertBefore(responseLink, repliesSection.closest('.replies-section'));
+
+  }
+
+  // Ajouter une section pour afficher les réponses
+  const repliesDiv = document.createElement("div");
+  repliesDiv.className = `replies-section hidden repondre-${newReply._id}`;
+  repliesDiv.setAttribute("data-open", "false");
+  repliesDiv.id = `replies-${newReply.parentCommentId}`;
+
+  // Ajouter un spinner à la section
+  const spinnerDiv = document.createElement("div");
+  spinnerDiv.className = "spinnerResp";
+  const spinnerImg = document.createElement("img");
+  spinnerImg.style.width = "50px";
+  spinnerImg.src = "/images/spinner.gif";
+  spinnerImg.alt = "very good";
+  spinnerDiv.appendChild(spinnerImg);
+  repliesDiv.appendChild(spinnerDiv);
+
+
+  //console.log(repliesSection, repliesDiv)
+
+  
+  // Ajouter le tout à la section des réponses
+  repliesSection.appendChild(repliesDiv);
+
+  repliesSection.classList.remove("hidden"); // Afficher la section des réponses
+});
+
+
+function deleteComment(commentId) {
+    // Envoyer une requête DELETE à l'API
+    console.log("commentId",commentId)
+    fetch(`/deliver/api/comments/delete-comment/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Inclure les cookies pour les sessions
+    })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+            if (data.message === "ok") {
+              console.log("Commentaire supprimé")
+                // Retirer le commentaire du DOM
+                document.getElementById(`comment-${commentId}`).innerHTML = "Ce commentaire a été supprimé."
+            } else {
+                alert(data.message || "Impossible de supprimer le commentaire.");
+            }
+        })
+        .catch(error => {
+            console.error("Erreur :", error);
+            alert("Une erreur est survenue.");
+        });
+
+}
+
+
+
+//Commentaire produit fin affichage de view comment
+
+function toggleLike(likeButton) {
+    // Récupérer l'élément du compteur de likes
+    let likesCount = likeButton.parentElement.querySelector('.likes-count');
+
+    const isLike = likeButton.getAttribute('data-isLiked')
+
+    const productId = likeButton.getAttribute('data-like-product')
+
+
+    // Convertir le texte du compteur en nombre
+    let likes = parseInt(likesCount.textContent);
+
+    // Vérifier si le bouton est déjà liké
+    const isLiked = this.isLiked
+
+    //console.log("1",isLiked,  likeButton)
+
+    // Incrémenter ou décrémenter en fonction de l'état
+    //likesCount.textContent = isLiked ? likes - 1 : likes + 1;
+    
+    // Ajouter l'animation et la retirer après 300ms
+    likeButton.classList.add('animate-heart');
+    setTimeout(() => {
+      likeButton.classList.add('liked');
+      likeButton.classList.remove('animate-heart')
+    }, 300);
+    //console.log("2",isLiked,  likeButton)
+  }
+
+// Fonction pour configurer le carrousel avec les boutons de navigation et les dots
+function setupCarousel(card, imageCount) {
+    const carouselImages = card.querySelector('.carousel-images');
+    const prevBtn = card.querySelector('.prev-btn');
+    const nextBtn = card.querySelector('.next-btn');
+    const dots = card.querySelectorAll('.carousel-dot');
+    let currentSlide = 0;
+    let interval;
+
+    // Fonction pour changer de slide
+    function changeSlide(index) {
+        currentSlide = (index + imageCount) % imageCount;
+        carouselImages.style.transform = `translateX(-${currentSlide * 100}%)`;
+        updateDots();
+    }
+
+    // Fonction pour mettre à jour la classe active des dots
+    function updateDots() {
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('bg-white', i === currentSlide);
+            dot.classList.toggle('bg-white/50', i !== currentSlide);
+        });
+    }
+
+    // Gestion des boutons de navigation
+    prevBtn.addEventListener('click', () => {
+        clearInterval(interval);
+        changeSlide(currentSlide - 1);
+    });
+    nextBtn.addEventListener('click', () => {
+        clearInterval(interval);
+        changeSlide(currentSlide + 1);
+    });
+
+    // Gestion des clics sur les dots
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+            clearInterval(interval);
+            changeSlide(i);
+        });
+    });
+
+    // Défilement automatique
+    interval = setInterval(() => {
+        changeSlide(currentSlide + 1);
+    }, 3000);
+}
+
+// Fonction pour configurer le bouton "like" avec un effet de clic
+function setupLikeButton(likeButton) {
+    likeButton.addEventListener('click', () => {
+        likeButton.classList.toggle('liked');
+    });
+}
+// Appel de la fonction pour récupérer et afficher le catalogue
+fetchCatalogue();
+
+    /********************************************* Fin Affichage des produit****************************/
+    
+    // Génère un ID unique pour chaque onglet
+    function generateTabId() {
+        return '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+  // ************************************** Acceder à la page voir le produit
+  function pageMonoProduit (id) {
+    console.log(id)
+    location.assign(`/deliver/pageMonoProduit/${id}`)
+  }
+
+    // Stocker ou récupérer l'ID de l'onglet dans un cookie
+    function getTabId() {
+        let tabId = document.cookie.replace(/(?:(?:^|.*;\s*)tabId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        if (!tabId) {
+            tabId = generateTabId();
+            document.cookie = "tabId=" + tabId + "; path=/";
+        }
+        //console.log("tab : "+tabId)
+        return tabId;
+    }
+
+    // Appel de la fonction pour s'assurer qu'il y a un tabId valide
+    const currentTabId = getTabId();
+    
+    //console.log("ID de l'onglet actuel :", currentTabId);
+    
+    /**Ce bloc s'assure que le script est exécuté uniquement
+     lorsque tout le contenu du DOM (Document Object Model)
+     est entièrement chargé, afin que les éléments de la page puissent être manipulés.**/
+    document.addEventListener('DOMContentLoaded', function() {
+    /**Sélectionne tous les liens d'ancrage qui commencent par un #. Cela signifie que ces liens pointent 
+      vers des éléments internes à la page (ex. <a href="#section1">).**/
+      {{!-- document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    //Ajoute un écouteur d'événement pour chaque lien d'ancrage. Lorsqu'on clique dessus, l'événement est capturé.
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+    //Utilise scrollIntoView() pour faire défiler en douceur jusqu'à l'élément ciblé par l'ancre.
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      }); --}}
+    /*IntersectionObserver : Permet de détecter lorsqu'un élément entre ou sort de la vue de l'utilisateur
+       (intersection avec le viewport).*/
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) { //Si un élément est visible dans la zone d'affichage, il ajoute une classe animate-fadeInUp pour déclencher une animation.
+            entry.target.classList.add('animate-fadeInUp');
+          }
+        });
+      }, {
+        threshold: 0.1//Le seuil spécifie que l'élément est considéré comme visible si au moins 10 % de celui-ci est dans la vue.
+      });
+      
+      document.querySelectorAll('.place-card').forEach(card => {
+        observer.observe(card);//Applique l'observation aux éléments avec la classe .place-card afin de surveiller leur visibilité.
+      });
+
+      // Sélectionne la modale d'authentification utilisateur
+      const loginBtn = document.getElementById("loginBtn"); 
+      // Sélectionne le bouton pour afficher le formulaire de connexion
+      const loginForm = document.getElementById("loginForm"); 
+      // Sélectionne le formulaire de connexion
+      const registerForm = document.getElementById("registerForm"); 
+      // Sélectionne le formulaire d'inscription
+      const loginFormEl = document.getElementById("loginFormEl"); 
+      // Élément du formulaire de connexion
+      const registerFormEl = document.getElementById("registerFormEl"); 
+      // Élément du formulaire d'inscription
+      const bodyLoginBtn = document.getElementById("bodyLoginBtn"); 
+      // Sélectionne un autre bouton de connexion situé dans le corps
+      const loginbtnsend = document.querySelector('.loginbtnsend'); 
+      // Sélectionne le bouton pour envoyer les données de connexion
+      const registerbtnsend = document.querySelector('.registerbtnsend'); 
+      // Sélectionne le bouton pour envoyer les données d'inscription      
+
+      function showUserProfile() { 
+        // Fonction pour afficher le profil utilisateur
+        document.getElementById("userProfile").style.display = "block"; 
+        // Affiche la section du profil utilisateur
+        document.getElementById("userName").textContent = "John Doe"; 
+        // Met à jour le nom de l'utilisateur (exemple de données fictives)
+        document.getElementById("userEmail").textContent = "john@example.com"; 
+        // Met à jour l'email de l'utilisateur (exemple de données fictives)
+        document.getElementById("loginBtn").style.display = "none"; 
+        // Masque le bouton de connexion dans la barre de navigation
+        document.getElementById("userStatus").style.display = "flex"; 
+        // Affiche le statut utilisateur dans la barre de navigation
+      }
+
+
+      // Vendor Auth moda
+
+      /*
+      Cette fonction vérifie la position des sections sur la page et, si elles atteignent un certain point dans
+      la fenêtre d'affichage (80 % du bas de l'écran), elles reçoivent une classe qui déclenche une animation.
+      */
+
+      function handleScrollAnimations() {
+        const sections = document.querySelectorAll('section');
+        sections.forEach(section => {
+          const rect = section.getBoundingClientRect();
+          const triggerPoint = window.innerHeight * 0.8;
+
+          if (rect.top <= triggerPoint) {
+            section.classList.add('animate-section');
+          }
+        });
+      }
+
+      // Use requestAnimationFrame for smoother animations
+      function onScroll() {
+        requestAnimationFrame(handleScrollAnimations);
+      }
+
+      window.addEventListener('scroll', onScroll);
+      onScroll(); // Call once on load
+    });
+  </script>

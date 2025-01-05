@@ -1,0 +1,357 @@
+<html><head><base href="." /></head>
+<body>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #4f46e5; 
+      --success: #22c55e;
+      --danger: #ef4444;
+      --text-gray: #4b5563;
+    }
+
+    .blue{
+        color: #3498db;
+      }
+    
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 0.5rem;
+      }
+    }
+    
+    .payment-container {
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 2rem;
+      background: white;
+    }
+    
+    @media (max-width: 768px) {
+      .payment-container {
+        padding: 1rem;
+      }
+    }
+    
+    .instructions {
+      background: #f3f4f6;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      border-left: 4px solid var(--primary);
+    }
+    
+    .instructions h3 {
+      color: var(--primary);
+      margin-top: 0;
+    }
+    
+    .instructions ol {
+      padding-left: 1.2rem;
+    }
+    
+    .instructions li {
+      margin-bottom: 0.8rem;
+    }
+    
+    .important-note {
+      background: #fff3cd;
+      border-left: 4px solid #fbbf24;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 4px;
+    }
+    
+    .payment-form {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    label {
+      font-weight: 500;
+      color: #374151;
+    }
+    
+    input, select {
+      padding: 0.75rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    
+    .btn {
+      padding: 1rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--secondary);
+      transform: translateY(-1px);
+    }
+    
+    .upload-preview {
+      width: 100%;
+      max-width: 300px;
+      height: 200px;
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1rem;
+      background: #f9fafb;
+    }
+    
+    .error-message {
+      color: var(--danger);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+    
+    .success-message {
+      color: var(--success);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Style général pour les deux messages */
+p.success:empty, p.fail:empty {
+  display: none;
+}
+
+
+p.success, p.fail {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+
+}
+
+/* Message de succès */
+p.success {
+  color: #155724; /* Couleur du texte (vert foncé) */
+  background-color: #d4edda; /* Couleur de fond (vert clair) */
+  border: 1px solid #c3e6cb; /* Bordure (vert) */
+}
+
+/* Message d'erreur */
+p.fail {
+  color: #721c24; /* Couleur du texte (rouge foncé) */
+  background-color: #f8d7da; /* Couleur de fond (rouge clair) */
+  border: 1px solid #f5c6cb; /* Bordure (rouge) */
+}
+
+  </style>
+
+  <div class="payment-container">
+    <h1>Paiement Manuel</h1>
+    
+    <div class="instructions">
+      <h3>Instructions de paiement</h3>
+      <p>Pour effectuer votre paiement en toute sécurité, veuillez suivre attentivement ces étapes :</p>
+      <ol>
+        <li>Envoyez le montant exact via Mobile Money au numéro <strong>+225 0700000000</strong></li>
+        <li>Après l'envoi, prenez une capture d'écran claire et lisible de la confirmation de transaction</li>
+        <li>Remplissez soigneusement le formulaire ci-dessous avec vos informations exactes</li>
+        <li>Vérifiez que toutes les informations sont correctes avant de soumettre</li>
+      </ol>
+    </div>
+
+    <div class="important-note">
+      <strong>Important :</strong> Assurez-vous que :
+      <ul>
+        <li>Le numéro utilisé pour le paiement correspond à celui que vous indiquez dans le formulaire</li>
+        <li>Le montant envoyé correspond exactement à celui indiqué</li>
+        <li>La capture d'écran montre clairement la confirmation de transaction</li>
+      </ul>
+    </div>
+
+    <form class="payment-form" id="paymentForm">
+      <div class="form-group">
+        <label for="name">Nom complet *</label>
+        <input 
+          type="text" 
+          id="name" 
+          required 
+          placeholder="Ex: Jean Dupont"
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="name">Email *</label>
+        <input 
+          type="email" 
+          id="email" 
+          required 
+          placeholder="Ex: Jeandupont@gmail.com"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Numéro Mobile Money utilisé *</label>
+        <input 
+          type="tel" 
+          id="phone" 
+          required 
+          pattern="[0-9]{10}"
+          placeholder="Ex: 0700000000"
+        >
+        <span class="helper-text">Format: 10 chiffres sans espaces</span>
+      </div>
+
+      <div class="form-group">
+        <label for="amount">Montant envoyé (FCFA) *</label>
+        <input 
+          type="number" 
+          id="amount" 
+          required 
+          min="100"
+          placeholder="Ex: 5000"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="proof">Preuve de paiement (capture d'écran) *</label>
+        <input 
+          type="file" 
+          id="proof" 
+          accept="image/*" 
+          required
+        >
+        <div class="upload-preview" id="preview">
+          <p>Aperçu de l'image</p>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Soumettre le paiement</button>
+      <p class="success"></p>
+      <p class="fail"></p>
+    </form>
+  </div>
+
+  <script>
+    const paymentForm = document.getElementById('paymentForm');
+    const proofInput = document.getElementById('proof');
+    const previewDiv = document.getElementById('preview');
+
+    // Validation et preview de l'image
+    proofInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        if (file.size > 5 * 1024 * 1024) { // 5MB max
+          alert('La taille de l\'image ne doit pas dépasser 5MB');
+          this.value = '';
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewDiv.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 100%; border-radius: 4px;">`;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Validation du formulaire
+    function validateForm() {
+      const phone = document.getElementById('phone').value;
+      const amount = document.getElementById('amount').value;
+      
+      if (phone.length !== 10 || !/^\d+$/.test(phone)) {
+        alert('Le numéro de téléphone doit contenir exactement 10 chiffres');
+        return false;
+      }
+      
+      if (amount < 100) {
+        alert('Le montant minimum est de 100 FCFA');
+        return false;
+      }
+      
+      return true;
+    }
+
+    // Soumission du formulaire
+const successMessage = document.querySelector('.success');
+const failMessage = document.querySelector('.fail');
+
+paymentForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  // Réinitialiser les messages
+  successMessage.textContent = '';
+  failMessage.textContent = '';
+
+  if (!validateForm()) {
+    failMessage.textContent = 'Formulaire invalide. Veuillez corriger les erreurs.';
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('name', document.getElementById('name').value);
+  formData.append('phone', document.getElementById('phone').value);
+  formData.append('amount', document.getElementById('amount').value);
+  formData.append('email', document.getElementById('email').value);
+  formData.append('proof', document.getElementById('proof').files[0]);
+
+  try {
+    const response = await fetch('/deliver/gestionPayement/', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log(result);
+      successMessage.innerHTML = `
+  Paiement soumis avec succès. Vous serez notifié(e) par SMS dès que votre paiement aura été validé dans un délai de 24 heures. 
+  <a class="blue" href="/deliver/foireQuestion" target="_blank">Cliquez ici pour plus d'informations</a>.
+`
+    } else {
+      failMessage.textContent = 'Erreur lors de la soumission. Veuillez réessayer.';
+    }
+  } catch (error) {
+    console.error('Erreur lors de la soumission.', error);
+    failMessage.textContent = 'Une erreur est survenue. Veuillez vérifier votre connexion et réessayer.';
+  }
+
+  paymentForm.reset();
+  previewDiv.innerHTML = '<p>Aperçu de l\'image</p>';
+});
+
+  </script>
+
+</body></html>

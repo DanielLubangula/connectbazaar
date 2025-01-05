@@ -1,0 +1,1734 @@
+<style>
+  
+    .premium-banner {
+        position: relative;
+        padding: 15px 25px;
+        background: linear-gradient(135deg, #2a2a72, #009ffd);
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        overflow: hidden;
+        animation: glow 2s infinite alternate;
+        margin-bottom: 15px;
+        margin: 15px;
+    }
+
+    .center{
+      text-align: center;
+    }
+
+    .content {
+        flex: 1;
+        color: white;
+    }
+
+    h2 {
+        margin: 0;
+        font-size: 1.4em;
+        margin-bottom: 5px;
+    }
+
+    p {
+        margin: 0;
+        font-size: 0.9em;
+        opacity: 0.9;
+    }
+
+    .cta-button {
+        background-color: #ffd700;
+        color: #000;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 25px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .cta-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .sparkle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: white;
+        border-radius: 50%;
+        opacity: 0;
+    }
+
+    @keyframes glow {
+        0% {
+            box-shadow: 0 4px 15px rgba(0,159,253,0.2);
+        }
+        100% {
+            box-shadow: 0 4px 25px rgba(0,159,253,0.4);
+        }
+    }
+    .overlaylimit {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modallimit {
+    position: fixed;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    max-width: 90%;
+    width: 400px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+
+.modal-content {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.modal-icon {
+    margin-bottom: 15px;
+}
+
+.premium-button {
+    background-color: #FF6B6B;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+}
+
+.premium-button:hover {
+    background-color: #FF5252;
+}
+
+
+/* Animation pour l'apparition */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.modallimit.show {
+    animation: fadeIn 0.3s ease forwards;
+    display: block;
+}
+
+
+
+/* opération réaliser avec succès publication du produit*/
+    .modalSucces {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        border-left: 5px solid;
+        width: 30%;
+        position: absolute;
+        top: 30%;
+        left: -150%;
+        min-width: 225px;
+        transition: all 0.3s ease;
+    }
+
+    .success {
+        border-left-color: #2ecc71;
+    }
+
+    .modal-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+        .modal-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+    }
+
+    .modal-title {
+        font-size: 1.2em;
+        font-weight: 600;
+    }
+
+    .modal-content {
+        margin-bottom: 15px;
+        color: #555;
+        line-height: 1.5;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+    .marginAuto{
+      margin: auto;
+    }
+
+
+/* Style général : table pleine largeur par défaut */
+.w-full {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+.overflowScroll {
+  overflow-x: auto; /* Ajoute un défilement horizontal si nécessaire */
+}
+
+
+/* Style général : affichage en grille */
+
+.p510 {
+  padding: 10px 5px;
+}
+
+.imagePreview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+ .price-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .currency-select {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 5px;
+    border: none;
+    background: transparent;
+    z-index: 2;
+    width: 80px;
+  }
+  
+  .price-input {
+    padding-right: 60px !important;
+  }
+/* Responsive : Mobile (max 480px) */
+@media screen and (max-width: 480px) {
+  .modal {
+    width: 85%;
+    padding: 15px;
+  }
+
+  .premium-banner {
+    flex-direction: column;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .premium-banner .cta-button {
+    font-size: 14px;
+    padding: 8px 15px;
+    margin-top: 15px;
+  }
+
+  .premium-banner .close-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+
+  .paddingD.element {
+    padding: 10px;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .paddingD.element > div {
+    width: 100%;
+    text-align: center;
+    margin: auto 5px;
+  }
+
+  #searchInputProduct {
+    max-width: 100%;
+    margin: auto;
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .w-full tbody tr td {
+    padding: 8px 0;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .w-full tbody tr td::before {
+    display: inline-block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #555;
+    margin-right: 10px;
+  }
+
+  #spinner img,
+  #spinnerCharge img {
+    width: 40px;
+  }
+
+  .imagePreview {
+    grid-template-columns: 1fr; /* Une seule colonne pour les images */
+  }
+
+  .form-actions button {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+
+  label {
+    font-size: 0.85rem;
+  }
+
+  textarea,
+  input,
+  select {
+    font-size: 0.9rem;
+    padding: 6px;
+  }
+}
+
+/* Responsive : Tablette (max 768px) */
+@media screen and (max-width: 768px) {
+  .paddingD.element {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .paddingD.element > div {
+    width: 100%;
+    text-align: center;
+  }
+
+  .premium-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .premium-banner .cta-button {
+    margin-top: 15px;
+  }
+
+  .premium-banner .close-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+
+  .w-full thead {
+    display: none;
+  }
+
+  .w-full tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .w-full tbody tr td {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 5px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .w-full tbody tr td:last-child {
+    border-bottom: none;
+  }
+
+  #spinnerCharge,
+  #spinner {
+    text-align: center;
+  }
+
+  #spinner img,
+  #spinnerCharge img {
+    width: 50px;
+  }
+
+  .form-content .grid {
+    gap: 12px;
+  }
+
+  .imagePreview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .form-actions {
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
+  label {
+    font-size: 0.95rem;
+  }
+}
+
+
+
+
+</style>
+<script defer src="/js/infiniteScroll.js"></script>
+<link rel="stylesheet" href="/style/productVendor.css">
+
+
+        <!-- Main Content -->
+    <main class="width flex-1 ml-6">
+        <input type="hidden" class="idVendor" value = "{{vendor._id}}">
+            <!-- Actions Bar -->
+            <div class="paddingD element table-responsive bg-white p-4 rounded-lg shadow mb-6 flex justify-between items-center wrap">
+                <div class="flex space-x-4">
+                    <button id="addProductBtn" class="secondaryColor text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+                        <i class="fas fa-plus"></i>
+                        <span>Ajouter un Produit</span>
+                    </button>
+                    {{!-- <button onclick="openFilterModal()" class="filtreProduct bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center space-x-2">
+                        <i class="fas fa-filter"></i>
+                        <span>Filtrer</span>
+                    </button> --}}
+                </div>
+                <div style="display: flex; align-items:center;border-radius : 30px; border : 1px solid gray; margin-top:10px" >
+                    <label for="searchInputProduct"><i class="fas fa-search text-gray-400" style="padding-left:10px;"></i></label>
+                    <input type="text" id="searchInputProduct" style="outline:none;padding:10px;border-radius : 30px; " placeholder="Rechercher un produit..." >  
+                </div>
+            </div>
+
+            {{!-- Début Plan premium --}}
+      {{#unless (eq CheckStatus "approved")}}
+      <div class="premium-banner">
+        <span class="close-btn" onclick="hideModalPremium()">×</span>
+        <div class="content">
+            <h2>🌟 Passez au compte Premium aujourd'hui !</h2>
+            <p>Augmentez vos ventes et boostez votre visibilité avec nos fonctionnalités exclusives.</p>
+        </div>
+        <a href="/deliver/payement" class="cta-button">Devenir Premium</a>
+    </div>
+    {{/unless}}
+            {{!-- Fin plan premium --}}
+
+            <!-- Products List -->
+            <div class=" bg-white rounded-lg shadow overflowScroll">
+                    
+                <table  class="w-full">
+                    <thead >
+                        <tr class="border-b">
+                            <th class="th text-left p-4">Image</th>
+                            <th class="th text-left p-4">Nom du Produit</th>
+                            <th class="th text-left p-4">Catégorie</th>
+                            <th class="th text-left p-4">Prix</th>
+                            <th class="th text-left p-4">Location</th>
+                            {{!-- <th class="th text-left p-4">Status</th> --}}
+                            <th class="th text-left p-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTable">
+
+                    </tbody>
+                </table>
+                    <div id="spinnerCharge">
+                        <img src="/images/spinner.gif" alt="">
+                    </div>
+                <div id="spinner" style="display: block; text-align:center;">
+                        <img style="width: 70px;margin : 0px auto; display: inline-block" src="/images/spinner.gif" alt="Chargement...">
+                </div>
+            </div>
+                    <p class="afficherPlus">Afficher Plus</p>
+                    <p class="information"></p>
+    </main>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productModal" class="product-modal">
+        <div class="fixed inset-0 flex items-center justify-center">
+            {{!-- Animation spinner --}}
+            {{!-- Fin Animation spinner --}}
+            <div id="spinnerSend">
+                    <img src="/images/spinner.gif" alt="">
+            </div>
+
+            <div class="divForm bg-white rounded-lg shadow-lg p510 w-full max-w-2xl">
+                <div class="titreForm span12px flex justify-between items-center mb-4">
+                    <h3 class="titreFormh3 centerWhite text-xl font-bold" style="margin: 0px auto;">Ajouter un Produit</h3>
+            
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700"> 
+                        <i class="x fas fa-times"></i>
+                    </button>
+                
+                </div>
+
+    <form id="productForm" enctype="multipart/form-data" class="space-y-4">
+    <div class="form-content">
+        <div class="grid grid-cols-2 gap-2">
+            <!-- Nom du Produit -->
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Nom du Produit<span class="oblig">*</span></label>
+                <input id="name" type="text" name="name" value="{{msgErrorPublieProduct.name}}" class="name mt-1 block w-full border rounded-md p-2">
+            </div>
+            <!-- Catégorie -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Catégorie<span class="oblig">*</span></label>
+                <select id="category" name="category" value="{{msgErrorPublieProduct.category}}" class="category mt-1 block w-full border rounded-md p-2">
+                    <option>Électronique</option>
+                    <option>Vêtements</option>
+                    <option>Alimentation</option>
+                    <option>Autres</option>
+                </select>
+            </div>
+            
+            <!-- Lieu de Retrait -->
+            <div class="col-span-2">
+                <label class="block text-sm font-medium text-gray-700">Lieu de Retrait</label>
+                <input type="text" id="pickupLocation" value="{{msgErrorPublieProduct.pickupLocation}}" name="pickupLocation" class="location mt-1 block w-full border rounded-md p-2" placeholder="Ex. : Gombe , Galerie du 30 Juin">
+            </div>
+
+            <!-- Prix -->
+            <div class="col-span-2">
+
+
+                <label class="block text-sm font-medium text-gray-700">Prix<span class="oblig">*</span></label>
+                <div class="price-input-group">
+                  <input type="number" name="price" value="{{msgErrorPublieProduct.price}}" step="0.01" min="0" class="price pl-7 block w-full border rounded-md p-2" id="price" required>
+                  <select class="currency-select" id="currency">
+                    <option value="USD">USD $</option>
+                    <option value="CDF">CDF FC</option>
+                  </select>
+                </div>
+
+
+                {{!-- <label class="block text-sm font-medium text-gray-700">Prix<span class="oblig">*</span></label>
+                <div class="mt-1 relative rounded-md shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span class="text-gray-500 sm:text-sm">€</span>
+                    </div>
+                    <input type="number" id="price" value="{{msgErrorPublieProduct.price}}" name="price" step="0.01" min="0" class="price pl-7 block w-full border rounded-md p-2" placeholder="0.00">
+                </div> --}}
+            </div>
+            <!-- Description -->
+            <div class="col-span-2">
+                <label class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea rows="3" name="description" value="{{msgErrorPublieProduct.description}}" class="description mt-1 block w-full border rounded-md p-2"></textarea>
+            </div>
+            <!-- Images du Produit -->
+            <div class="col-span-2">
+                <label class="block text-sm font-medium text-gray-700">Images du Produit <span class="oblig">*</span></label>
+                <div class="mt-1 flex flex-col items-center" style="position: relative;">
+                    <div class="clearImg" style="position : absolute;top:0px;left:0px; margin-bottom: -7px; background-color : inherit;cursor : pointer; z-index:2;">
+                        ×
+                    </div>
+                    <div id="imagePreview" class="imagePreview grid grid-cols-3 gap-2 mb-4 w-full" style="background-color : rgba(128, 128, 128, 0.137)">
+                    </div>
+                    <div style="height: fit-content;" class="flex space-x-4">
+                        <label class="height flex items-center bgImporte px-4 py-2 text-white rounded-lg cursor-pointer">
+                            <i class="fas fa-file-upload mr-2"></i>
+                            <span class="span12px">Importer</span>
+                            <input type="file" id="fileInput" name="images" class="imagesInput hidden" accept="image/*" multiple>
+                        </label>
+                        <label  class="height flex items-center px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700" for="cameraInput">
+                            <i class="fas fa-camera mr-2"></i>
+                            <span class="span12px">Prendre une photo</span>
+                            <input type="file" id="cameraInput" class="hidden" accept="image/*" capture="environment">
+                        </label>
+                    </div>
+                    <p class="span12px information" style="text-align: center;">Vous ne pouvez télécharger que 3 images maximum.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Boutons d'action -->
+    <div class="positionAbsolute center form-actions flex justify-end space-x-3">
+        <button type="button" onclick="closeModal()" class="span12px bg-gray-200 text-gray-700 px-4 py-2 rounded-lg">
+            Annuler
+        </button>
+        <button type="button" onclick="closeButton()" class="span12px btnUpload secondaryColor text-white px-4 py-2 rounded-lg">
+            Enregistrer
+        </button>
+        <button type="button" style="display: none;" onclick="closeButton()" class="span12px btnEdit secondaryColor text-white px-4 py-2 rounded-lg">
+            Appliquer
+        </button>
+    </div>
+</form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera Preview Modal -->
+    <div id="cameraModal" class="product-modal">
+        <div class="fixed inset-0 flex items-center justify-center">
+            <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">Prendre une Photo</h3>
+                    <button onclick="closeCameraModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <video id="cameraPreview" autoplay playsinline class="w-full h-64 bg-black rounded-lg"></video>
+                    <div class="flex justify-center">
+                        <button id="captureButton" class="secondaryColor text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+                            <i class="fas fa-camera"></i>
+                            <span>Capturer</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="product-modal">
+        <div class="fixed inset-0 flex items-center justify-center">
+            <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                <div class="text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-exclamation-triangle text-red-500 text-5xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Confirmer la suppression</h3>
+                    <p class="text-gray-600 mb-6">Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.</p>
+                    <div class="flex justify-center space-x-4">
+                        <button onclick="closeDeleteModal()" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300">
+                            Annuler
+                        </button>
+                        <button onclick="confirmDelete()" class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600">
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Filter Modal -->
+    <div id="filterModal" class="product-modal">
+        <div class="fixed inset-0 flex items-center justify-center">
+            <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">Filtrer les Produits</h3>
+                    <button onclick="closeFilterModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="filterForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Catégorie</label>
+                        <select name="category" class="selectedProduct mt-1 block w-full border rounded-md p-2">
+                            <option value="">Toutes les catégories</option>
+                            <option value="Électronique">Électronique</option>
+                            <option value="Vêtements">Vêtements</option>
+                            <option value="Alimentation">Alimentation</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Prix</label>
+                        <div class="mediaTall grid grid-cols-2 gap-4">
+                            <div>
+                                <input type="number" name="minPrice" placeholder="Min €" class="minPrice mt-1 block w-full border rounded-md p-2">
+                            </div>
+                            <div>
+                                <input type="number" name="maxPrice" placeholder="Max €" class="maxPrice mt-1 block w-full border rounded-md p-2">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        {{!-- <label class="block text-sm font-medium text-gray-700">Status</label> --}}
+                        {{!-- <select name="status" class="statusProduct mt-1 block w-full border rounded-md p-2">
+                            <option value="">Tous les status</option>
+                            {{!-- <option value="actif">Actif</option> --}}
+                            <option value="inactif">Inactif</option>
+                        </select> --}}
+                    </div>
+                    <div class="flex justify-end space-x-3 mt-4">
+                        <button type="button" onclick="resetFilters()" class="renit bg-gray-200 text-gray-700 px-4 py-2 rounded-lg">
+                            Réinitialiser
+                        </button>
+                        <button type="button" class="appliquerFilterBtn secondaryColortext-white px-4 py-2 rounded-lg">
+                            Appliquer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+   </div>
+
+   <!-- Overlay et Modal -->
+<div class="overlaylimit" id="overlaylimit">
+    <div class="modallimit" id="modallimit">
+        <span class="close-btn" onclick="hideModal()">×</span>
+        <div class="modal-content">
+            <div class="modal-icon">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="24" r="23" stroke="#FF6B6B" stroke-width="2"/>
+                    <path d="M24 12v16M24 34v2" stroke="#FF6B6B" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h2>Limite atteinte</h2>
+            <p>Vous avez atteint votre limite quotidienne de publication</p>
+            <p>Passez en version Premium pour profiter d'un nombre illimité de publications !</p>
+            <button class="premium-button" onclick="window.location.href='/deliver/payement'">Passer en Premium</button>
+        </div>
+    </div>
+</div>
+
+
+            <div class="modalSucces success">
+                <div class="modal-header">
+                    <svg class="modal-icon" viewBox="0 0 24 24" fill="#2ecc71">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                    <h2 class="modal-title">Succès</h2>
+                </div>
+                <div class="modal-content">
+                    L'opération a été effectuée avec succès !
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-success" onclick="pageMonoProduit()">Voir</button>
+                </div>
+            </div>
+
+   <script>
+// début plan premium
+    function createSparkles() {
+      clearInterval()
+        const banner = document.querySelector('.premium-banner');
+        if (!banner) return
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        
+        // Position aléatoire
+        sparkle.style.left = Math.random() * 100 + '%';
+        sparkle.style.top = Math.random() * 100 + '%';
+        
+        banner.appendChild(sparkle);
+        
+        // Animation
+        sparkle.animate([
+            { opacity: 0, transform: 'scale(0)' },
+            { opacity: 1, transform: 'scale(1)' },
+            { opacity: 0, transform: 'scale(0)' }
+        ], {
+            duration: 1000,
+            easing: 'ease-out'
+        }).onfinish = () => sparkle.remove();
+    }
+
+    // Créer des étincelles toutes les 300ms
+    setInterval(createSparkles, 300);
+// fin plan premium
+    
+    document.querySelector(".clearImg").style.display = "none";
+// Affiche produit
+//function APiProduct
+/** 
+orgine est un paramètre qui permet de vérifier qui a appelé cette fonction afin de modifier l'affichage
+*/
+let scrollInfinite = "";
+const ApiProduct = async (orgine) => {
+  const spinner = document.getElementById("spinner");
+  const productTable = document.getElementById("productTable");
+
+  // Affiche le spinner pendant le chargement des données
+  spinner.style.display = "block";
+
+  try {
+    // const response = await fetch("http://192.168.4.14:5000/deliver/apiProduct");
+    const baseURL =
+          window.location.origin.includes('localhost')
+            ? 'http://localhost:5000'
+            : 'https://deliver-jvwl.onrender.com';
+            //const baseURL = "http://192.168.181.14:5000"
+
+
+    const response = await fetch(baseURL + "/deliver/apiProduct");
+
+    if (!response.ok)
+      throw new Error("Erreur lors de la récupération des produits");
+
+    const products = await response.json();
+    // Masquer le spinner une fois les données prêtes
+    spinner.style.display = "none";
+
+    if (products.length === 0) {
+      document.querySelector(".information").classList.add("center");
+      document.querySelector(
+        ".information"
+      ).innerHTML = `Vous n'avez publié aucun produit`;
+
+      //console.log(document.querySelector(".afficherPlus"));
+      document.querySelector(".afficherPlus").style.display = "none";
+    } else {
+      document.querySelector(".information").innerHTML = ``;
+      document.querySelector(".afficherPlus").style.display = "block";
+    }
+
+    // Afficher les produits dans le tableau
+    if (orgine !== "app1") {
+      productTable.innerHTML = "";
+      scrollInfinite = true;
+    }
+
+    if (products.length === 0){
+      return
+    }
+
+    document.querySelector(".afficherPlus").innerHTML = "Afficher plus"
+    AfficherProduit(products);
+    
+  } catch (error) {
+    console.error(error);
+    spinner.style.display = "none";
+    alert("Erreur lors de la récupération des produits.");
+  }
+  let nextImage = "";
+  /* Caroussel image**/
+  const carousels = document.querySelectorAll(".carousel-container");
+  carousels.forEach((carousel) => {
+    let currentIndex = 0;
+    const images = carousel.querySelectorAll(".carousel-image");
+    const dots = carousel.querySelectorAll(".carousel-dot");
+    const totalImages = images.length;
+    let startX;
+
+    const showImage = (index) => {
+      images.forEach((img, i) => img.classList.toggle("active", i === index));
+      dots.forEach((dot, i) => dot.classList.toggle("active", i === index));
+    };
+
+    const nextImage = () => {
+      currentIndex = (currentIndex + 1) % totalImages;
+      showImage(currentIndex);
+    };
+
+    const prevImage = () => {
+      currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+      showImage(currentIndex);
+    };
+
+    // Automatic scroll
+    let autoScroll = setInterval(nextImage, 3000); // Change image every 3 seconds
+
+    // Event listeners for dots
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        currentIndex = parseInt(dot.getAttribute("data-index"));
+        showImage(currentIndex);
+        clearInterval(autoScroll); // Reset auto-scroll on manual click
+        autoScroll = setInterval(nextImage, 3000);
+      });
+    });
+
+    // Swipe functionality for touch screens
+    carousel.addEventListener("touchstart", (event) => {
+      startX = event.touches[0].clientX;
+    });
+
+    carousel.addEventListener("touchend", (event) => {
+      const endX = event.changedTouches[0].clientX;
+      if (startX - endX > 50) {
+        // Swipe left
+        nextImage();
+      } else if (endX - startX > 50) {
+        // Swipe right
+        prevImage();
+      }
+      clearInterval(autoScroll); // Reset auto-scroll on manual swipe
+      autoScroll = setInterval(nextImage, 3000);
+    });
+
+    // Event listeners for navigation buttons
+
+      if (carousel.querySelector(".carousel-nav.left") !== null || carousel.querySelector(".carousel-nav.right") !== null){
+
+    carousel
+      .querySelector(".carousel-nav.left")
+      .addEventListener("click", () => {
+        prevImage();
+        clearInterval(autoScroll);
+        autoScroll = setInterval(nextImage, 3000);
+      });
+
+    carousel
+      .querySelector(".carousel-nav.right")
+      .addEventListener("click", () => {
+        nextImage();
+        clearInterval(autoScroll);
+        autoScroll = setInterval(nextImage, 3000);
+      });
+      }
+      
+  });
+};
+
+/* Caroussel image**/
+
+//function APiProduct
+
+document.addEventListener("DOMContentLoaded", async () => {
+  ApiProduct("app1");
+});
+
+// Affiche produit
+
+//Spinner
+const productForm = document.getElementById("productForm");
+const spinner = document.getElementById("spinnerSend");
+let validation = "";
+let currentProductId = ""
+
+document
+  .querySelector(".btnUpload")
+  .addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    // Affiche le spinner
+    spinner.style.display = "block";
+    document.querySelector(".divForm").style.display = "none";
+
+    const formData = new FormData();
+
+    // Récupérer les fichiers choisis (jusqu'à 3)
+    const images = document.querySelector(".imagesInput").files;
+    console.log(images)
+    for (let i = 0; i < images.length && i < 3; i++) {
+      formData.append("images", images[i]); // 'images' est le nom du champ que le serveur attend
+    }
+
+    // Ajouter d'autres données si nécessaire
+    formData.append("name", document.querySelector(".name").value);
+    formData.append("category", document.querySelector(".category").value);
+    formData.append("price", document.querySelector(".price").value + " "+ document.getElementById("currency").value);
+    formData.append("pickupLocation",document.querySelector(".location").value);
+    console.log("Id",document.getElementById("currency").value)
+
+    try {
+      const response = await fetch("/deliver/productPublieVendor", {
+        method: "POST",
+        body: formData, // Pas de Content-Type nécessaire pour FormData
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log("Success:", result);
+        currentProductId = result.id
+
+        document.querySelector(".name").value = "";
+        document.querySelector(".price").value = "";
+        document.querySelector(".description").value = "";
+        document.querySelector(".category").value = "";
+        document.querySelector(".location").value = "";
+        validation = true;
+
+        ApiProduct();
+
+        // Apparition de message succès 
+        document.querySelector(".modalSucces").style.right = "0px"
+        setTimeout(function(){
+          document.querySelector(".modalSucces").style.left = "-150%"
+        }, 3000)
+
+        // Autres actions, par exemple rediriger l'utilisateur ou réinitialiser le formulaire
+      } else {
+        limitFunction()
+        closeModal()
+        console.error(
+          "Error:",
+          result.message || "Erreur lors de la soumission"
+        );
+        document.querySelector(".information").innerHTML = result.message;
+        document.querySelector(".information").classList.add("messageError");
+
+        validation = false;
+      }
+    } catch (error) {
+      console.error("Fetch Error:", error);
+      validation = false;
+    } finally {
+      if (validation) {
+        // Masque le spinner une fois la requête terminée (succès ou erreur)
+        spinner.style.display = "none";
+        document.querySelector(".divForm").style.display = "block";
+        modal.classList.remove("active");
+      } else {
+        spinner.style.display = "none";
+        document.querySelector(".divForm").style.display = "block";
+      }
+    }
+  });
+
+  // ************************************** Acceder à la page voir le produit
+  function pageMonoProduit () {
+    location.assign(`/deliver/pageMonoProduit/${currentProductId}`)
+  }
+
+//Spinner
+
+function limitFunction () {
+    document.getElementById('overlaylimit').style.display = 'block';
+    document.getElementById('modallimit').classList.add('show');
+}
+
+function hideModal() {
+    document.getElementById('overlaylimit').style.display = 'none';
+    if (document.getElementById('modal').classList.remove('show') !== null) document.getElementById('modal').classList.remove('show');
+   
+}
+
+function hideModalPremium() {
+    document.querySelector('.premium-banner').style.display = 'none';
+}
+
+// Fermer le modal en cliquant sur l'overlay
+document.getElementById('overlaylimit').addEventListener('click', function(e) {
+    if (e.target === this) {
+        hideModal();
+    }
+});
+
+// Fermer avec la touche Echap
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        hideModal();
+    }
+});
+
+// Modal Management
+document.querySelector(".clearImg").addEventListener("click", () => {
+  document.querySelector(".clearImg").style.display = "none";
+  document.getElementById("imagePreview").innerHTML = "";
+  document.querySelector(".imagesInput").value = "";
+});
+
+const modal = document.getElementById("productModal");
+
+const cameraModal = document.getElementById("cameraModal");
+const filterModal = document.getElementById("filterModal");
+const addProductBtn = document.getElementById("addProductBtn");
+
+addProductBtn.addEventListener("click", () => {
+  //document.querySelector(".header").classList.add('zIndex')
+  document.querySelector(".btnUpload").style.display = "block";
+  document.querySelector(".btnEdit").style.display = "none";
+
+  modal.classList.add("active");
+  document.querySelector(".headerVendor").style.display = "none";
+});
+
+function closeButton() {
+  document.getElementById("imagePreview").innerHTML = "";
+  document.querySelector(".clearImg").style.display = "none";
+  document.querySelector(".headerVendor").style.display = "block";
+}
+
+function closeModal() {
+  document.querySelector(".titreFormh3").innerHTML = "Ajouter un Produit";
+  document.querySelector(".clearImg").style.display = "none";
+  document.querySelector(".imagesInput").value = "";
+  document.getElementById("imagePreview").innerHTML = "";
+  modal.classList.remove("active");
+  document.querySelector(".headerVendor").style.display = "block";
+}
+
+function openFilterModal() {
+  filterModal.classList.add("active");
+}
+
+function closeFilterModal() {
+  filterModal.classList.remove("active");
+}
+
+// Camera Management
+const cameraPreview = document.getElementById("cameraPreview");
+const captureButton = document.getElementById("captureButton");
+let stream = null;
+
+document
+  .querySelector('label[for="cameraInput"]')
+  .addEventListener("click", (e) => {
+    openCameraPreview();
+  });
+
+async function openCameraPreview() {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: "environment",
+      },
+    });
+    cameraPreview.srcObject = stream;
+    cameraModal.classList.add("active");
+  } catch (err) {
+    console.error("Error accessing camera:", err);
+    alert(
+      "Impossible d'accéder à la caméra. Veuillez vérifier les permissions."
+    );
+  }
+}
+
+function closeCameraModal() {
+  if (stream) {
+    stream.getTracks().forEach((track) => track.stop());
+    stream = null;
+  }
+  cameraModal.classList.remove("active");
+}
+
+captureButton.addEventListener("click", () => {
+  // Check if we already have 3 images
+  if (imagePreview.children.length >= 3) {
+    alert("Vous ne pouvez avoir que 3 images maximum.");
+    closeCameraModal();
+    return;
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = cameraPreview.videoWidth;
+  canvas.height = cameraPreview.videoHeight;
+  canvas.getContext("2d").drawImage(cameraPreview, 0, 0);
+
+  const imageUrl = canvas.toDataURL("image/jpeg");
+
+  // Create preview element
+  const previewContainer = document.createElement("div");
+  previewContainer.className = "relative";
+
+  const img = document.createElement("img");
+  img.src = imageUrl;
+  img.className = "w-full h-32 object-cover rounded-lg";
+
+  //const deleteBtn = document.createElement('button');
+  //deleteBtn.className = 'clearInput absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center';
+  //deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+  //deleteBtn.onclick = function() {
+  //   previewContainer.remove();
+  //};
+
+  previewContainer.appendChild(img);
+  // {{!-- previewContainer.appendChild(deleteBtn); --}}
+
+  closeCameraModal();
+});
+
+// Image preview handling
+const fileInput = document.getElementById("fileInput");
+const cameraInput = document.getElementById("cameraInput");
+const imagePreview = document.getElementById("imagePreview");
+
+function handleImageUpload(event) {
+  const files = event.target.files;
+
+  document.querySelector(".clearImg").style.display = "block";
+  // Check if we already have 3 images
+  if (files.length > 3) {
+    document.querySelector(".imagesInput").value = "";
+    closeButton();
+    alert("Vous ne pouvez télécharger que 3 images maximum.");
+    return;
+  }
+  
+  // Calculate how many more images we can add
+  //console.log("imagePreview.children.length")
+  //console.log(imagePreview.children.length)
+  const remainingSlots = 3 - imagePreview.children.length;
+  //console.log('remainingSlots')
+  //console.log(remainingSlots)
+  const filesToProcess = Array.from(files).slice(0, 3);
+  //console.log("filesToProcess")
+  //console.log(filesToProcess)
+  for (const file of filesToProcess) {
+    console.log("files", file)
+    imagePreview.innerHTML = "";
+    //console.log("2file")
+    //console.log(file)
+    if (file.type.startsWith("image/")) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        // Only add if we haven't reached 3 images yet
+        if (imagePreview.children.length < 3) {
+          const previewContainer = document.createElement("div");
+          previewContainer.className = "relative";
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.className = "w-full h-32 object-cover rounded-lg";
+
+          //const deleteBtn = document.createElement('button');
+          //deleteBtn.className = 'absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center';
+          //deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+          //deleteBtn.onclick = function() {
+          //    previewContainer.remove();
+          //};
+
+          previewContainer.appendChild(img);
+          //{{!-- previewContainer.appendChild(deleteBtn); --}}
+          //console.log('ici')
+
+          imagePreview.appendChild(previewContainer);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+}
+
+fileInput.addEventListener("change", handleImageUpload);
+cameraInput.addEventListener("change", handleImageUpload);
+
+// Form Submission
+productForm.addEventListener("submit", (e) => {
+  // Add form submission logic
+  closeModal();
+});
+
+// Filter Modal Submission
+const filterForm = document.getElementById("filterForm");
+
+filterForm.addEventListener("submit", (e) => {
+  // Get filter values
+  const formData = new FormData(filterForm);
+  const filters = {
+    category: formData.get("category"),
+    minPrice: formData.get("minPrice"),
+    maxPrice: formData.get("maxPrice"),
+    status: formData.get("status"),
+  };
+
+  // Apply filters to the product list
+  filterProducts(filters);
+
+  // Close the modal
+  closeFilterModal();
+});
+
+function resetFilters() {
+  filterForm.reset();
+}
+
+function filterProducts(filters) {
+  const rows = document.querySelectorAll("tbody tr");
+
+  rows.forEach((row) => {
+    let visible = true;
+
+    // Category filter
+    if (filters.category && row.children[2].textContent !== filters.category) {
+      visible = false;
+    }
+
+    // Price filter
+      console.log("1 ", row.children[3].textContent)
+    const price = parseFloat(
+      row.children[3].textContent.replace("€", "").trim()
+    );
+    if (filters.minPrice && price < filters.minPrice) {
+      visible = false;
+    }
+    if (filters.maxPrice && price > filters.maxPrice) {
+      visible = false;
+    }
+
+    // Status filter
+    if (filters.status) {
+      const status = row.children[5].textContent.trim().toLowerCase();
+      if (status !== filters.status) {
+        visible = false;
+      }
+    }
+
+    // Show/hide row
+    row.style.display = visible ? "" : "none";
+  });
+}
+
+// Search functionality
+const searchInput = document.getElementById("searchInputProduct");
+
+searchInput.addEventListener("input", function (e) {
+  const searchTerm = e.target.value.toLowerCase();
+  const rows = document.querySelectorAll("tbody tr");
+
+  rows.forEach((row) => {
+    const productName = row.children[1].textContent.toLowerCase();
+    const category = row.children[2].textContent.toLowerCase();
+
+    // Search in product name and category
+    const matches =
+      productName.includes(searchTerm) || category.includes(searchTerm);
+
+    // Show/hide row based on search
+    row.style.display = matches ? "" : "none";
+  });
+});
+
+//
+let productToDelete = null;
+
+function deleteProduct(id) {
+  productToDelete = id;
+  const deleteModal = document.getElementById("deleteModal");
+  deleteModal.classList.add("active");
+}
+
+function closeDeleteModal() {
+  const deleteModal = document.getElementById("deleteModal");
+  deleteModal.classList.remove("active");
+  productToDelete = null;
+}
+
+async function confirmDelete() {
+  if (productToDelete) {
+    // Sélectionner la ligne du produit à supprimer
+    const productRow = document.getElementById(`product-${productToDelete}`);
+    const productImage = productRow.querySelector(".product-image");
+
+    //document.querySelector("#productTable").classList.add("disabled");
+
+    // Ajouter des styles ternes et afficher le spinner
+    productRow.classList.add("opacity-50"); // Rendre la ligne terne
+    const spinner = document.createElement("div");
+    spinner.classList.add("spinnerDelete");
+    productImage.appendChild(spinner); // Ajouter le spinner au niveau de l'image
+    try {
+      const response = await fetch(`/deliver/api/products/${productToDelete}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log("Succès :", result.message);
+        // Mettez à jour l'interface pour retirer le produit de la liste affichée
+        setTimeout(function () {
+          ApiProduct();
+          productRow.remove();
+          document.querySelector("#productTable").classList.remove("disabled");
+        }, 5000);
+      } else {
+        console.error(
+          "Erreur lors de la suppression du produit :",
+          result.message
+        );
+        // Retirer le spinner et restaurer l'opacité si la suppression échoue
+        productRow.classList.remove("opacity-50");
+        spinner.remove();
+        //document.querySelector("#productTable").classList.remove("disabled");
+      }
+    } catch (error) {
+      console.error("Erreur réseau lors de la suppression du produit :", error);
+      productRow.classList.remove("opacity-50");
+      //document.querySelector("#productTable").classList.remove("disabled");
+      spinner.remove();
+    }
+  }
+  closeDeleteModal();
+}
+
+/**
+ *Modifier les information du produit
+ */
+let idProduct = "";
+function editProduct(productId) {
+  idProduct = productId;
+  document.querySelector(".headerVendor").style.display = "none";
+  // Récupérez les informations du produit à partir de l'élément correspondant
+  const productRow = document.getElementById(`product-${productId}`);
+  let images = productRow.querySelector("td:nth-child(1)").innerHTML;
+  let name = productRow.querySelector("td:nth-child(2)").textContent;
+  let category = productRow.querySelector("td:nth-child(3)").textContent;
+  let price = productRow.querySelector("td:nth-child(4)").textContent.split(' ')[0];
+ 
+  let location = productRow.querySelector("td:nth-child(5)").textContent;
+
+  document.querySelector(".titreFormh3").innerHTML = "Modifier le produit";
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(images, "text/html");
+
+  // Sélectionne toutes les balises <img> dans .carousel-images
+  images = doc.querySelectorAll(".carousel-images img");
+
+  // Affiche les balises <img> récupérées
+  // Affichez le modal
+  document.querySelector(".product-modal").classList.toggle("active");
+
+  // Remplissez les champs du formulaire
+  // {{!-- document.getElementById('editProductId').value = productId; --}}
+  document.getElementById("name").value = name;
+  document.getElementById("category").value = category;
+  document.getElementById("price").value = price;
+  document.getElementById("pickupLocation").value = location;
+
+  if (document.querySelector(".btnUpload") !== null) {
+    document.querySelector(".btnUpload").style.display = "none";
+    //document.querySelector(".positionAbsolute ").removeChild(document.querySelector('.btnUpload'));
+  }
+  document.querySelector(".btnEdit").style.display = "block";
+
+  //const button = document.createElement('button')
+  //button.className = "span12px btnEdit bg-indigo-600 text-white px-4 py-2 rounded-lg"
+  //button.innerHTML = "Appliquer"
+  //document.querySelector(".positionAbsolute ").appendChild(button)
+  // Parcours et affichage des images extraites
+  images.forEach((img) => {
+    // Cloner l'image pour pouvoir l'ajouter dans un autre conteneur
+    const imgClone = img.cloneNode(true);
+    // Réinitialiser la classe en une seule classe 'imgEdit'
+    imgClone.className = "imgEdit";
+    imagePreview.appendChild(imgClone);
+  });
+
+  // Add escape key handler for filter modal
+}
+document.querySelector(".btnEdit").addEventListener("click", async (event) => {
+  event.preventDefault(); // Empêche le rechargement de la page
+  const productId = idProduct;
+  if (idProduct === "") {
+    return;
+  }
+
+  // Affiche le spinner
+  spinner.style.display = "block";
+
+  // Cacher la div formulaire
+  document.querySelector(".divForm").style.display = "none";
+  {{!-- location = document.querySelector(".location").value; --}}
+  price = document.getElementById("price").value;
+  category = document.getElementById("category").value;
+  name = document.getElementById("name").value;
+  
+
+  const formData = new FormData();
+
+  formData.append("name", document.getElementById("name").value);
+  formData.append("pickupLocation", document.querySelector(".location").value );
+  formData.append("price", document.getElementById("price").value + " "+ document.getElementById("currency").value);
+  formData.append("category", document.getElementById("category").value);
+
+  document.getElementById("name").value = "";
+  document.getElementById("pickupLocation").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("category").value = "";
+  // Ajouter les fichiers
+
+  console.log("formData",formData)
+  const imagesInput = document.querySelector(".imagesInput");
+  for (let i = 0; i < imagesInput.files.length; i++) {
+    formData.append("images", imagesInput.files[i]);
+  }
+
+  try {
+    // Envoie la requête PUT pour mettre à jour le produit
+    const response = await fetch(`/deliver/api/editProduct/${productId}`, {
+      method: "PUT",
+      body: formData,
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      // Actualise la ligne du produit dans le tableau
+      // {{!-- const productRow = document.getElementById(`product-${productId}`);
+      // productRow.querySelector('td:nth-child(2)').textContent = name;
+      // productRow.querySelector('td:nth-child(3)').textContent = category;
+      // productRow.querySelector('td:nth-child(4)').textContent = `€${price}`; --}}
+
+      console.log(result.message);
+
+      spinner.style.display = "none";
+      ApiProduct();
+      // Ferme le modal
+      // {{!-- closeEditModal(); --}}
+    } else {
+      console.error("Erreur lors de la mise à jour du produit");
+    }
+  } catch (error) {
+    console.error("Erreur réseau :", error);
+  } finally {
+    // Cacher le spinner
+    spinner.style.display = "none";
+    document.querySelector(".divForm").style.display = "block";
+    document.querySelector(".product-modal").classList.remove("active");
+  }
+});
+//
+//Rechercher un produit
+// Récupère l'input de recherche et le tableau des produits
+//const searchInput = document.getElementById("searchInputProduct");
+const productTable = document.getElementById("productTable");
+
+// Écoute les événements "input" pour détecter les changements dans le champ de recherche
+searchInput.addEventListener("input", function () {
+  const searchValue = searchInput.value.toLowerCase(); // Convertit le texte de recherche en minuscules
+
+  // Parcourt chaque ligne du tableau
+  Array.from(productTable.getElementsByTagName("tr")).forEach((row) => {
+    const productName = row.cells[1]?.textContent.toLowerCase(); // Supposons que le nom du produit est dans la deuxième colonne
+
+    // Vérifie si le nom du produit contient le texte de recherche
+    if (productName && productName.includes(searchValue)) {
+      row.style.display = ""; // Affiche la ligne si elle correspond
+    } else {
+      row.style.display = "none"; // Cache la ligne si elle ne correspond pas
+    }
+  });
+});
+
+//Filtre de produit
+// Sélection du formulaire de filtre et du tableau des produits
+
+// Fonction de filtrage des produits
+function applyFilter() {
+  // Récupérer les valeurs des filtres
+  const selectedCategory = document
+    .querySelector(".selectedProduct")
+    .value.toLowerCase();
+  const minPrice = parseFloat(document.querySelector(".minPrice").value) || 0;
+  const maxPrice =
+    parseFloat(document.querySelector(".maxPrice").value) || Infinity;
+  const status = document.querySelector(".statusProduct").value.toLowerCase();
+
+  // Parcourir chaque ligne du tableau des produits
+  Array.from(productTable.getElementsByTagName("tr")).forEach((row) => {
+    //console.log(row.cells[2]?.textContent.toLowerCase())
+    //console.log(row.cells[3]?.textContent.replace(/[^0-9.-]+/g, ""))
+    //console.log(row.cells[5]?.textContent.toLowerCase().trim())
+    const productCategory = row.cells[2]?.textContent.toLowerCase(); // Supposons que la catégorie est dans la deuxième colonne
+    const productPrice =
+      parseFloat(row.cells[3]?.textContent.replace(/[^0-9.-]+/g, "")) || 0; // Supposons que le prix est dans la troisième colonne
+    const productStatus = row.cells[5]?.textContent.toLowerCase().trim(); // Supposons que le statut est dans la quatrième colonne
+
+    console.log(selectedCategory, productCategory, productPrice);
+    // Conditions de filtrage
+    const matchesCategory =
+      selectedCategory === "toutes les catégories" ||
+      productCategory === selectedCategory;
+    const matchesPrice = productPrice >= minPrice && productPrice <= maxPrice;
+    {{!-- const matchesStatus =
+      status === "tous les status" || productStatus === status; --}}
+
+    // Afficher ou masquer la ligne en fonction des filtres
+    if (matchesCategory && matchesPrice && matchesStatus) {
+      row.style.display = ""; // Afficher la ligne si elle correspond
+    } else {
+      row.style.display = "none"; // Masquer la ligne si elle ne correspond pas
+    }
+  });
+}
+
+// Attacher l'événement au bouton "Appliquer"
+document
+  .querySelector(".appliquerFilterBtn")
+  .addEventListener("click", function (event) {
+    event.preventDefault(); // Empêcher le rechargement de la page
+    applyFilter(); // Appliquer le filtre
+    document.getElementById("filterModal").classList.remove("active"); // Fermer la fenêtre modale après application du filtre
+  });
+
+// Attacher l'événement au bouton "Réinitialiser" pour afficher toutes les lignes
+document.querySelector(".renit").addEventListener("click", function (event) {
+  event.preventDefault(); // Empêcher le rechargement de la page
+  document.querySelector(".selectedProduct").value = "toutes les catégories";
+  document.querySelector(".minPrice").value = "";
+  document.querySelector(".maxPrice").value = "";
+  document.querySelector(".statusProduct").value = "tous les status";
+  applyFilter(); // Réappliquer le filtre pour afficher toutes les lignes
+});
+///**********************************infinite_Scroll***********************/
+
+let lastItemId = null;
+
+function loadMoreItems() {
+  document.getElementById("spinnerCharge").style.display = "block";
+  document.querySelector(".afficherPlus").style.display = "none";
+  console.log("lastItemId : " + lastItemId);
+  fetch("/deliver/api/chargeproduct/" + lastItemId, {
+    method: "POST",
+    headers: {
+      contentType: "application/json",
+    },
+    body: JSON.stringify(lastItemId),
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      document.getElementById("spinnerCharge").style.display = "none";
+      document.querySelector(".afficherPlus").style.display = "block";
+      if (result.products.length === 0) {
+        document.querySelector(".afficherPlus").innerHTML = "Plus de produit à afficher";
+      }else{
+         document.querySelector(".afficherPlus").innerHTML = "Afficher plus"
+      }
+      AfficherProduit(result.products);
+    })
+    .catch((error) =>
+      console.log("Erreur lors du chargement des produit : " + error)
+    );
+}
+
+//document.getElementById('spinnerCharge').style.display = 'none';
+
+let items = "";
+// Initialisation
+
+// console.log(items)
+
+document.querySelector(".afficherPlus").addEventListener("click", function () {
+  items = document.querySelectorAll(".item");
+  if (items.length > 0) {
+    lastItemId = items[items.length - 1].getAttribute("data-id"); //Récupère le dernier ID de l'item
+    console.log(lastItemId);
+    loadMoreItems();
+  }
+});
+///**********************************infinite_Scroll***********************/
+function AfficherProduit(products) {
+  console.log(products)
+  products.forEach((product) => {
+    const row = document.createElement("tr");
+
+    row.className = "border-b hover:bg-gray-50";
+    row.className = "item";
+    row.id = `product-${product._id}`;
+    row.setAttribute("data-id", product._id);
+    row.innerHTML = `
+<td class="p-4 product-image marginAuto">
+<div class="carousel-container">
+    <div class="carousel-images">
+          <a href="/deliver/pageMonoProduit/${product._id}">
+
+            ${product.images
+          .map(
+            (img, index) => `
+            <img src="${img.path}" alt="${
+              product.name
+            }" class="carousel-image ${
+              index === 0 ? "active" : ""
+            }" data-index="${index}">
+        `
+          )
+          .join("")}
+
+          </a>
+    </div>
+    ${product.images.length > 1 
+    ? `
+    <button class="carousel-nav left">&#10094;</button>
+    <button class="carousel-nav right">&#10095;</button>
+    <div class="carousel-indicators">
+      ${product.images
+        .map(
+          (img, index) => `
+          <span class="carousel-dot ${index === 0 ? "active" : ""}" 
+                data-index="${index}"></span>
+        `
+        )
+        .join("")}
+    </div>
+    `
+    : ""}
+    
+</div>
+</td>
+<td class="p-4 center marginAuto">${product.name}</td>
+<td class="p-4 marginAuto">${product.category}</td>
+<td class="p-4 marginAuto">${product.price}</td>
+<td class="p-4 marginAuto">${product.pickupLocation ? product.pickupLocation : "-" }</td>
+<td class="p-4 marginAuto">
+{{!-- <span class="bg-green-100 text-green-800 px-2 py-1 rounded">Actif</span> --}}
+</td>
+<td class="p-4 marginAuto">
+<div class="flex space-x-2">
+    <button class="text-blue-600 hover:text-blue-800" onclick="editProduct('${
+      product._id
+    }')">
+        <i class="fas fa-edit"></i>
+    </button>
+    <button class="text-red-600 hover:text-red-800" onclick="deleteProduct('${
+      product._id
+    }')">
+        <i class="fas fa-trash"></i>
+    </button>
+</div>
+</td>
+`;
+
+    productTable.appendChild(row);
+  });
+}
+
+//**********************************************************
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && filterModal.classList.contains("active")) {
+    closeFilterModal();
+  }
+  if (e.key === "Escape" && cameraModal.classList.contains("active")) {
+    closeCameraModal();
+  }
+});
+
+   </script>
+

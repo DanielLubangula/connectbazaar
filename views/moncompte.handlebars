@@ -1,0 +1,851 @@
+<style>
+  :root {
+    --primary-color: #3A506B;
+    --secondary-color: #5BC0BE;
+    --text-color: #1C2541;
+    --bg-color: #F5F5F5;
+    --card-bg: #FFFFFF;
+    --accent-color: #285eaf;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    position: absolute;
+  }
+  
+  nav {
+    background-color: var(--primary-color);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo img {
+    width: 180px;
+    height: auto;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+  }
+  
+  nav ul li {
+    margin-left: 2rem;
+  }
+  
+  nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+  
+  nav ul li a:hover {
+    color: var(--secondary-color);
+  }
+  
+  main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  .profile-container {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .profile-sidebar {
+    flex: 1;
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .profile-content {
+    flex: 3;
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    cursor: pointer;
+  }
+  
+  .profile-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .profile-email {
+    color: #666;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-menu {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .profile-menu li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .profile-menu a {
+    display: block;
+    padding: 0.5rem;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+  }
+  
+  .profile-menu a:hover, .profile-menu a.active {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+  
+  h1 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="tel"],
+  textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .save-btn {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .order-history {
+    margin-top: 2rem;
+  }
+  
+  .order-item {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .order-item h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--primary-color);
+  }
+  
+  .order-item p {
+    margin: 0.25rem 0;
+  }
+
+  /* Styles pour la prévisualisation de l'image */
+  .image-preview-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1001;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .image-preview-content {
+    max-width: 90%;
+    max-height: 90%;
+  }
+
+  .image-preview-content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .image-preview-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .image-preview-buttons button, .image-preview-buttons span {
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .image-preview-buttons button.confirm {
+    background-color: var(--accent-color);
+    color: white;
+  }
+
+  .image-preview-buttons span.cancel {
+    background-color: #ccc;
+    color: black;
+  }
+  
+  #preview-image{
+    max-height: 450px;
+    max-width:300px ;
+  }
+  .form-group {
+        margin-bottom: 1rem;
+        margin-top: 15px;
+  }
+  .notification-settings {
+        display: flex;
+        align-items: center;
+    }
+    .notification-settings label {
+        margin-right: 1rem;
+    }
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+    input:checked + .slider {
+        background-color: var(--primary-color);
+    }
+    input:checked + .slider:before {
+        transform: translateX(26px);
+    }
+    .deconnexion{
+      background-color: #ff4444;
+    }
+
+    .profile-content .niv1{
+      border-top:2px solid #285eaf ;
+      margin-top: 10px;
+    }
+        .back-arrow-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            width:90%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+            margin: 15px auto;
+            position: sticky;
+            top: 0;
+            left: 0;
+        }
+
+        .back-arrow-container:hover {
+            background-color: #e0e0e0;
+        }
+
+        .back-arrow {
+            border: solid #4a4a4a;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 10px;
+            transform: rotate(135deg);
+            -webkit-transform: rotate(135deg);
+        }
+
+        .text {
+            margin-left: 10px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+        }
+
+         textarea {
+            resize: none;
+         }
+         /*Preference*/
+          .preferences-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        color: #333;
+        border-bottom: 2px solid #81c7bc;
+        padding-bottom: 10px;
+    }
+
+    .preference-section {
+        margin-bottom: 30px;
+    }
+
+    .preference-section h2 {
+        color: #444;
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .category-item {
+        background-color: #f8f8f8;
+        padding: 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .category-item.selected {
+        background-color: #81c7bc;
+        color: white;
+    }
+
+    .category-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .dietary-preferences {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .dietary-tag {
+        background-color: #f0f0f0;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .dietary-tag.selected {
+        background-color: #81c7bc;
+        color: white;
+    }
+
+    .price-range {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .price-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5px;
+    }
+
+    .save-btn {
+        background-color: #81c7bc;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+        margin-top: 20px;
+    }
+
+    .save-btn:hover {
+        background-color: #6ab5a9;
+    }
+
+    .frequency-select {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .message{
+      position: fixed;
+      top: -50px;
+      left: 50%;
+      border: 1px solid #3e807e;
+      border-radius: 7px;
+      width: 90%;
+      height: 50px;
+      background-color: #5bc0be;
+      transform: translate(-50%,-50%);
+      text-align: center;
+      color: rgb(0, 0, 0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 500ms ease;
+      z-index: 5;
+    }
+
+    .message span:nth-child(1){
+      flex-basis: 75%;
+    }
+    .message span:nth-child(2){
+      flex-basis: 10%;
+      border-left: 1px solid black;
+      cursor: pointer;
+    }
+
+    .msgUpdateerr{
+      padding: 5px 10px;
+      border-radius: 10px;
+      background-color: rgba(255, 0, 0, 0.39);
+      color: rgb(0, 0, 0);
+      border: 1px solid red;
+      margin: 15px;
+    }
+  @media (max-width: 768px) {
+    .profile-container {
+      flex-direction: column;
+    }
+    
+    .profile-sidebar, .profile-content {
+      width: 100%;
+    }
+  }
+</style>
+  <div class="message">
+    <span>message</span>
+    <span class="enlevenotif">❌</span>
+  </div>
+  <main>
+      <a class="back-arrow-container" style="color:#4a4a4a ;" href="/deliver">
+          <div class="back-arrow"></div>
+              <span class="text">Retour</span>
+          </div>
+      </a>
+    {{#if user}}
+    <form enctype="multipart/form-data">
+
+    <div class="profile-container">
+      <div class="profile-sidebar">
+        <input type="file" name="image" id="profile-picture-input" accept="image/*" style="display: none;">
+
+      <!-- Overlay pour la prévisualisation de l'image -->
+          <div class="image-preview-overlay" id="image-preview-overlay">
+            <div class="image-preview-content">
+              <img id="preview-image" src="" alt="Prévisualisation de l'image de profil">
+              <div class="image-preview-buttons">
+                <button class="confirm" id="confirm-image">Confirmer</button>
+                <span class="cancel" id="cancel-image">Annuler</span>
+              </div>
+            </div>
+          </div>
+
+    </form>
+        <!-- Fin Overlay pour la prévisualisation de l'image -->
+        {{!-- photo de profil --}}
+        {{!-- {{#if user.bufferString}}                 --}}
+              {{!-- <img src="data:{{user.contentType}};base64,{{user.bufferString}}" class="profile-picture" id="profile-picture" width="150" height="150" alt="Photo de profil"><br> --}}
+              {{!-- {{else}} --}}
+                <img src="{{user.profileImagePath}}" alt="Photo de profil" class="profile-picture" id="profile-picture" width="150" height="150">
+        {{!-- {{/if}}  --}}
+        {{!-- fin photo de profil --}}
+        <h2 class="profile-name">{{user.username}}</h2>
+        <p class="profile-email">{{user.email}}</p>
+        <ul class="profile-menu">
+          <li><a href="#personal-info" class="active">Informations personnelles</a></li>
+          <li><a href="#order-history">Historique des commandes</a></li>
+          <li><a class="securite" href="#securite">Sécurité</a></li>
+          <li><a href="#settings-section">Notifications</a></li>
+          <li><a href="#preferences">Préférences</a></li>
+          <li><a class="deconnexion" style="color: white;" href="/deliver/logout">Déconnexion</a></li>
+        </ul>
+      </div>
+      <div class="profile-content">
+      <div id="personal-info">
+        <h1>Modifier vos informations</h1>
+      <form action="/deliver/updateUser" method="POST" id="profile-form">
+        <div class="form-group">
+          <label for="name">Nom complet</label>
+          <input type="text" id="name" name="name" value="{{user.username}}">
+        </div>
+        <div class="form-group">
+          <label for="email">Adresse e-mail</label>
+          <input type="email" id="email" name="email" value="{{user.email}}">
+        </div>
+        <div class="form-group">
+          <label for="phone">Numéro de téléphone</label>
+          <input type="tel" id="phone" name="phone" placeholder="Insérer votre numéro de téléphone" value="{{user.numberPhone}}">
+        </div>
+        <div class="form-group">
+          <label for="address">Adresses de livraison</label>
+          <textarea id="address" name="address" placeholder="Saisissez votre adresse ici..." rows="4">{{user.address}}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="bio">À propos de moi</label>
+          <textarea id="bio" name="bio" rows="4">{{user.bio}}</textarea>
+        </div>
+        <button type="submit" class="save-btn">Enregistrer les modifications</button>
+      </form>
+      </div>
+
+        
+        <div id="order-history" class="order-history niv1">
+          <h2>Historique des commandes</h2>
+          <div class="order-item">
+            <h3>Commande #1234</h3>
+            <p><strong>Date :</strong> 15/05/2023</p>
+            <p><strong>Restaurant :</strong> Sushi Paradise</p>
+            <p><strong>Total :</strong> 35,90 €</p>
+            <p><strong>Statut :</strong> Livrée</p>
+          </div>
+          <div class="order-item">
+            <h3>Commande #1233</h3>
+            <p><strong>Date :</strong> 10/05/2023</p>
+            <p><strong>Restaurant :</strong> Burger Queen</p>
+            <p><strong>Total :</strong> 28,50 €</p>
+            <p><strong>Statut :</strong> Livrée</p>
+          </div>
+        </div>
+
+        <div id="securite" class="niv1">
+          <h1>Sécurité</h1>
+          <form action="/deliver/updatePassword" method="post">
+            {{#if messsageErrorUpdatepassword}}
+                <span class="msgUpdateerr" style="color: rgb(201, 9, 9);">{{messsageErrorUpdatepassword}}</span>
+              {{/if}}
+            <div class="form-group">
+              <label for="current-password">Mot de passe actuel</label>
+              <input type="password" id="current-password" name="current-password" required>
+             </div>
+             <div class="form-group">
+                <label for="new-password">Nouveau mot de passe</label>
+                <input type="password" id="new-password" name="new-password" required>
+              </div>
+              <div class="form-group">
+                 <label for="confirm-password">Confirmer le nouveau mot de passe</label>
+                 <input type="password" id="confirm-password" name="confirm-password" required>
+              </div>
+              
+              <button type="submit" class="save-btn">Changer le mot de passe</button>
+          </form>
+        </div>
+
+        <div id="settings-section" class="niv1">
+          <h1>Notifications</h1>
+          <div class="form-group notification-settings">
+            <label for="email-notifications">Notifications par e-mail</label>
+            <label class="switch">
+              <input type="checkbox" id="email-notifications" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="form-group notification-settings">
+            <label for="sms-notifications">Notifications par SMS</label>
+            <label class="switch">
+              <input type="checkbox" id="sms-notifications">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div id="preferences" class="preferences-container">
+        <h1>Mes Préférences</h1>
+
+        <div class="preference-section">
+            <h2>Catégories préférées</h2>
+            <div class="category-grid">
+                <div class="category-item">Pizza</div>
+                <div class="category-item selected">Burgers</div>
+                <div class="category-item">Sushi</div>
+                <div class="category-item selected">Salades</div>
+                <div class="category-item">Sandwichs</div>
+                <div class="category-item">Desserts</div>
+                <div class="category-item">Boissons</div>
+                <div class="category-item">Plats asiatiques</div>
+            </div>
+        </div>
+
+        <div class="preference-section">
+            <h2>Préférences alimentaires</h2>
+            <div class="dietary-preferences">
+                <span class="dietary-tag">Végétarien</span>
+                <span class="dietary-tag selected">Sans gluten</span>
+                <span class="dietary-tag">Vegan</span>
+                <span class="dietary-tag">Halal</span>
+                <span class="dietary-tag">Bio</span>
+                <span class="dietary-tag selected">Healthy</span>
+            </div>
+        </div>
+
+        <div class="preference-section">
+            <h2>Gamme de prix préférée</h2>
+            <input type="range" min="0" max="100" value="50" class="price-range" id="priceRange">
+            <div class="price-labels">
+                <span>Économique</span>
+                <span>Moyen</span>
+                <span>Premium</span>
+            </div>
+        </div>
+
+        <div class="preference-section">
+            <h2>Fréquence de commande habituelle</h2>
+            <select class="frequency-select">
+                <option>Plusieurs fois par semaine</option>
+                <option selected>Une fois par semaine</option>
+                <option>Quelques fois par mois</option>
+                <option>Occasionnellement</option>
+            </select>
+        </div>
+
+        <button class="save-btn">Enregistrer mes préférences</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  {{/if}}
+
+
+
+  <!-- <img src="${product.image}" alt="${product.name}" class=""> -->
+  <script defer>
+    // Message Erreur
+    if (document.querySelector('.msgUpdateerr')){
+      if (document.querySelector('.msgUpdateerr').innerHTML){
+        const menuLiens = document.querySelectorAll('.profile-menu a');
+        menuLiens.forEach(link => {
+        menuLiens.forEach(l => l.classList.remove('active'));
+        document.querySelector('.securite').classList.add('active');
+          
+          const targetId = document.querySelector('.securite').getAttribute('href').slice(1);
+          document.querySelectorAll('.profile-content > div').forEach(div => {
+            div.style.display = div.id === targetId ? 'block' : 'none';
+          });
+    })
+    }
+    }
+    // Fin Message Erreur
+    let succesUpdatePassword = ""
+    // Message 
+    if ({{{json succesUpdatePassword}}} === "Mot de passe modifié avec succès"){
+      document.querySelector(".message span").innerHTML = "Mot de passe modifié avec succès"
+      document.querySelector('.message').style.top = "50px"
+
+      setTimeout(function (){
+        document.querySelector('.message').style.top = ""
+      }, 5000)     
+    }
+
+      //enleve notification de successUpdatePAssword
+    document.querySelector(".enlevenotif").addEventListener('click', function(){
+      document.querySelector('.message').style.top = ""
+    })
+    // Message 
+    document.addEventListener('DOMContentLoaded', function() {
+      const profileForm = document.getElementById('profile-form');
+      const profilePicture = document.getElementById('profile-picture');
+      const profilePictureInput = document.getElementById('profile-picture-input');
+      const imagePreviewOverlay = document.getElementById('image-preview-overlay');
+      const previewImage = document.getElementById('preview-image');
+      const confirmImageButton = document.getElementById('confirm-image');
+      const cancelImageButton = document.getElementById('cancel-image');
+      
+      profileForm.addEventListener('submit', function(e) {
+        // Simuler la sauvegarde des données
+      });
+      
+      // Gestion de la navigation dans le menu du profil
+      const menuLinks = document.querySelectorAll('.profile-menu a');
+      menuLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          menuLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+          
+          const targetId = this.getAttribute('href').slice(1);
+          document.querySelectorAll('.profile-content > div').forEach(div => {
+            div.style.display = div.id === targetId ? 'block' : 'none';
+          });
+        });
+      });
+
+      // Gestion du changement de photo de profil
+      profilePicture.addEventListener('click', function() {
+        profilePictureInput.click();
+      });
+
+      profilePictureInput.addEventListener('change', function(e) {
+        if (e.target.files && e.target.files[0]) {
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            imagePreviewOverlay.style.display = 'flex';
+          }
+          
+          reader.readAsDataURL(e.target.files[0]);
+        }
+      });
+
+      confirmImageButton.addEventListener('click', changeProfil);
+
+      async function changeProfil(e){
+        e.preventDefault()
+        console.log(document.querySelector("#profile-picture-input").value)
+        profilePicture.src = previewImage.src;
+        imagePreviewOverlay.style.display = 'none';
+
+        //
+        const fileInput = document.getElementById('profile-picture-input');
+    const file = fileInput.files[0];
+
+    if (!file) {
+      alert("Veuillez sélectionner une image.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await fetch('/deliver/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message);
+      } else {
+        alert("Erreur : " + result.message);
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'envoi de l'image:", error);
+    }
+        //
+
+      }
+
+      cancelImageButton.addEventListener('click', function() {
+        imagePreviewOverlay.style.display = 'none';
+        profilePictureInput.value = '';
+      });
+    });
+    // préference ***************************************************
+    // Gestion des catégories
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('selected');
+            });
+        });
+
+        // Gestion des tags diététiques
+        document.querySelectorAll('.dietary-tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                tag.classList.toggle('selected');
+            });
+        });
+
+        // Gestion du bouton de sauvegarde
+        document.querySelector('.save-btn').addEventListener('click', function() {
+            this.textContent = 'Préférences sauvegardées !';
+            this.style.backgroundColor = '#4CAF50';
+            
+            setTimeout(() => {
+                this.textContent = 'Enregistrer mes préférences';
+                this.style.backgroundColor = '#81c7bc';
+            }, 2000);
+        });
+
+        // Gestion du range de prix
+        const priceRange = document.getElementById('priceRange');
+        priceRange.addEventListener('input', function() {
+            const value = this.value;
+            // Vous pouvez ajouter ici une logique pour afficher le prix sélectionné
+        });
+  </script>

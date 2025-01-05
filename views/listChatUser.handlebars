@@ -1,0 +1,1402 @@
+
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f5f7fa;
+  }
+
+  .header {
+    max-width: 600px;
+    margin: 0 auto 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #2c3e50;
+  }
+
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .home-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #4a90e2;
+    color: white;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+
+  .home-button:hover {
+    background: #357abd;
+  }
+
+  .chat-list {
+    max-width: 600px;
+    margin: 25px auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .chat-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .chat-item:hover {
+    background: #f8f9fb;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #4a90e2;
+    margin-right: 15px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .chat-info {
+    flex: 1;
+  }
+
+  .chat-name {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+    width: 100px;
+    margin-bottom: 5px;
+  }
+
+  .last-message {
+    font-size: 0.9em;
+    color: #7f8c8d;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .chat-meta {
+    text-align: right;
+    min-width: 44px;
+    position: relative;
+  }
+
+  .time {
+    color: #95a5a6;
+    position: absolute;
+    right: 0px;
+    bottom: -25px;
+    font-size: 12px;
+
+  }
+
+  .unread {
+    background: #4a90e2;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 8px;
+    font-size: 0.8em;
+    margin-top: 5px;
+    display: inline-block;
+  }
+
+  .online-indicator {
+    width: 10px;
+    height: 10px;
+    background: #2ecc71;
+    border-radius: 50%;
+    margin-left: 5px;
+    display: inline-block;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+  }
+
+  .user-profile {
+    text-align: center;
+  }
+
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #4a90e2;
+    margin: 0 auto 20px;
+    display: inline-block;
+    object-fit: cover;
+    color: white;
+  }
+
+  .profile-info {
+    margin-top: 20px;
+    text-align: left;
+  }
+
+  .profile-info-item {
+    margin: 10px 0;
+    padding: 10px;
+    background: #f8f9fb;
+    border-radius: 8px;
+  }
+
+  .profile-info-label {
+    color: #666;
+    font-size: 0.9em;
+  }
+
+  .profile-info-value {
+    color: #2c3e50;
+    font-weight: 500;
+    margin-top: 5px;
+  }
+
+  .product-images {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    margin-right: 8px;
+    position: absolute;
+    z-index: 5;
+    right: 0px;
+    bottom: -30px;
+  }
+
+  .product-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    object-fit: cover;
+    cursor: pointer;
+  }
+
+  .user-type {
+    font-size: 0.8em;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin-left: 10px;
+    display: inline-block;
+  }
+
+  .seller {
+    background: #e74c3c;
+    color: white;
+  }
+
+  .buyer {
+    background: #2ecc71;
+    color: white;
+  }
+
+  .image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 2000;
+  }
+
+  .image-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    height: 80vh;
+    margin: 50px auto;
+  }
+
+  .image-slider {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lastMessImgProduct{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .slider-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    font-size: 24px;
+  }
+
+  .prev-image {
+    left: 10px;
+  }
+
+  .next-image {
+    right: 10px;
+  }
+
+  .new-message-indicator {
+    width: 8px;
+    height: 8px;
+    background: #e74c3c;
+    border-radius: 50%;
+    margin-left: 5px;
+    display: inline-block;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .close-image-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 2001;
+  }
+
+  .listLink{
+    display : inline-block;
+    width: 100%;
+    
+  }
+
+  .chat-loading {
+  position: relative;
+  padding: 15px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%; /* Changed from 300px to 100% */
+  width: 100%; /* Added to ensure full width */
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e0e0e0;
+}
+
+.unread-count{
+  position: absolute;
+  padding: 5px;
+  color: white;
+  background-color: #e74c3c;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  top: -8px;
+  right: 10px;
+  text-align: center;
+}
+
+.loading-content {
+  flex-grow: 1;
+  width: 100%; /* Added to ensure content takes full width */
+}
+
+.loading-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #999;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out;
+}
+
+.dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { 
+    transform: scale(0);
+  } 
+  40% { 
+    transform: scale(1.0);
+  }
+}
+
+
+ /* Noticatio message */
+ .notification {
+  position: fixed;
+  top: -100px; /* Start above the viewport */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffffff;
+  color: #333;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: top 0.5s ease-in-out;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  z-index: 1000;
+  min-width: 300px;
+  max-width: 400px;
+  border: 1px solid #eaeaea;
+}
+
+.notification.show {
+  top: 20px; /* Slide down to this position */
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.profile-pic svg {
+  width: 24px;
+  height: 24px;
+  fill: #666;
+}
+
+.notification-content {
+  flex-grow: 1;
+}
+
+.notification-header {
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #333;
+  font-size: 14px;
+}
+
+.notification-message {
+  color: #666;
+  font-size: 13px;
+}
+
+.notification-time {
+  color: #999;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0;
+  line-height: 1;
+  align-self: flex-start;
+}
+
+.close-button:hover {
+  opacity: 0.8;
+}
+ /* Noticatio message */
+
+/* Added styles for full screen container */
+#chat-container {
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Reset body margin */
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/** Début Stylé le bouton moreOptions**/
+
+.more-options {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  padding: 5px;
+  margin-left: 10px;
+  float: right;
+}
+
+.context-menu {
+  position: fixed;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  padding: 8px 0;
+  min-width: 150px;
+  z-index: 1000;
+  min-width: 210px;
+  display: none;
+}
+
+.context-menu.active {
+  display: block;
+}
+
+.context-menu-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  color: #333;
+}
+
+.context-menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+.context-menu-item.danger {
+  color: #dc3545;
+}
+
+.more-dotsOp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.dotOp {
+  width: 4px;
+  height: 4px;
+  background: #666;
+  border-radius: 50%;
+}
+
+/** Fin Stylé le bouton moreOptions**/
+
+.blockedRow{
+  opacity: 0.5;
+}
+  
+</style>
+<body>
+
+<div class="header">
+  <a href="/deliver/" class="home-button">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M9 22V12H15V22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Accueil
+  </a>
+</div>
+
+<div class="chat-list">
+ 
+</div>
+
+<div class="modal" id="userModal">
+  <div class="modal-content">
+    <span class="close-button">&times;</span>
+    <div class="user-profile">
+      <img id="modalAvatar" class="profile-avatar" />
+      <h2 id="modalName"></h2>
+      <div class="profile-info">
+        <div class="profile-info-item">
+          <div class="profile-info-label">Email</div>
+          <div class="profile-info-value" id="modalEmail"></div>
+        </div>
+        <div class="profile-info-item">
+          <div class="profile-info-label">Téléphone</div>
+          <div class="profile-info-value" id="modalPhone"></div>
+        </div>
+        <div class="profile-info-item">
+          <div class="profile-info-label">Statut</div>
+          <div class="profile-info-value" id="modalStatus"></div>
+        </div>
+        <div class="profile-info-item">
+          <div class="profile-info-label">Membre depuis</div>
+          <div class="profile-info-value" id="modalMember"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="image-modal" id="imageModal">
+  <span class="close-image-modal">&times;</span>
+  <div class="image-modal-content">
+    <div class="image-slider">
+      <div class="slider-nav prev-image">&lt;</div>
+      <img class="slider-image" id="currentImage" src="" alt="Product Image">
+      <div class="slider-nav next-image">&gt;</div>
+    </div>
+  </div>
+</div>
+
+{{!-- Début User Info Comment --}}
+<div class="modal-overlay" id="overlay"></div>
+<div class="user-modal" id="userModal">
+    {{!-- <span class="close-modal" onclick="closeModal()">&times;</span> --}}
+    <div class="user-info" id="userInfo">
+        <!-- Le contenu sera injecté dynamiquement -->
+    </div>
+</div>
+
+<div class="notification" id="notification">
+  <div class="profile-pic">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+    </svg>
+  </div>
+  <div class="notification-content">
+    <div class="notification-header" id="notification-name"></div>
+    <div class="notification-message" id="notification-text"></div>
+    <div class="notification-time"></div>
+  </div>
+  <button class="close-button" onclick="hideNotification()">×</button>
+</div>
+
+{{!-- Fin User Info Comment --}}
+
+
+<script>
+const socket = io();
+
+    let map2 = new Map()
+let utilisateurId = ""
+
+map2.set("1",{{{json vendor}}})
+map2.set("2",{{{json user}}})
+
+map2.forEach((value, key) => {
+  if (value){
+    utilisateurId = value._id
+  }
+})
+
+
+// Adapter le nombre de message notification
+socket.on("updateNotif", async (data) => {
+  const allInfo = data.allInfo;
+  const infoUser = data.infoUser;
+
+  if (!allInfo || allInfo.length === 0) {
+    console.log("Aucune notification disponible.");
+    showNotification("Aucune notification", "Pas de nouveaux messages", null, null);
+    return;
+  }
+
+  // Récupérer la dernière notification
+  const latestNotification = allInfo[allInfo.length - 1];
+
+  // Construire le lien de redirection
+  const roomParts = data.room.split("-");
+  const firstId = roomParts.find((id) => id !== utilisateurId); // Récupère l'ID différent de l'utilisateur actuel
+  const lastId = roomParts[roomParts.length - 1]; // Le dernier ID reste inchangé
+
+  const baseURL =
+          window.location.origin.includes('localhost')
+            ? 'http://localhost:5000'
+            : 'https://deliver-jvwl.onrender.com';
+
+//const baseURL = "http://192.168.181.14:5000"
+
+  const chatLink = `${baseURL}/chat/${firstId}/${lastId}`;
+  //const chatLink = `http://192.168.43.14:5000/deliver/chat/${firstId}/${lastId}`;
+
+  // Détecter le type de contenu et formater le message
+  const contentType = detectContentType(latestNotification);
+  const message = formatMessage(latestNotification, contentType);
+
+   // Réajuster le nom au cas où il s'agit d'un acheteur
+    if (infoUser.companyName === undefined){
+      infoUser.companyName = data.infoUser.username
+    }
+
+  // Afficher la notification avec le lien
+  showNotification(infoUser.companyName, message, chatLink, infoUser.profileImagePath);
+});
+
+/************** Début Affichage de notification ***************************/ 
+let notificationTimeout;
+
+function showNotification(name, message, link, imagePath) {
+  const notification = document.getElementById('notification');
+  const notificationName = document.getElementById('notification-name');
+  const notificationText = document.getElementById('notification-text');
+  const notificationTime = document.querySelector('.notification-time');
+  const profilePic = document.querySelector('.profile-pic svg');
+
+  // Mettre à jour le contenu de la notification
+  notificationName.textContent = name;
+  notificationText.textContent = message;
+  notificationTime.textContent = "À l'instant";
+
+  // Afficher l'image de profil si elle est disponible
+  if (imagePath) {
+    console.log('.profile-pic', document.querySelector('.profile-pic'))
+    //profilePic.style.display = "none";
+    notification.querySelector('.profile-pic').innerHTML = `<img src="${imagePath}" alt="${name}" />`;
+  } else {
+    profilePic.style.display = "block";
+  }
+
+  // Ajouter le lien autour de la notification
+  if (link) {
+    notification.onclick = () => {
+      window.location.href = link;
+    };
+    notification.style.cursor = "pointer";
+  } else {
+    notification.onclick = null;
+    notification.style.cursor = "default";
+  }
+
+  // Afficher la notification
+  notification.classList.add('show');
+
+  // Masquer la notification après 10 secondes
+  if (notificationTimeout) {
+    clearTimeout(notificationTimeout);
+  }
+  notificationTimeout = setTimeout(() => {
+    hideNotification();
+  }, 10000);
+}
+
+function hideNotification() {
+  const notification = document.getElementById('notification');
+  notification.classList.remove('show');
+  
+  // Clear timeout
+  if (notificationTimeout) {
+    clearTimeout(notificationTimeout);
+  }
+}
+
+// Détection du type de contenu
+function detectContentType(notification) {
+  if (notification.content) return "text";
+  if (notification.images && notification.images.length > 0) return "image";
+  if (notification.audios && notification.audios.length > 0) return "audio";
+  return "unknown";
+}
+
+// Formatage du message
+function formatMessage(notification, type) {
+  switch (type) {
+    case "text":
+      return notification.content;
+    case "image":
+      return "Une image a été envoyée.";
+    case "audio":
+      return "Un message audio a été envoyé.";
+    default:
+      return "Notification inconnue.";
+  }
+}
+/************** Fin Affichage de notification ***************************/ 
+
+
+
+/***************** Début Afficher nouveau utilisateur dans la liste **************************/
+socket.on('newListChat', (newChat) =>{
+  console.log(newChat)
+  const tab = []
+
+  tab[0] = newChat
+  displayUserList(tab)
+})
+/***************** Fin Afficher nouveau utilisateur dans la liste **************************/
+
+//**************** Début function pour afficher la liste des utilisateur ****************/
+function adjustMenuPosition(menu, clickX, clickY) {
+  const menuRect = menu.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const viewportWidth = window.innerWidth;
+  
+  let top = clickY;
+  let left = clickX;
+  
+  if (top + menuRect.height > viewportHeight) {
+    top = viewportHeight - menuRect.height - 10;
+  }
+  
+  if (left + menuRect.width > viewportWidth) {
+    left = viewportWidth - menuRect.width - 10;
+  }
+  
+  top = Math.max(10, top);
+  left = Math.max(10, left);
+  
+  menu.style.top = `${top}px`;
+  menu.style.left = `${left}px`;
+}
+
+function createContextMenu(isBlocked) {
+  const menu = document.createElement('div');
+  menu.className = 'context-menu';
+  menu.innerHTML = `
+    ${
+      isBlocked
+        ? `
+       
+        <div class="context-menu-item danger" onclick="chooseOption(this)" data-context="unblockUser">Débloquer l'utilisateur</div>`
+        : `
+         <div class="context-menu-item" onclick="chooseOption(this)" data-context="Voir le profil">Voir le profil</div>
+        <div class="context-menu-item" onclick="chooseOption(this)" data-context="Marquer comme lu">Marquer comme lu</div>
+        {{!-- <div class="context-menu-item" onclick="chooseOption(this)" data-context="Archiver la conversation">Archiver la conversation</div> --}}
+   
+        <div class="context-menu-item danger" onclick="chooseOption(this)" data-context="bloqueUser">Bloquer l'utilisateur</div>
+        `
+    }
+    <div class="context-menu-item danger" onclick="chooseOption(this)" data-context="Signaler">Signaler</div>
+  `;
+  document.body.appendChild(menu);
+  return menu;
+}
+
+
+let contextMenu = createContextMenu();
+let productIdBtnAction
+let userIdBtnAction
+
+function displayUserList(datas){
+  const moreOptions = document.createElement('div');
+  moreOptions.className = 'more-options';
+  moreOptions.innerHTML = `
+    <div class="more-dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  `;
+  let hasImg = ''
+  let hasAudio = ''
+
+  const chatListDiv = document.querySelector(".chat-list")
+  //chatListDiv.innerHTML = ""
+  datas.forEach ( async data => {
+    const lasMsg = truncateText(data?.lastMessage?.content, 20); 
+
+    const chatItem = document.createElement('div')
+    //chatItem.className = ""
+    chatItem.setAttribute('data-Id', `/deliver/chat/${data.userId}/${data.productId}`)
+    chatItem.className = `chat-item row_${data.userId}-${data.productId} ${data.blocked ? 'blockedRow' : "" }` 
+    chatItem.onclick = newPage
+   chatItem.innerHTML = `
+      <div class="avatar" onclick="InfoUserFetch(this)" data-userId="${data.userId}">
+    <img style="width:100%; object-fit: fit-content; border-radius: 50%" src="${data.userImage}" />
+    <div class="chat-name">
+      ${data.userName}
+    </div>
+  </div>
+  <div class="chat-info">
+    <div class="lastMessImgProduct">
+        <div class="last-message">
+      ${lasMsg || data?.discussionsMap?.lastMessage || "..."}
+    </div>
+    <div class="product-images">
+          ${data.productImages.length > 0 
+              ? data.productImages.map((image, index) => `
+                  <div onclick='showImg(this)' class="product-image" data-index="${index}">
+                    <img style="width:100%; object-fit: cover; border-radius: 5px;" src="${image}" alt="Produit ${index + 1}" />
+                  </div>
+                `).join('') 
+              : '<div class="no-images">Pas d\'images disponibles</div>'
+          }
+        </div>
+    </div>
+      </div>
+      <div class="chat-meta">
+        <div class="time">${data.lastMessageTime || "Heure inconnue"}</div>
+
+        <div class='more-options' data-productId='${data.productId}' data-userId='${data.userId}'>
+
+            <div class="more-dotsOp">
+              <div class="dotOp"></div>
+              <div class="dotOp"></div>
+              <div class="dotOp"></div>
+          </div>
+
+        </div>
+      </div>
+
+        <div  class="count-${data.userId}-${data.productId}"> 
+        </div>
+
+`;
+
+  //chatItem.querySelector('.chat-meta').querySelector(".moreOptions");
+
+  //console.log(moreOptions, chatItem.querySelector('.chat-meta'))
+
+  const data1 = data.userId
+  const data2 = data.productId
+
+  if ( data?.discussionsMap?.lastMessage){ // Si le message est envoyé en temps réel via socket
+    chatListDiv.prepend(chatItem)
+    chatListDiv.removeChild(document.querySelectorAll(`.row_${data.userId}-${data.productId}`)[1]) // Lors du nouveau message supprimé  l'ancien
+    foundNotif()
+   
+    const moreOptions = chatItem.querySelector('.chat-meta').querySelector('.more-options')
+    moreOption(moreOptions, data.blocked); // Passe le statut "bloqué"
+   
+    return
+ 
+  }else{
+    //console.log("moreoptions", moreOptions)
+    foundNotif()
+    chatListDiv.appendChild(chatItem)
+    const moreOptions = chatItem.querySelector('.chat-meta').querySelector('.more-options')
+    moreOption(moreOptions, data.blocked); // Passe le statut "bloqué"
+
+  }
+
+  function moreOption(moreOptions, isBlocked){
+    moreOptions.addEventListener('click', (e) => {
+    e.stopPropagation();
+    productIdBtnAction = moreOptions.getAttribute('data-productId')
+    userIdBtnAction = moreOptions.getAttribute('data-userId')
+    
+      console.log('blocked', isBlocked)
+
+    // Met à jour le menu contextuel avec le statut "bloqué"
+    document.body.removeChild(contextMenu); // Supprime l'ancien menu
+    const updatedMenu = createContextMenu(isBlocked); // Crée un nouveau menu
+    contextMenu = updatedMenu;
+
+    contextMenu.classList.add('active');
+    adjustMenuPosition(contextMenu, e.clientX, e.clientY);
+    });
+
+    let pressTimer;
+    chatItem.addEventListener('touchstart', (e) => {
+    pressTimer = setTimeout(() => {
+      contextMenu.classList.add('active');
+      adjustMenuPosition(contextMenu, e.touches[0].clientX, e.touches[0].clientY);
+    }, 500);
+  });
+
+  chatItem.addEventListener('touchend', () => {
+    clearTimeout(pressTimer);
+  });
+  }
+
+  document.addEventListener('click', (e) => {
+  if (!e.target.closest('.context-menu') && !e.target.closest('.more-options')) {
+    contextMenu.classList.remove('active');
+    userIdBtnAction = ""
+    productIdBtnAction = ""
+  }
+});
+
+
+   async function foundNotif(){
+   try {
+    const response = await fetch('/deliver/api/numbreNotifListChat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({sender : data1, productId : data2 }),
+    });
+    const result = await response.json();
+
+    if (result.nombreNotif < 1) return
+    document.querySelector(`.count-${result.identif.sender}-${result.identif.productId}`).classList.add("unread-count")
+    document.querySelector(`.count-${result.identif.sender}-${result.identif.productId}`).innerHTML = result.nombreNotif
+
+    if (result.success) {
+      console.log('Notifif ok');
+    }
+  } catch (error) {
+    console.error('Failed to mark messages as read:', error);
+  }
+   }
+  
+  
+})
+
+}
+
+function chooseOption(el){
+     //console.log(productIdBtnAction)
+    //console.log(userIdBtnAction)
+    const action = event.target.getAttribute("data-context");
+    switch(action.trim()) {
+      case "bloqueUser":
+        console.log("bloqué")
+        
+        bloqueUtilisateur()
+
+        fetchChatList()
+
+        break;
+      case "unblockUser":
+        console.log("débloqué")
+        bloqueUtilisateur()
+
+        fetchChatList()
+
+        break;
+      case 'Signaler':
+        console.log('Conversation signalée');
+        break;
+      case 'Voir le profil':
+        InfoUserFetch()
+        break;
+      case 'Marquer comme lu':
+
+        if(document.querySelector(`.row_${userIdBtnAction}-${productIdBtnAction}`).querySelector('.unread-count')){
+          markMessagesAsRead()
+        }
+
+       
+        break;
+    }
+    contextMenu.classList.remove('active');
+
+}
+
+{{!-- document.querySelectorAll('.context-menu-item').forEach(item => {
+  item.addEventListener('click', (e) => {
+    //console.log(productIdBtnAction)
+    //console.log(userIdBtnAction)
+
+    const action = e.target.getAttribute("data-context");
+        console.log(action)
+    switch(action.trim()) {
+      case "bloqueUser":
+        console.log("on attends")
+        bloqueUtilisateur()
+
+        break;
+      case 'Signaler':
+        console.log('Conversation signalée');
+        break;
+      case 'Voir le profil':
+        InfoUserFetch()
+        break;
+      case 'Marquer comme lu':
+
+        if(document.querySelector(`.row_${userIdBtnAction}-${productIdBtnAction}`).querySelector('.unread-count')){
+          document.querySelector(`.row_${userIdBtnAction}-${productIdBtnAction}`).removeChild(document.querySelector(`.row_${userIdBtnAction}-${productIdBtnAction}`).querySelector('.unread-count'))
+          markMessagesAsRead()
+        }
+
+       
+        break;
+    }
+    contextMenu.classList.remove('active');
+  });
+}); --}}
+
+// function pour bloqueé l'utilisateur
+async function bloqueUtilisateur() {
+  console.log('arrivé bien arrivé')
+  try {
+    const response = await fetch("/deliver/api/listNoir", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        otherUser: userIdBtnAction, // ID de l'utilisateur avec qui on discute
+      }),
+    });
+
+    if (!response.ok) {
+      // Si le statut HTTP n'est pas dans la plage 200-299
+      const errorData = await response.json();
+      console.error("Erreur côté serveur :", errorData);
+      return;
+    }
+
+    const data = await response.json();
+    console.log("Réponse réussie :", data);
+  } catch (err) {
+    console.error("Erreur réseau ou autre :", err);
+  }
+}
+
+
+// function pour marquer comme lu les message
+async function markMessagesAsRead(){
+   try {
+    // Envoi de la requête au serveur
+    const response = await fetch("/deliver/api/markMessagesAsRead", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        recipientId: userIdBtnAction, // ID de l'utilisateur avec qui on discute
+        productId: productIdBtnAction, // ID du produit associé à la discussion
+      }),
+    });
+
+    // Vérification si la requête a réussi
+    if (!response.ok) {
+      // Si la réponse n'est pas OK (ex. 403, 500, etc.), afficher une erreur
+      const errorData = await response.json();
+      console.error("Erreur du serveur :", errorData.error);
+      return;
+    }
+
+    // Lecture et traitement de la réponse JSON en cas de succès
+    const data = await response.json();
+    console.log("Réponse du serveur :", data);
+    document.querySelector(`.row_${userIdBtnAction}-${productIdBtnAction}`).removeChild(document.querySelector(`.row_${userIdBtnAction}-${productIdBtnAction}`).querySelector('.unread-count'))
+         
+
+    // Afficher un message de succès si disponible
+    if (data.success) {
+      //alert(data.message || "Messages marqués comme lus avec succès !");
+    }
+  } catch (error) {
+    // Gestion des erreurs réseau ou autres exceptions
+    console.error("Erreur réseau ou autre :", error);
+    alert("Une erreur réseau est survenue. Veuillez réessayer.");
+  }
+}
+
+
+//**************** Fin function pour afficher la liste des utilisateur ****************/
+function newPage (el){
+  const lien = this.getAttribute('data-Id')
+
+  location.assign(lien)
+}
+
+/**
+ * Limite la longueur d'un texte et ajoute "..." si le texte dépasse la longueur spécifiée.
+ * 
+ * @param {string} text - Le texte à limiter.
+ * @param {number} maxLength - La longueur maximale autorisée pour le texte.
+ * @returns {string} - Le texte limité avec "..." si nécessaire.
+ */
+
+function truncateText(text, maxLength) {
+  if (!text) return
+
+  if (text.length > maxLength) {
+    return text.slice(0, maxLength) + '...';
+  }
+  return text;
+}
+
+
+const fetchChatList = async () => {
+
+        class ChatLoader {
+        constructor() {
+          this.isLoading = false;
+        }
+
+        createLoader() {
+          const loader = document.createElement('div');
+          loader.className = 'chat-loading';
+          loader.innerHTML = `
+            <div class="avatar"></div>
+            <div class="loading-content">
+              <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </div>
+          `;
+          return loader;
+        }
+      }
+
+        const chatLoader = new ChatLoader();
+        const container = document.querySelector('.chat-list');
+        
+        // Fill the screen with loading indicators
+        const screenHeight = window.innerHeight;
+        const loaderHeight = 70; // Approximate height of each loader
+        const numberOfLoaders = Math.floor(screenHeight / loaderHeight);
+        
+        for(let i = 0; i < numberOfLoaders; i++) {
+          const loader = document.createElement('div');
+          loader.className = 'chat-loading';
+          loader.innerHTML = `
+            <div class="avatar"></div>
+            <div class="loading-content">
+              <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </div>
+          `;
+          container.appendChild(loader);
+        }
+
+   try {
+    const response = await fetch('/deliver/getListChatUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch chat messages');
+    }
+
+    const messagesReceive = await response.json();
+    console.log('Messages fetched:', messagesReceive);
+    container.innerHTML = ""
+    displayUserList(messagesReceive)
+
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+  }
+};
+
+
+fetchChatList()
+const modal = document.getElementById('userModal');
+const closeButton = document.querySelector('.close-button');
+
+function showUserProfile(userinfo, isConnect) {
+  if (isConnect.status){
+    isConnect = isConnect.status
+  }
+  let mois = ["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]
+
+        let date = userinfo.infoUser.date.split('-')
+        const numberMois = +date[1]
+        const jour = date[2].split('T')[0]
+
+        date = jour + " " + mois[numberMois] +" "+date[0]
+  console.log(userinfo)
+
+  if (userinfo) {
+    document.getElementById('modalAvatar').src = userinfo.infoUser.profileImagePath || "/images/defaultUserProfil.jpg";
+    document.getElementById('modalName').textContent = userinfo.infoUser.companyName;
+    document.getElementById('modalEmail').textContent = userinfo.infoUser.email;
+    document.getElementById('modalPhone').textContent = '*********';
+    document.getElementById('modalStatus').textContent = isConnect;
+    document.getElementById('modalMember').textContent = date;
+    modal.style.display = 'flex';
+  }
+}
+
+{{!-- document.querySelectorAll('.avatar').forEach(avatar => {
+  avatar.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const userId = avatar.getAttribute('data-user');
+    showUserProfile(userId);
+  });
+}); --}}
+
+let isConnect = ""
+function InfoUserFetch (el) {
+  event.stopPropagation()
+  let dataUserId
+  dataUserId = el?.getAttribute('data-userId')
+
+  if (!dataUserId) { // si l'id de l'utilisateur est envoyé une autre source
+    dataUserId = userIdBtnAction
+  }
+
+  socket.emit("userStatus", dataUserId)
+
+  socket.on("userStatusResp", (resp) => {
+    isConnect = resp
+  })
+
+  fetch('/deliver/api/userinfo/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: dataUserId }),
+    })
+      .then(response => response.json())
+      .then(data => {
+
+        // Réajuster le nom au cas où il s'agit d'un acheteur
+        if (data.infoUser.companyName === undefined){
+          data.infoUser.companyName = data.infoUser.username
+        }
+
+        showUserProfile(data, isConnect)
+
+        
+        console.log('Réponse du serveur:', data)
+
+      })
+      .catch(error => console.error('Erreur:', error));
+
+
+}
+
+closeButton.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+
+document.querySelectorAll('.chat-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const name = item.querySelector('.chat-name').textContent;
+    console.log(`Ouverture de la conversation avec ${name}`);
+  });
+});
+
+function formatTime(date) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  
+  if (date >= today) {
+    return date.toLocaleTimeString('fr-FR', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  } else {
+    return date.toLocaleDateString('fr-FR', {
+      weekday: 'long'
+    });
+  }
+}
+
+// Add image handling logic
+const imageModal = document.getElementById('imageModal');
+const closeImageModal = document.querySelector('.close-image-modal');
+let currentImageSet = [];
+let currentImageIndex = 0;
+
+function showImageModal(allImg, imageIndex) {
+  currentImageSet = allImg;
+  currentImageIndex = imageIndex;
+  updateModalImage();
+  imageModal.style.display = 'block';
+}
+
+function updateModalImage() {
+  const currentImage = document.getElementById('currentImage');
+  currentImage.src = currentImageSet[currentImageIndex].src;
+}
+
+function nextImage() {
+  currentImageIndex = (currentImageIndex + 1) % currentImageSet.length;
+  updateModalImage();
+}
+
+function prevImage() {
+  currentImageIndex = (currentImageIndex - 1 + currentImageSet.length) % currentImageSet.length;
+  updateModalImage();
+}
+
+function showImg(divImg){
+  event.stopPropagation();
+  const productImages = divImg.parentNode
+  const allImg = productImages.querySelectorAll("img")
+  const imageIndex = parseInt(divImg.getAttribute('data-index'));
+  showImageModal(allImg, imageIndex);
+
+}
+
+document.querySelector('.next-image').addEventListener('click', nextImage);
+document.querySelector('.prev-image').addEventListener('click', prevImage);
+
+closeImageModal.addEventListener('click', () => {
+  imageModal.style.display = 'none';
+});
+</script>
+
+</body></html>
