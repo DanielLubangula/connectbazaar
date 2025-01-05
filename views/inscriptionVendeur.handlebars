@@ -374,7 +374,6 @@
 const form = document.getElementById('sellerRegisterForm');
 form.addEventListener('submit', async (e) => {
   e.preventDefault(); // Empêche la soumission classique du formulaire
-
   const formData = new FormData(form); // Utilisation de FormData pour envoyer le formulaire complet
   const data = Object.fromEntries(formData.entries()); // Convertit FormData en objet JSON pour les champs texte
 
@@ -382,14 +381,14 @@ form.addEventListener('submit', async (e) => {
   const inputs = e.target.querySelectorAll("input, checkbox");
   let isValid = true;
 
-  inputs.forEach((input) => {
+ /* inputs.forEach((input) => {
     if (!input.value.trim()) {
       isValid = false;
       input.style.borderColor = "red";
     } else {
       input.style.borderColor = "";
     }
-  });
+  });*/
 
   if (!isValid) return;
 
@@ -401,6 +400,7 @@ form.addEventListener('submit', async (e) => {
         if (data.message !== "success"){
             document.querySelector('.msgerr').innerHTML = data.message;
         } else {
+            console.log("succès")
             location.assign(`/deliver/`);
         }
         console.log("data", data);

@@ -165,7 +165,7 @@ body {
         </nav>
     </header>
 <div class="product-container" id="productContainer">
-    <img src="/spinner.gif" alt="" srcset="">
+    <img style="margin: auto;" width="50px" src="/images/spinner.gif" alt="" srcset="">
 </div>
 
 <script>
@@ -175,9 +175,9 @@ body {
             ? 'http://localhost:5000'
             : 'https://connectbazaar.onrender.com';
 
-    const API_URL = await fetch(`${baseURL}/deliver/admin/api/findProduct`);
+    const API_URL = `${baseURL}/deliver/admin/api/findProduct`;
 
-    //const API_URL = "http://192.168.43.14:5000/deliver/admin/api/findProduct";
+    //const API_URL = "http://localhost:5000/deliver/admin/api/findProduct";
     // Charger les produits depuis l'API
     const loadProducts = async () => {
       try {

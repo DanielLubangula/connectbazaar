@@ -33,6 +33,6 @@ adminSchema.pre('save', async function (next) {
   }
 });
 
-module.exports = mongoose.model('Admin', adminSchema);
+module.exports = mongoose.model('Admin1', adminSchema);
 
 

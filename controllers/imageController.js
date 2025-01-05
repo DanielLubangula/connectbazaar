@@ -139,7 +139,7 @@ exports.registerGestion = async (req, res) => {
         password,
         confirmPassword,
       } = req.body;
-
+      console.log("body", req.body)
       // Validation des champs obligatoires
       if (
         !companyName ||
