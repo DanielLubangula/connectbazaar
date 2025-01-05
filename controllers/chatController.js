@@ -22,7 +22,7 @@ exports.chat = async (req, res) => {
     const product = await Product.findById(productId)
 
     // Récupération du nom et du chemin de l'image
-    const username = user.username || user.companyName
+    const username = user?.username || user?.companyName
     const profileImagePath = user.profileImagePath || "/images/defaultUserProfil.jpg"
 
     // Récupération du produit
