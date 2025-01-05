@@ -29,7 +29,7 @@ exports.chat = async (req, res) => {
     const images = product.images
     const nameProduct = product.name
 
-    res.render("ChatInterface", {
+    res.render("chatInterface", {
         productId,
         userId,
         username,
