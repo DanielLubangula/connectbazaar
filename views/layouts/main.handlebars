@@ -212,10 +212,10 @@ socketMain.on("updateNotif", async (data) => {
   const firstId = roomParts.find((id) => id !== utilisateurIdMain); // Récupère l'ID différent de l'utilisateur actuel
   const lastId = roomParts[roomParts.length - 1]; // Le dernier ID reste inchangé
 
-  const baseURLNotif =
+ const baseURLNotif =
           window.location.origin.includes('localhost')
             ? 'http://localhost:5000'
-            : 'https://deliver-jvwl.onrender.com';
+            : 'https://connectbazaar.onrender.com';
 
   const chatLink = `${baseURLNotif}/deliver/chat/${firstId}/${lastId}`;
   //const chatLink = `http://192.168.43.14:5000/deliver/chat/${firstId}/${lastId}`;

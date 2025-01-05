@@ -484,7 +484,13 @@
 
   async function fetchStats() {
             try {
+                       const baseURL =
+                window.location.origin.includes('localhost')
+                  ? 'http://localhost:5000'
+                  : 'https://connectbazaar.onrender.com';
+
                 const response = await fetch('http://localhost:5000/deliver/api/payments/stats');
+                const response = await fetch(`${baseURL}/deliver/api/payments/stats`);
                 if (!response.ok) {
                     throw new Error('Erreur lors de la récupération des statistiques');
                 }

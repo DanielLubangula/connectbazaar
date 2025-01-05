@@ -685,10 +685,10 @@ socket.on("updateNotif", async (data) => {
   const firstId = roomParts.find((id) => id !== utilisateurId); // Récupère l'ID différent de l'utilisateur actuel
   const lastId = roomParts[roomParts.length - 1]; // Le dernier ID reste inchangé
 
-  const baseURL =
+    const baseURL =
           window.location.origin.includes('localhost')
             ? 'http://localhost:5000'
-            : 'https://deliver-jvwl.onrender.com';
+            : 'https://connectbazaar.onrender.com';
 
 //const baseURL = "http://192.168.181.14:5000"
 

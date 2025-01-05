@@ -247,7 +247,12 @@
 
      
 <script>
-    const API_URL = "http://localhost:5000/deliver/api/findAlluser";
+     const baseURL =
+          window.location.origin.includes('localhost')
+            ? 'http://localhost:5000'
+            : 'https://connectbazaar.onrender.com';
+
+    const API_URL = await fetch(`${baseURL}/deliver/api/findAlluser`);
     //const API_URL = "http://192.168.43.14:5000/deliver/api/findAlluser";
     const socket = io()
     

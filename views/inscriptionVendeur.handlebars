@@ -415,7 +415,12 @@ form.addEventListener('submit', async (e) => {
 {{!-- document.addEventListener("DOMContentLoaded", async () => {
     const countrySelect = document.getElementById("countrySelect");
     try {
-        const response = await fetch("http://localhost:5000/deliver/api/countries");
+
+            const baseURL =
+          window.location.origin.includes('localhost')
+            ? 'http://localhost:5000'
+            : 'https://connectbazaar.onrender.com';
+        const response = await fetch(`${baseURL}/deliver/api/countries`);
         const countries = await response.json();
         const sortedCountries = countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
 

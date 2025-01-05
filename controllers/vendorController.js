@@ -16,8 +16,8 @@ exports.dashbordVendor = (req, res) => {
     req.session.vendor.profileImagePath = "/images/defaultUserProfil.jpg";
   }
 
-  res.render("dashbordVendor", {
-    navbarVendor: true,
+  res.render("dashbordVendor", { 
+    navbarVendor: true,  
     titre: "Dashboard Vendeur",
     activeongletdas: true,
     URL
