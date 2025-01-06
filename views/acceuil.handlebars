@@ -132,7 +132,7 @@ tailwind.config = {
         <p>Concluez vos transactions en toute transparence, directement avec les vendeurs.</p>
       </div>
     </div>
-    <a href="#explore" class="cta-button">Découvrir nos vendeurs</a>
+    {{!-- <a href="#explore" class="cta-button">Découvrir nos vendeurs</a> --}}
   </div>
 </section>
 
@@ -173,12 +173,14 @@ tailwind.config = {
 
     <!-- FIN SECTION CAFES -->
      <!-- SECTION D'INSCRIPTION DES CLIENTS -->
+  {{#unless vendor}}
   <section class="auth-cta-section">
   <div class="auth-cta-container" style="padding: 5px;">
     <h2>Rejoignez ConnectBazaar dès aujourd'hui !</h2>
     <p>Créez votre compte pour explorer les offres des vendeurs près de chez vous et échanger directement avec eux.</p>
     <a href="/deliver/registerVendor" id="bodyLoginBtn" class="auth-btn cta-button">Inscription / Connexion</a>
   </div>
+  {{/unless}}
 </section>
 
 <!-- FIN SECTION D'INSCRIPTION -->
@@ -541,8 +543,8 @@ function showUserInfo(info) {
         date = mois[numberMois] +" "+date[0]
 
         userInfo.innerHTML = `
-        <a href="${data.infoUser.profileImagePath}">
-          <img style='margin: 0px auto' src="${data.infoUser.profileImagePath}" alt="Photo de profil de ${data.infoUser.companyName}">
+        <a href="${data.infoUser.profileImagePath ? data.infoUser.profileImagePath : "/images/defaultUserProfil.jpg"}">
+          <img style='margin: 0px auto' src="${data.infoUser.profileImagePath ? data.infoUser.profileImagePath : "/images/defaultUserProfil.jpg"}" alt="Photo de profil de ${data.infoUser.companyName}">
         </a>
         <h2 style='font-weight : bold;'>${data.infoUser.companyName}</h2>
         <p>Passionné de technologie et amateur de bonnes affaires</p>
@@ -769,7 +771,7 @@ likeDuButton = likeButton
 }
 let map = new Map()
 function createProductCard(product) {
-
+console.log("product", product)
 const card = document.createElement('div');
 card.className = 'maxHeighDiv maxWeight maxHeigh card padding5 bg-white rounded-xl shadow-lg overflow-hidden relative transition-transform duration-300 hover:-translate-y-1 w-full sm:w-80';
 
@@ -862,7 +864,7 @@ card.innerHTML = `
     <div style="padding:0px 15px; ">
 
         <div class="flex items-center border-t border-gray-100">
-            <img src="${product.seller.profileImagePath}" data-user="${product.seller._id}"  onclick="showUserInfo(this)"alt="Seller avatar" class="w-10 h-10 rounded-full mr-3">
+            <img src="${product.seller.profileImagePath ? product.seller.profileImagePath : "/images/defaultUserProfil.jpg"}" data-user="${product.seller._id}"  onclick="showUserInfo(this)"alt="Seller avatar" class="w-10 h-10 rounded-full mr-3">
             <div>
                 <div style="text-align:left" class="font-medium text-gray-800">${product.seller.name}</div>
                 {{!-- <div class="text-secondary">★★★★★ (${product.seller.rating})</div> --}}

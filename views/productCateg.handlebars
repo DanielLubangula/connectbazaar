@@ -625,9 +625,9 @@ card.innerHTML = `
     <div style="padding:0px 15px; ">
 
         <div class="flex items-center border-t border-gray-100">
-            <img src="${product.infoUser.profileImagePath}" data-user="${product.infoUser.userId}"  onclick="showUserInfo(this)"alt="Seller avatar" class="w-10 h-10 rounded-full mr-3">
+            <img src="${product.vendorInfo.profileImagePath ? product.vendorInfo.profileImagePath : "/images/defaultUserProfil.jpg"}" data-user="${product.infoUser.userId}"  onclick="showUserInfo(this)"alt="Seller avatar" class="w-10 h-10 rounded-full mr-3">
             <div>
-                <div style="text-align:left" class="font-medium text-gray-800">${product.seller.name}</div>
+                <div style="text-align:left" class="font-medium text-gray-800">${product.vendorInfo.companyName}</div>
                 {{!-- <div class="text-secondary">★★★★★ (${product.seller.rating})</div> --}}
             </div>
         </div>

@@ -678,13 +678,11 @@ function displayProduct(product) {
 
       <div class="seller-info">
             <div class="seller-avatar">
-                <img class="seller-avatar" data-user="${product.seller._id}" onclick="showUserInfo(this)" src="${
-                  product.seller.profileImagePath
-                }" />
+                <img class="seller-avatar" data-user="${product.seller._id}" onclick="showUserInfo(this)" src="${product.seller.profileImagePath ? product.seller.profileImagePath : "/images/defaultUserProfil.jpg"}" />
             </div>
                 <div>
                 <div>Store didi</div>
-                    <div class="rating">★★★★★ <span style="color: #666">(5)</span></div>
+                    {{!-- <div class="rating">★★★★★ <span style="color: #666">(5)</span></div> --}}
                 </div>
         </div>
 
