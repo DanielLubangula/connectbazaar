@@ -34,16 +34,32 @@ exports.deleteProduct = async (req, res) => {
       return res.status(404).json({ message: "Produit non trouvé" });
     }
 
-    // Supprimez chaque image associée au produit
-    product.images.forEach((image) => {
-      const imagePath = path.join(__dirname, "..", "uploads", image.path);
-      // Supprimez l'image avec fs.unlink()
-      fs.unlink(imagePath, (err) => {
+    // Supprimez chaque image associée au produit, dans AWS S3 et localement
+    const deletePromises = product.images.map(async (image) => {
+      // Suppression sur AWS S3
+      const params = {
+        Bucket: process.env.AWS_BUCKET_NAME, // Remplacez par votre nom de bucket
+        Key: image.s3Key, // Le chemin ou clé dans S3 (doit être stocké dans votre modèle Product)
+      };
+
+      try {
+        await s3.send(new DeleteObjectCommand(params));
+        console.log(`Image supprimée de S3: ${image.s3Key}`);
+      } catch (err) {
+        console.error("Erreur lors de la suppression de l'image sur S3:", err);
+      }
+
+      // Suppression locale si applicable (facultatif)
+      const localPath = path.join(__dirname, "..", "uploads", image.path);
+      fs.unlink(localPath, (err) => {
         if (err) {
-          console.error("Erreur lors de la suppression de l'image:", err);
+          console.error("Erreur lors de la suppression de l'image locale:", err);
         }
       });
     });
+
+    // Attendez que toutes les suppressions soient terminées
+    await Promise.all(deletePromises);
 
     // Supprimez le produit de la base de données
     await Product.findByIdAndDelete(productId);
@@ -54,7 +70,43 @@ exports.deleteProduct = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
-//
+
+// Route API pour supprimer un produit
+// exports.deleteProduct = async (req, res) => {
+//   try {
+//     // Vérifiez que l'ID est défini et valide
+//     const productId = req.params.id;
+//     if (!mongoose.Types.ObjectId.isValid(productId)) {
+//       return res.status(400).json({ message: "ID de produit invalide" });
+//     }
+
+//     // Recherchez le produit dans la base de données
+//     const product = await Product.findById(productId);
+//     if (!product) {
+//       return res.status(404).json({ message: "Produit non trouvé" });
+//     }
+
+//     // Supprimez chaque image associée au produit
+//     product.images.forEach((image) => {
+//       const imagePath = path.join(__dirname, "..", "uploads", image.path);
+//       // Supprimez l'image avec fs.unlink()
+//       fs.unlink(imagePath, (err) => {
+//         if (err) {
+//           console.error("Erreur lors de la suppression de l'image:", err);
+//         }
+//       });
+//     });
+
+//     // Supprimez le produit de la base de données
+//     await Product.findByIdAndDelete(productId);
+
+//     res.json({ message: "Produit supprimé avec succès" });
+//   } catch (error) {
+//     console.error("Erreur lors de la suppression du produit:", error);
+//     res.status(500).json({ message: "Erreur serveur" });
+//   }
+// };
+// //
 
 // Configuration de multer pour stocker les images en mémoire
 const storageVendor = multer.memoryStorage();
