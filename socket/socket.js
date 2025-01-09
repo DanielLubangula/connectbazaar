@@ -566,7 +566,7 @@ module.exports = (io) => {
         const user =
           (await User.findById(dataId)) || (await Vendor.findById(dataId));
         const lastSeen = user?.lastSeen;
-        socket.emit("userStatusResp", {
+        socket.emit("userStatusResp", { 
           userId: dataId,
           status: "Hors ligne",
           lastSeen,
