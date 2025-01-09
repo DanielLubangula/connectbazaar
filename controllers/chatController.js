@@ -20,14 +20,15 @@ exports.chat = async (req, res) => {
     }
     // Recherche du produit
     const product = await Product.findById(productId)
-
+    console.log("chatController", productId, " - product - ", product)
+    if (!product) return
     // Récupération du nom et du chemin de l'image
     const username = user?.username || user?.companyName
     const profileImagePath = user?.profileImagePath || "/images/defaultUserProfil.jpg"
 
     // Récupération du produit
-    const images = product.images
-    const nameProduct = product.name
+    const images = product?.images
+    const nameProduct = product?.name
 
     res.render("chatInterface", {
         productId,

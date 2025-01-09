@@ -463,7 +463,7 @@ module.exports = (io) => {
         //console.log(savedMessage);
 
         // Retourner le message sauvegardé au client émetteur
-        // callback({ success: true, data: savedMessage });
+         callback({ success: true, data: savedMessage });
       } catch (error) {
         console.error("Erreur lors du traitement du message :", error);
         callback({

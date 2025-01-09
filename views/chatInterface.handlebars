@@ -1988,7 +1988,7 @@ async function sendMessage(audioBuffer = null) {
   if (response.success) {
     console.log('Message envoyé :', response.data);
     //console.log("other", otherUser)
-    // if (otherUser) return
+    if (otherUser) return
     // Afficher le message envoyé dans l'interface
     displayMessage(response.data);
   } else {
