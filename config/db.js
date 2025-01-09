@@ -14,7 +14,7 @@ const connectDB = async () => {
         console.error('Erreur de connexion à MongoDB', err);
         process.exit(1);  // Quitter l'application en cas d'échec de la connexion
     }
-};
+}; 
 
 module.exports = { connect: connectDB };
 
@@ -33,3 +33,4 @@ module.exports = { connect: connectDB };
 // };
 
 // module.exports = { connect: connectDB };
+ 

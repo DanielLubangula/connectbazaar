@@ -50,9 +50,33 @@ exports.acceuil = async (req, res) => {
 
   const user = req.session.user;
   const vendor = req.session.vendor;
+  const navbarFooter = true
 
-  res.render("acceuil", { user, vendor, isMessage, p, CheckStatus, URL});
+  res.render("acceuil", { user, vendor, isMessage, p, CheckStatus, URL, navbarFooter});
 };
+
+// api pour récuperer le nombre des utilisateurs
+exports.numberNotifMessage = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ error: "L'ID utilisateur est requis" });
+    }
+
+    const allNotif = await Message.find({
+      recipient: userId, // Destinataire (l'utilisateur connecté)
+      unread: true, // Seulement les messages non lus
+    });
+
+    const notificationCount = allNotif.length;
+    res.json({ notifications: notificationCount });
+  } catch (error) {
+    console.error("Erreur dans numberNotifMessage:", error);
+    res.status(500).json({ error: "Erreur interne du serveur" });
+  }
+};
+
 
 // Route pour la page registerLogin
 let messageError = "";
@@ -497,14 +521,27 @@ exports.logoutUser = (req, res) => {
 };
 
 exports.productCateg = (req, res) => {
+  let user
+  let vendor
+  if (req.session?.user)  user = req.session.user
+  if (req.session?.vendor) vendor = req.session.vendor
+
+
   const category = req.params.category;
-  res.render("productCateg", { category, URL });
+  const navbarFooter = true
+  res.render("productCateg", { category, URL, navbarFooter, user, vendor });
 };
 
 exports.listChatUser = (req, res) => {
-  res.render("listChatUser");
-};
+  let user
+  let vendor
+  if (req.session?.user)  user = req.session.user
+  if (req.session?.vendor) vendor = req.session.vendor
 
+ 
+  const navbarFooter = true
+  res.render("listChatUser", {navbarFooter, user, vendor});
+};
 
 /**
  * Fonction pour récupérer la liste des discussions triée par le message le plus récent

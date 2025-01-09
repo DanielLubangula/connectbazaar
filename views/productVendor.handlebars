@@ -224,6 +224,7 @@
 
 .overflowScroll {
   overflow-x: auto; /* Ajoute un défilement horizontal si nécessaire */
+  min-height: 100vh;
 }
 
 
@@ -428,8 +429,9 @@
   }
 }
 
-
-
+.four{
+  color : #f1c40f;
+}
 
 </style>
 <script defer src="/js/infiniteScroll.js"></script>
@@ -1072,24 +1074,27 @@ addProductBtn.addEventListener("click", () => {
   //document.querySelector(".header").classList.add('zIndex')
   document.querySelector(".btnUpload").style.display = "block";
   document.querySelector(".btnEdit").style.display = "none";
+  document.querySelector(".navbar-footer").style.display = "none";
 
   modal.classList.add("active");
-  document.querySelector(".headerVendor").style.display = "none";
+  // document.querySelector(".headerVendor").style.display = "none";
 });
 
 function closeButton() {
   document.getElementById("imagePreview").innerHTML = "";
   document.querySelector(".clearImg").style.display = "none";
-  document.querySelector(".headerVendor").style.display = "block";
+  document.querySelector(".navbar-footer").style.display = "block";
+  // document.querySelector(".headerVendor").style.display = "block";
 }
 
 function closeModal() {
+  document.querySelector('.navbar-footer').style.display = "block"
   document.querySelector(".titreFormh3").innerHTML = "Ajouter un Produit";
   document.querySelector(".clearImg").style.display = "none";
   document.querySelector(".imagesInput").value = "";
   document.getElementById("imagePreview").innerHTML = "";
   modal.classList.remove("active");
-  document.querySelector(".headerVendor").style.display = "block";
+  // document.querySelector(".headerVendor").style.display = "block";
 }
 
 function openFilterModal() {
@@ -1394,8 +1399,9 @@ async function confirmDelete() {
  */
 let idProduct = "";
 function editProduct(productId) {
+  document.querySelector('.navbar-footer').style.display = "none"
   idProduct = productId;
-  document.querySelector(".headerVendor").style.display = "none";
+  // document.querySelector(".headerVendor").style.display = "none";
   // Récupérez les informations du produit à partir de l'élément correspondant
   const productRow = document.getElementById(`product-${productId}`);
   let images = productRow.querySelector("td:nth-child(1)").innerHTML;

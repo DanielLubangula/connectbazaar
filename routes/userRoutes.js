@@ -148,7 +148,7 @@ router.get("/apiProduct", checkAuthentication,vendorController.apiProduct);
 // Route pour supprimer un produit
 router.delete("/api/products/:id", checkAuthentication,apiController.deleteProduct);
 
-// Route pour supprimer un produit
+// Route pour mettre à jour le produit
 router.put("/api/editProduct/:id", checkAuthentication,apiController.editProduct);
 
 // Route pour charger le produit (infiniteScroll)
@@ -300,6 +300,9 @@ router.post("/logout/vendor", checkAuthentication,vendorController.logoutVendor)
 
 // Route pour récupérer la liste de pays
 router.get("/api/countries", apiController.allContries)
+
+// Route pour récupérer le nombre de notification
+router.post("/api/numberNotifMessage", userController.numberNotifMessage)
 
 function checkAuthentication(req, res, next) {
   if (req.session.user || req.session.vendor) {

@@ -1,0 +1,169 @@
+Pour connecter votre projet à Amazon S3 et adapter la fonction de téléchargement des images afin de stocker directement les fichiers sur S3, voici les étapes à suivre :
+
+### 1. Installer les dépendances nécessaires
+Ajoutez les bibliothèques suivantes à votre projet si elles ne sont pas encore installées :
+
+```bash
+npm install aws-sdk multer multer-s3 sharp
+```
+
+- `aws-sdk` : Bibliothèque pour interagir avec AWS.
+- `multer-s3` : Intégration de Multer avec S3.
+
+---
+
+### 2. Configurer AWS SDK et Multer pour S3
+Créez un fichier de configuration pour AWS (par exemple, `config/aws.js`) :
+
+```javascript
+const AWS = require("aws-sdk");
+
+// Configuration d'AWS avec les clés d'accès (assurez-vous que ces valeurs soient sécurisées)
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID, // Clé d'accès
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, // Clé secrète
+  region: process.env.AWS_REGION, // Région (ex : us-east-1)
+});
+
+const s3 = new AWS.S3();
+
+module.exports = s3;
+```
+
+---
+
+### 3. Adapter la fonction `uploadImage` pour utiliser S3
+
+Voici comment adapter votre fonction pour uploader l'image directement dans un bucket S3 :
+
+```javascript
+const multer = require("multer");
+const multerS3 = require("multer-s3");
+const sharp = require("sharp");
+const User = require("../models/User"); // Modèle User (modifiez le chemin selon votre projet)
+const s3 = require("../config/aws");
+
+// Configuration de Multer pour S3
+const uploadImg = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: "votre-nom-de-bucket", // Nom de votre bucket
+    metadata: (req, file, cb) => {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: (req, file, cb) => {
+      const filename = `photoProfilUser/${Date.now()}-${Math.round(
+        Math.random() * 1e9
+      )}.jpg`; // Générer un nom unique
+      cb(null, filename);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limite de 5 Mo
+}).single("image");
+
+// Fonction de mise à jour de l'image de profil
+exports.uploadImage = async (req, res) => {
+  // Utiliser multer pour gérer le téléchargement de l'image
+  uploadImg(req, res, async function (err) {
+    if (err) {
+      return res.status(500).json({
+        message: "Erreur lors du téléchargement de l'image",
+        error: err,
+      });
+    }
+
+    try {
+      // Vérifier si un fichier a été téléchargé
+      if (!req.file) {
+        return res
+          .status(400)
+          .json({ message: "Veuillez télécharger une image." });
+      }
+
+      const userId = req.session.user._id;
+
+      // Récupérer le vendeur depuis la base de données
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "Utilisateur non trouvé." });
+      }
+
+      // Supprimer l'ancienne image du bucket S3 si elle existe
+      if (user.profileImagePath) {
+        const oldKey = user.profileImagePath.replace(/^\/photoProfilUser\//, "photoProfilUser/");
+        await s3
+          .deleteObject({
+            Bucket: "votre-nom-de-bucket",
+            Key: oldKey,
+          })
+          .promise();
+      }
+
+      // Mettre à jour le chemin de l'image de profil dans la base de données
+      user.profileImagePath = `/${req.file.key}`; // Clé du fichier dans S3
+      await user.save();
+
+      // Mettre à jour la session utilisateur
+      req.session.user = user;
+
+      res.json({
+        message: "Image de profil mise à jour avec succès!",
+        profileImagePath: user.profileImagePath, // Nouveau chemin de l'image
+      });
+    } catch (err) {
+      console.error("Erreur lors de la mise à jour de l'image de profil:", err);
+      res.status(500).json({
+        message:
+          "Une erreur est survenue lors de la mise à jour de l'image de profil.",
+      });
+    }
+  });
+};
+```
+
+---
+
+### Explications des modifications :
+1. **Utilisation de `multer-s3`** : Les fichiers sont uploadés directement dans S3 grâce à Multer.
+2. **Nom unique pour les fichiers** : Les images sont stockées dans le sous-dossier `photoProfilUser` avec des noms générés dynamiquement.
+3. **Suppression des anciennes images** : Avant d'uploader une nouvelle image, l'ancienne image est supprimée de S3 pour éviter d'accumuler des fichiers inutiles.
+4. **Stockage des chemins dans MongoDB** : Le chemin de l'image dans S3 est enregistré dans la base de données.
+
+---
+
+### 4. Ajouter les variables d'environnement
+Ajoutez vos informations AWS dans votre fichier `.env` :
+
+```env
+AWS_ACCESS_KEY_ID=VotreAccessKeyID
+AWS_SECRET_ACCESS_KEY=VotreSecretAccessKey
+AWS_REGION=VotreRégion (ex : us-east-1)
+```
+
+---
+
+### 5. Exemple de réponse API :
+Une fois l'image uploadée, votre API retournera quelque chose comme ceci :
+
+```json
+{
+  "message": "Image de profil mise à jour avec succès!",
+  "profileImagePath": "/photoProfilUser/1674748323415-123456789.jpg"
+}
+```
+
+---
+
+### 6. Afficher les images
+Pour afficher les images dans votre application front-end, construisez l'URL publique à partir du chemin de l'image :
+
+```javascript
+const s3BaseUrl = "https://votre-nom-de-bucket.s3.amazonaws.com";
+const imageUrl = `${s3BaseUrl}${user.profileImagePath}`;
+```
+
+Cela permettra de récupérer les images directement depuis S3.
+
+---
+
+Si vous avez des questions ou rencontrez des erreurs, faites-le-moi savoir ! 😊

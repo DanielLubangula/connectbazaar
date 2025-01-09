@@ -15,6 +15,9 @@ const Preference = require("../models/Preference");
 const likedProduct = require("../models/likeProduct");
 const { info } = require("console");
 const Payment = require('../models/payement');
+const multerS3 = require("multer-s3");
+const { S3Client, DeleteObjectCommand } = require("@aws-sdk/client-s3");
+const s3 = require("../config/aws");
 
 // Route API pour supprimer un produit
 exports.deleteProduct = async (req, res) => {
@@ -55,22 +58,33 @@ exports.deleteProduct = async (req, res) => {
 
 // Configuration de multer pour stocker les images en mémoire
 const storageVendor = multer.memoryStorage();
+// Configuration de Multer pour S3
 const uploadVendor = multer({
-  storage: storageVendor,
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.AWS_BUCKET_NAME, // Nom du bucket S3
+    metadata: (req, file, cb) => {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: (req, file, cb) => {
+      const filename = `products/${Date.now()}-${Math.round(
+        Math.random() * 1e9
+      )}${path.extname(file.originalname)}`; // Génération d'un nom unique
+      cb(null, filename);
+    },
+  }),
   limits: { fileSize: 5 * 1024 * 1024 }, // Taille limite de 5 Mo par fichier
-}).array("images", 3); // Limite à 3 fichiers
-
-// Dossier de sauvegarde des images
-const uploadDir = path.join(__dirname, "..", "uploads", "products");
+}).array("images", 3); // Maximum 3 fichiers
 
 // Fonction pour la modification du produit
 exports.editProduct = async (req, res) => {
-
   uploadVendor(req, res, async function (err) {
     if (err) {
-      return res
-        .status(500)
-        .json({ message: "Erreur lors du téléchargement", error: err });
+      console.error("Erreur lors du téléchargement des images:", err);
+      return res.status(500).json({
+        message: "Erreur lors du téléchargement des images",
+        error: err,
+      });
     }
 
     const { name, category, price, description, pickupLocation } = req.body;
@@ -78,7 +92,7 @@ exports.editProduct = async (req, res) => {
     let msgErr = "";
 
     // Validation des champs obligatoires
-    if (!name || !category || !price ) {
+    if (!name || !category || !price) {
       msgErr = "Veuillez remplir les champs obligatoires";
       return res.status(400).json({ message: msgErr });
     }
@@ -93,48 +107,29 @@ exports.editProduct = async (req, res) => {
       // Vérifier si de nouvelles images ont été uploadées
       let images = currentProduct.images; // Conserver les images actuelles par défaut
       if (req.files && req.files.length > 0) {
-        // Supprimer les anciennes images du dossier si de nouvelles images sont uploadées
+        // Supprimer les anciennes images du bucket S3 si de nouvelles images sont uploadées
         if (images && images.length > 0) {
-          images.forEach((image) => {
-            const oldImagePath = path.join(
-              uploadDir,
-              image.path.split("/").pop()
-            );
-            if (fs.existsSync(oldImagePath)) {
-              console.log("photo supprimé");
-              fs.unlinkSync(oldImagePath); // Supprimer le fichier
+          for (const image of images) {
+            const imageKey = image.path.split("/").slice(3).join("/"); // Extraire la clé du fichier S3
+            try {
+              await s3.send(
+                new DeleteObjectCommand({
+                  Bucket: process.env.AWS_BUCKET_NAME,
+                  Key: imageKey,
+                })
+              );
+              console.log(`Image supprimée du bucket S3: ${imageKey}`);
+            } catch (error) {
+              console.error(`Erreur lors de la suppression de l'image S3: ${imageKey}`, error);
             }
-          });
+          }
         }
 
-        // Limiter à trois images maximum
-        if (req.files.length > 3) {
-          return res.status(400).json({
-            message: "Erreur : vous ne pouvez envoyer que 3 images au maximum.",
-          });
-        }
-
-        // Traiter et sauvegarder chaque image
-        images = await Promise.all(
-          req.files.map(async (file, index) => {
-            const filename = `image_${Date.now()}_${index}.jpg`;
-            const filePath = path.join(uploadDir, filename);
-
-            // Traitement et compression avec sharp
-            const processedImageBuffer = await sharp(file.buffer)
-            .resize({ width: 320, height: 280 }) // Redimensionnement
-            .jpeg({ quality: 99 }) // Compression JPEG
-            .toBuffer();
-
-            // Sauvegarder l'image sur le disque
-            fs.writeFileSync(filePath, processedImageBuffer);
-
-            return {
-              path: "/products/" + filename, // Chemin relatif de l'image
-              contentType: "image/jpeg",
-            };
-          })
-        );
+        // Créer un tableau des URL des images uploadées
+        images = req.files.map((file) => ({
+          path: file.location, // URL complète de l'image sur S3
+          contentType: file.mimetype,
+        }));
 
         // Inverser l'ordre des images pour les sauvegarder
         images.reverse();
@@ -163,6 +158,7 @@ exports.editProduct = async (req, res) => {
     }
   });
 };
+
 
 exports.infiniteScrollProduct = async (req, res) => {
   try {
@@ -227,21 +223,30 @@ exports.updateVendorInfo = async (req, res) => {
   }
 };
 
-// Configurer multer pour stocker l'image en mémoire
-const storageVendorImg = multer.memoryStorage();
-const uploadVendorImg = multer({
-  storage: storageVendorImg,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Limiter la taille à 5 Mo
-}).single("profilVendor"); // Un seul fichier à la fois pour l'image de profil
 
-// Chemin du dossier de sauvegarde des images de profil
-const uploadDirImg = path.join(__dirname, "..", "uploads", "profilVendeur");
+// Configuration de Multer pour S3
+const uploadVendorImg = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.AWS_BUCKET_NAME, // Nom du bucket S3
+    metadata: (req, file, cb) => {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: (req, file, cb) => {
+      const filename = `profilVendor/${Date.now()}-${Math.round(
+        Math.random() * 1e9
+      )}.jpg`; // Génération d'un nom unique
+      cb(null, filename);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limite de 5 Mo
+}).single("profilVendor");
 
 // Fonction de mise à jour de l'image de profil
 exports.updateProfileImage = async (req, res) => {
-  // Utiliser multer pour gérer le téléchargement de l'image
   uploadVendorImg(req, res, async function (err) {
     if (err) {
+      console.error("Erreur lors du téléchargement de l'image:", err);
       return res.status(500).json({
         message: "Erreur lors du téléchargement de l'image",
         error: err,
@@ -251,9 +256,7 @@ exports.updateProfileImage = async (req, res) => {
     try {
       // Vérifier si un fichier a été téléchargé
       if (!req.file) {
-        return res
-          .status(400)
-          .json({ message: "Veuillez télécharger une image." });
+        return res.status(400).json({ message: "Veuillez télécharger une image." });
       }
 
       const vendorId = req.session.vendor._id;
@@ -264,50 +267,39 @@ exports.updateProfileImage = async (req, res) => {
         return res.status(404).json({ message: "Vendeur non trouvé." });
       }
 
-      // Supprimer l'ancienne image du serveur de fichiers si elle existe
+      // Supprimer l'ancienne image de S3 si elle existe
       if (vendor.profileImagePath) {
-        const oldImagePath = path.join(
-          __dirname,
-          "..",
-          "uploads",
-          vendor.profileImagePath
+        const oldKey = vendor.profileImagePath.split("/").slice(-2).join("/"); // Extraire la clé de l'ancienne image
+        await s3.send(
+          new DeleteObjectCommand({
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: oldKey,
+          })
         );
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath);
-        }
       }
 
-      // Traiter et sauvegarder la nouvelle image avec Sharp
-      const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}.jpg`;
-      const filePath = path.join(uploadDirImg, filename);
+      // Mettre à jour le chemin de l'image de profil avec l'URL complète
+      vendor.profileImagePath = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}`;
 
-      // Compression et redimensionnement de l'image
-      const processedImageBuffer = await sharp(req.file.buffer)
-        .resize({ width: 250, height: 250 }) // Ajuster la taille selon les besoins
-        .jpeg({ quality: 80 }) // Compression en JPEG avec qualité 80
-        .toBuffer();
-
-      // Sauvegarder l'image traitée sur le serveur
-      fs.writeFileSync(filePath, processedImageBuffer);
-
-      // Mettre à jour le chemin de l'image de profil dans la base de données
-      vendor.profileImagePath = `/profilVendeur/${filename}`;
+      // Sauvegarder les modifications dans la base de données
       await vendor.save();
 
+      // Mettre à jour la session utilisateur
       req.session.vendor = vendor;
+
       res.json({
         message: "Image de profil mise à jour avec succès!",
-        profileImagePath: vendor.profileImagePath, // Nouveau chemin de l'image
+        profileImagePath: vendor.profileImagePath,
       });
     } catch (err) {
       console.error("Erreur lors de la mise à jour de l'image de profil:", err);
       res.status(500).json({
-        message:
-          "Une erreur est survenue lors de la mise à jour de l'image de profil.",
+        message: "Une erreur est survenue lors de la mise à jour de l'image de profil.",
       });
     }
   });
-};
+}; 
+
 
 exports.updatePassword = async (req, res) => {
   // Valider les champs de mot de passe
@@ -787,78 +779,71 @@ const ITEMS_PER_PAGE = 12; // Nombre de produits par page
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
- 
 
-const uploadDirMessage = path.join(__dirname, "..", "uploads", "messages");
 
-// Configure multer pour stockage en mémoire
-const storageMessage = multer.memoryStorage();
-const uploadMessage = multer({
-  storage: storageVendor,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5 Mo max par fichier
+// Configuration de Multer pour S3
+const uploadMessageImg = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.AWS_BUCKET_NAME, // Nom du bucket S3
+    metadata: (req, file, cb) => {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: (req, file, cb) => {
+      const filename = `messages/${Date.now()}-${Math.round(
+        Math.random() * 1e9
+      )}.jpg`; // Génération d'un nom unique
+      cb(null, filename);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limite de 5 Mo par fichier
 }).array("images", 5); // Limite de 5 fichiers
 
 // Fonction pour recevoir les messages et fichiers
 exports.uploadChat = async (req, res) => {
-  uploadMessage(req, res, async function (err) {
+  uploadMessageImg(req, res, async function (err) {
     if (err) {
-      console.log(err.message);
+      console.error("Erreur lors du téléchargement des images:", err);
       return res.status(500).json({
-        message: "Erreur lors du téléchargement",
-        error: err.message,
-      });
-    }
-
-    const { message } = req.body; // Message texte envoyé par le client
-    const { recipient } = req.body; //
-
-    // Valider si le message texte ou au moins une image est présent
-    if (!message && (!req.files || req.files.length === 0)) {
-      return res.status(400).json({
-        message: "Veuillez envoyer un message ou au moins une image.",
+        message: "Erreur lors du téléchargement des images.",
+        error: err,
       });
     }
 
     try {
-      // Créer un tableau de chemins pour les images traitées
-      const images = await Promise.all(
-        req.files.map(async (file, index) => {
-          const filename = `image_${Date.now()}_${index}.jpg`;
-          const filePath = path.join(uploadDirMessage, filename);
+      // Vérifier si un message texte ou des images sont présents
+      const { message, recipient } = req.body;
+      if (!message && (!req.files || req.files.length === 0)) {
+        return res
+          .status(400)
+          .json({ message: "Veuillez envoyer un message ou au moins une image." });
+      }
 
-          // Traiter l'image avec sharp
-          const processedImageBuffer = await sharp(file.buffer)
-            .resize({ width: 320, height: 280 }) // Redimensionner
-            .jpeg({ quality: 70 }) // Compression
-            .toBuffer();
-
-          // Enregistrer le fichier traité sur le disque
-          fs.writeFileSync(filePath, processedImageBuffer);
-
-          return {
-            path: `/messages/${path.basename(filename)}`,
-            contentType: "image/jpeg",
-          };
-        })
-      );
-
-      // Recherche de la session
       const userId = req.session.user?._id || req.session.vendor?._id;
 
-      console.log("userId", userId);
-      // Rechercher le nom et le chemin de l'image de l'utilisateur
+      // Vérifier si l'utilisateur est valide
       const user =
         (await User.findById(userId)) || (await Vendor.findById(userId));
+      if (!user) {
+        return res.status(404).json({ message: "Utilisateur non trouvé." });
+      }
 
-      // Créer un objet pour sauvegarder le message et les images
+      // Créer un tableau contenant les URL des images
+      const images = req.files.map((file) => ({
+        path: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`,
+        contentType: file.mimetype,
+      }));
+
+      // Créer un objet message
       const savedMessage = new Message({
         sender: userId,
-        recipient: recipient,
+        recipient,
         content: message || null,
         images,
         timestamp: new Date(),
       });
 
+      // Sauvegarder le message dans la base de données
       await savedMessage.save();
 
       res.json({
@@ -866,13 +851,15 @@ exports.uploadChat = async (req, res) => {
         data: savedMessage,
       });
     } catch (err) {
-      console.error("Erreur lors du traitement :", err);
-      res
-        .status(500)
-        .json({ message: "Erreur lors du traitement des données" });
+      console.error("Erreur lors du traitement des données:", err);
+      res.status(500).json({
+        message: "Une erreur est survenue lors du traitement des données.",
+      });
     }
   });
 };
+
+
 
 exports.recuperChat = async (req, res) => {
   // Endpoint pour récupérer les messages
@@ -1047,10 +1034,7 @@ exports.deleteMessage = async (req, res) => {
   }
 };
 
-// Créer un répertoire de sauvegarde s'il n'existe pas
-if (!fs.existsSync(uploadDirMessage)) {
-  fs.mkdirSync(uploadDirMessage, { recursive: true });
-}
+
 
 exports.allContries =  async (req, res) => {
   return

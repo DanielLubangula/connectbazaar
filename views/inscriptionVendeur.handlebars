@@ -397,13 +397,15 @@ form.addEventListener('submit', async (e) => {
       method: 'POST',
       body: formData, // On envoie directement le FormData, pas besoin de stringify
     }).then(response => response.json()).then(data => { 
+        console.log(data.message)
         if (data.message !== "success"){
+            console.log("1")
             document.querySelector('.msgerr').innerHTML = data.message;
         } else {
+            console.log("2")
             console.log("succès")
             location.assign(`/deliver/`);
         }
-        console.log("data", data);
     });
 
   } catch (error) {

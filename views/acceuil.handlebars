@@ -1,5 +1,10 @@
 <script src="https://cdn.tailwindcss.com"></script>
 {{!-- <script src="./js/tailwind.js"></script> --}}
+<style>
+  .one{
+    color: #f1c40f;
+  }
+</style>
 <link rel="stylesheet" href="/style/acceuil.css">
 <script>
 tailwind.config = {
@@ -40,12 +45,7 @@ tailwind.config = {
 </div>
 
 
-  <!-- Bouton du menu burger -->
-  <button id="burgerMenu" class="burger-menu">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
+
 
   <!-- Menu principal -->
   <div id="menu" class="menu">
@@ -90,12 +90,17 @@ tailwind.config = {
           <span style="color: whitesmoke;">{{user.username}}</span>
         </div>
         {{else if vendor}}
-        <a href="/deliver/productVendor" class="vendor-icon">
+            <a href="/deliver/profilVendor">
+              <img src="{{vendor.profileImagePath}}" alt="Photo de profil" class="user-avatar" onerror="this.src='/images/defaultUserProfil.jpg';">
+            </a>
+            <span class="status-indicator"></span>&nbsp;&nbsp;
+          <span style="color: whitesmoke;">{{vendor.companyName}}</span>
+        {{!-- <a href="/deliver/productVendor" class="vendor-icon">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
           </svg>
           <span>Espace Vendeur</span>
-        </a>
+        </a> --}}
         {{else}}
         <a href="/deliver/registerLogin" id="loginBtn">Connexion / Inscription</a>
         {{/if}}
@@ -304,23 +309,6 @@ tailwind.config = {
   </div>
 </footer>
 
-  {{#if isMessage}}
-
-    <a href="/deliver/listChatUser" class="linkListChatUser">
-    <div class="chat-button">
-      {{#if p}}
-        <span class="numberNotif" style="padding : 5px; background : rgb(233, 65, 65); color : white;">{{p}}</span>
-      {{/if}}
-
-    <svg style="position : relative" class="chat-icon" viewBox="0 0 24 24" fill="white">
-            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
-        </svg>
-        Mes Discussions
-      </div>
-    </a>
-
-  {{/if}}
-
 
 
 <div class="overlay">
@@ -366,12 +354,6 @@ tailwind.config = {
 
   <script>
 
-    document.getElementById("burgerMenu").addEventListener("click", function () {
-      console.log("ici")
-  const menu = document.getElementById("menu");
-  menu.classList.toggle("open");
-});
-
 
 
     const socket = io();
@@ -395,7 +377,7 @@ socket.on("userStatus", async (data) => {
 /************** Début Affichage de notification ***************************/ 
 let notificationTimeout;
 
-function showNotification(name, message, link, imagePath) {
+{{!-- function showNotification(name, message, link, imagePath) {
   const notification = document.getElementById('notification');
   const notificationName = document.getElementById('notification-name');
   const notificationText = document.getElementById('notification-text');
@@ -437,7 +419,7 @@ function showNotification(name, message, link, imagePath) {
   notificationTimeout = setTimeout(() => {
     hideNotification();
   }, 10000);
-}
+} --}}
 
 function hideNotification() {
   const notification = document.getElementById('notification');

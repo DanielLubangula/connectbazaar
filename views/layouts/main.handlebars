@@ -7,14 +7,16 @@
     {{!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="/style/output.css" rel="stylesheet">
+    <link href="/style/navbarfooter.css" rel="stylesheet">
     <script src="/socket.io/socket.io.js"></script>
     <script defer src="/js/connexionSocket.js"></script>
+    <script defer src="/js/notification.js"></script>
     <script src="/js/notifAllPage.js"></script>
 
     {{!-- <script defer src="/js/socket-client.js"></script>
     <script defer src="/js/spinner.js"></script> --}}
     {{#if navbarVendor}}
-        <script defer src="/js/sidebarVendor.js"></script>
+        {{!-- <script defer src="/js/sidebarVendor.js"></script> --}}
         <link rel="stylesheet" href="/style/sidebarVendor.css">
     {{/if}}
 </head>
@@ -137,12 +139,12 @@
     </style>
 <body>
     {{#if navbarVendor}}
-        {{>navbarVendor}}
+        {{!-- {{>navbarVendor}} --}}
              <!-- Header (same as orders page) -->
             <div id="overlay" class="overlay"></div>
         <div class="container mx-auto mt-6 flex">
         <!-- Sidebar (same as orders page) -->
-        {{>sidebarVendor}}
+        {{!-- {{>sidebarVendor}} --}}
 
     {{/if}}
     {{#if sidebarVendorOnly}}
@@ -150,12 +152,21 @@
             <div id="overlay" class="overlay"></div>
         <div class="container mx-auto mt-6 flex">
         <!-- Sidebar (same as orders page) -->
-        {{>sidebarVendor}}
+        {{!-- {{>sidebarVendor}} --}}
 
     {{/if}}
 
     {{{body}}}
-
+    {{#if user}}
+      {{#if navbarFooter}}
+        {{> navbarfooter}}
+      {{/if}}
+    {{/if}}
+    {{#if vendor}}
+      {{#if navbarFooter}}
+        {{> navbarfooter}}
+      {{/if}}
+    {{/if}}
     
 <div class="notification" id="notification">
   <div class="profile-pic">
@@ -190,9 +201,7 @@ mapMain.forEach((value, key) => {
 
         // Adapter le nombre de message notification
 socketMain.on("updateNotif", async (data) => {
-    console.log(data)
 
-    {{!-- return --}}
   const allInfo = data.allInfo;
   const infoUser = data.infoUser;
 

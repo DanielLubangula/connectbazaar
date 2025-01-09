@@ -1504,22 +1504,6 @@ li {
   width: 120px;
 }
 
-.burger-menu {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  background: none;
-  border: none;
-}
-
-.burger-menu span {
-  display: block;
-  width: 25px;
-  height: 3px;
-  background-color: white;
-}
-
 .menu {
   display: flex;
   flex-direction: row;
@@ -1623,26 +1607,6 @@ li {
 
   li {
     margin: 10px 0;
-  }
-
-  .burger-menu {
-    display: flex;
-  }
-
-  .menu {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 5%;
-    left: 0;
-    width: 100%;
-    z-index: 100;
-    background-color: #1a1a2e;
-    padding: 10px;
-  }
-
-  .menu.open {
-    display: flex;
   }
 
   .notification-text {

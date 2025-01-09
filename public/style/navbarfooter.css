@@ -1,0 +1,135 @@
+.navbar-footer {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    padding: 15px 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-items {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    transition: transform 0.3s, color 0.3s;
+    width: 33.33%;
+    padding: 0 5px;
+    position: relative;
+}
+
+.nav-item:hover {
+    transform: translateY(-5px);
+    color: #f1c40f;
+}
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 5px;
+}
+
+.nav-text {
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: calc(50% - 20px);  /* Adjusted positioning */
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.nav-item:active .nav-icon {
+    animation: pulse 0.3s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .nav-text {
+        font-size: 10px;
+    }
+    .nav-icon {
+        width: 20px;
+        height: 20px;
+    }
+    .navbar-footer {
+        padding: 10px 0;
+    }
+    .notification-badge {
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 320px) {
+    .nav-text {
+        font-size: 9px;
+    }
+    .nav-icon {
+        width: 18px;
+        height: 18px;
+    }
+    .notification-badge {
+        width: 16px;
+        height: 16px;
+        font-size: 9px;
+    }
+}
+
+/* For larger screens */
+@media (min-width: 768px) {
+    .nav-items {
+        max-width: 800px;
+    }
+    .nav-icon {
+        width: 28px;
+        height: 28px;
+    }
+    .nav-text {
+        font-size: 14px;
+    }
+    .notification-badge {
+        width: 22px;
+        height: 22px;
+        font-size: 13px;
+    }
+}

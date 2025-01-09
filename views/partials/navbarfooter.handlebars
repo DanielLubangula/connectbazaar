@@ -1,0 +1,86 @@
+ <script defer src="/js/notification.js"></script>
+ <nav class="navbar-footer">
+        <div class="nav-items">
+           <a href="/deliver" class="nav-item one">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+                <span class="nav-text">Accueil</span>
+            </a>
+
+         <a href="/deliver/productCateg/all" class="nav-item two">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H3zm0 2h18v4H3V6zm0 6h8v6H3v-6zm10 0h8v6h-8v-6z"/>
+            </svg>
+            <span class="nav-text">Produits</span>
+        </a>
+
+                <a href="/deliver/listChatUser" class="nav-item three">
+                    <span class="notification-badge"></span>
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                    </svg>
+                    <span class="nav-text">Discussions</span>
+                </a>
+             {{#if vendor}}
+              <a href="/deliver/productVendor" class="nav-item four">
+                  <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                  </svg>
+                  <span class="nav-text">Espace vendeur</span>
+                </a>
+             {{/if}}
+        </div>
+    </nav>
+    <script>
+const socketMainNav = io();
+
+let mapMainNav = new Map();
+let utilisateurIdnav = "";
+
+// Définir les utilisateurs (exemple JSON pour vendor et user)
+mapMainNav.set("1", {{{json vendor}}});
+mapMainNav.set("2", {{{json user}}});
+
+// Parcourir la map pour trouver l'utilisateur
+mapMainNav.forEach((value, key) => {
+  if (value) {
+    console.log(value);
+    utilisateurIdnav = value._id; // ID de l'utilisateur trouvé
+  }
+});
+
+// Fonction pour récupérer le nombre de notifications
+async function fetchNumberOfNotifications(userId) {
+  try {
+    const response = await fetch("/deliver/api/numberNotifMessage", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId }), // Passer l'ID de l'utilisateur
+    });
+
+    if (!response.ok) {
+      throw new Error("Erreur lors de la récupération des notifications");
+    }
+
+    const data = await response.json();
+    console.log("Nombre de notifications non lues :", data.notifications || 0);
+
+    // Afficher dynamiquement ou mettre à jour le compteur dans le DOM
+    document.querySelector(".notification-badge").textContent = data.notifications || "";
+    if (data.notifications == 0){
+        document.querySelector(".notification-badge").style.display = "none"
+    }
+  } catch (error) {
+    console.error("Erreur dans fetchNumberOfNotifications:", error);
+  }
+}
+
+// Appeler la fonction avec l'ID utilisateur récupéré
+if (utilisateurIdnav) {
+  fetchNumberOfNotifications(utilisateurIdnav);
+}
+
+    </script>

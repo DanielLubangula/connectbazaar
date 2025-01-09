@@ -1,5 +1,43 @@
 
         <style>
+            .return-button-container {
+    text-align: left;
+    margin: 10px 20px;
+}
+
+.return-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #5bc0be;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    font-size: 15px;
+}
+
+.return-button:hover {
+    background-color: #418f8e;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        flex-direction: column;
+    }
+
+    .divUpdate,
+    .security,
+    .divPhoto {
+        margin: 10px 0;
+    }
+
+    .return-button-container {
+        text-align: center;
+        margin: 10px 0;
+    }
+}
+
             .divUpdate{
                 border: 1px solid #5bc0be;
                 transition: all 500ms ease;
@@ -174,10 +212,18 @@
                 .profile-sidebar, .profile-content {
                 width: 100%;
                 }
+
+                
             }
         </style>
         <!-- Main Content -->
+
         <main class="flex-1 ml-0 md:ml-6">
+        <div class="return-button-container">
+            <a href="/deliver" class="return-button">
+                Retour à l'accueil
+            </a>
+        </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Informations Personnelles -->
                 <div class="md:col-span-2">

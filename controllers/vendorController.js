@@ -41,6 +41,7 @@ exports.productVendor = async (req, res) => {
     
   }
 
+  const navbarFooter = true
   const vendor = req.session.vendor;
   res.render("productVendor", {
     navbarVendor: true,
@@ -48,7 +49,8 @@ exports.productVendor = async (req, res) => {
     activeongletprod: true,
     vendor,
     CheckStatus,
-    URL
+    URL,
+    navbarFooter
   });
 };
 
