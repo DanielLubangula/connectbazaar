@@ -231,6 +231,27 @@
         text-shadow: 0px 0px 1px rgb(5, 5, 5);
     }
     /* Terme et condition*/
+
+    /* Spinner*/
+    .spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0px auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 </style>
 </head>
 <body>
@@ -371,6 +392,48 @@
 
 
 <script>
+
+const form = document.getElementById('sellerRegisterForm');
+const submitButton = form.querySelector('.register-button');
+const spinner = document.createElement('div'); // Créer un spinner
+spinner.className = 'spinner';
+spinner.style.display = 'none'; // Masquer par défaut
+submitButton.parentNode.insertBefore(spinner, submitButton.nextSibling); // Ajouter après le bouton
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault(); // Empêche la soumission classique du formulaire
+
+  const formData = new FormData(form); // Utilisation de FormData pour envoyer le formulaire complet
+
+  // Désactiver le bouton et afficher le spinner
+  submitButton.disabled = true;
+  spinner.style.display = 'inline-block';
+
+  try {
+    const response = await fetch('/deliver/registerGestion', {
+      method: 'POST',
+      body: formData, // On envoie directement le FormData
+    });
+
+    const data = await response.json();
+    if (data.message !== "success") {
+      console.log("1");
+      document.querySelector('.msgerr').innerHTML = data.message;
+    } else {
+      console.log("2");
+      console.log("succès");
+      location.assign(`/deliver/`);
+    }
+  } catch (error) {
+    console.log('Erreur', error);
+  } finally {
+    // Réactiver le bouton et masquer le spinner
+    submitButton.disabled = false;
+    spinner.style.display = 'none';
+  }
+});
+
+/*    
 const form = document.getElementById('sellerRegisterForm');
 form.addEventListener('submit', async (e) => {
   e.preventDefault(); // Empêche la soumission classique du formulaire
@@ -388,7 +451,7 @@ form.addEventListener('submit', async (e) => {
     } else {
       input.style.borderColor = "";
     }
-  });*/
+  });
 
   if (!isValid) return;
 
@@ -412,6 +475,7 @@ form.addEventListener('submit', async (e) => {
     console.log('Erreur', error);
   }
 });
+*/
 //<!-- Script pour récupérer la liste des pays -->
 
 {{!-- document.addEventListener("DOMContentLoaded", async () => {

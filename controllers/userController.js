@@ -4,29 +4,28 @@ const passport = require("passport");
 const Vendor = require("../models/Vendor"); // Assurez-vous d'inclure votre modèle Vendor
 const Message = require("../models/Message");
 const Product = require("../models/product"); //
-const Payment = require("../models/payement")
+const Payment = require("../models/payement");
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
-require('dotenv').config();
-const URL = "localhost"
+require("dotenv").config();
+const URL = "localhost";
 
 // Page d'acceuil
 exports.acceuil = async (req, res) => {
   const tabId = req.cookies?.tabId; // Utilisation de l'opérateur optionnel pour vérifier si cookies existe
   let userId = req.session.user?._id || req.session.vendor?._id;
   let chatMessage = "";
-  let CheckStatus = ""
+  let CheckStatus = "";
 
   // Rechercher le status de payement
-  if (req.session.vendor){
-    let userEmail = req.session.vendor.email 
+  if (req.session.vendor) {
+    let userEmail = req.session.vendor.email;
     let isPayement = await Payment.findOne({
-      email : userEmail
-    })
+      email: userEmail,
+    });
 
-    if (isPayement) CheckStatus = isPayement.status
-    
+    if (isPayement) CheckStatus = isPayement.status;
   }
 
   // Rechercher si l'utilisateur connecté à un message
@@ -41,18 +40,24 @@ exports.acceuil = async (req, res) => {
 
   let p = "";
   if (allNotif.length > 0) {
-    p = allNotif.length 
-  }else{
+    p = allNotif.length;
+  } else {
     p = "";
   }
 
-  
-
   const user = req.session.user;
   const vendor = req.session.vendor;
-  const navbarFooter = true
+  const navbarFooter = true;
 
-  res.render("acceuil", { user, vendor, isMessage, p, CheckStatus, URL, navbarFooter});
+  res.render("acceuil", {
+    user,
+    vendor,
+    isMessage,
+    p,
+    CheckStatus,
+    URL,
+    navbarFooter,
+  });
 };
 
 // api pour récuperer le nombre des utilisateurs
@@ -77,11 +82,10 @@ exports.numberNotifMessage = async (req, res) => {
   }
 };
 
-
 // Route pour la page registerLogin
 let messageError = "";
 exports.registerLogin = (req, res) => {
-  if (req.session.messageError) { 
+  if (req.session.messageError) {
     messageError = req.session.messageError;
   } else {
     messageError = "Pas d'erreur";
@@ -94,11 +98,15 @@ exports.registerUser = async (req, res) => {
 
   // Vérification des champs
   if (!username || !email || !password || !confirmPassword) {
-    return res.status(401).json({ errors: "Veuillez remplir tous les champs." });
+    return res
+      .status(401)
+      .json({ errors: "Veuillez remplir tous les champs." });
   }
 
   if (password !== confirmPassword) {
-    return res.status(401).json({ errors: "Les mots de passe ne correspondent pas." });
+    return res
+      .status(401)
+      .json({ errors: "Les mots de passe ne correspondent pas." });
   }
 
   try {
@@ -113,7 +121,7 @@ exports.registerUser = async (req, res) => {
 
     await newUser.save();
 
-    // Ajouter l'utilisateur dans la session si nécessaire 
+    // Ajouter l'utilisateur dans la session si nécessaire
     req.session.user = newUser;
 
     res.status(201).json({ message: "Inscription réussie !" });
@@ -125,13 +133,13 @@ exports.registerUser = async (req, res) => {
 
 // Page mot de passe oublié
 exports.forgotPasswordPage = (req, res) => {
-  res.render("forgotPassword", URL)
-}
+  res.render("forgotPassword", URL);
+};
 
 // Page mot de passe oublié
 exports.forgotPasswordPage = (req, res) => {
-  res.render("forgotPassword", URL)
-}
+  res.render("forgotPassword", URL);
+};
 
 // Connexion de l'utilisateur
 exports.loginUser = async (req, res) => {
@@ -139,29 +147,40 @@ exports.loginUser = async (req, res) => {
 
   // Vérifier si les champs sont remplis
   if (!email || !password) {
-    return res.status(400).json({ errors: "Veuillez entrer votre email et mot de passe." });
+    return res
+      .status(400)
+      .json({ errors: "Veuillez entrer votre email et mot de passe." });
   }
 
   try {
     // Vérifier si l'utilisateur existe dans la base de données
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ errors: "Email ou mot de passe incorrect." });
+      return res
+        .status(400)
+        .json({ errors: "Email ou mot de passe incorrect." });
     }
 
     // Comparer le mot de passe
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ errors: "Email ou mot de passe incorrect." });
+      return res
+        .status(400)
+        .json({ errors: "Email ou mot de passe incorrect." });
     }
 
     // Vérifier si l'utilisateur est bloqué
     if (user.status === "blocked") {
-      return res.status(403).json({ errors: "Votre compte est bloqué. Veuillez contacter l'administrateur." });
+      return res
+        .status(403)
+        .json({
+          errors:
+            "Votre compte est bloqué. Veuillez contacter l'administrateur.",
+        });
     }
 
-     // Si "Se souvenir de moi" est coché, on prolonge la durée de vie de la session
-     if (rememberMe) {
+    // Si "Se souvenir de moi" est coché, on prolonge la durée de vie de la session
+    if (rememberMe) {
       req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 jours
     } else {
       req.session.cookie.maxAge = 7 * 24 * 60 * 60 * 1000; // 7 heure
@@ -178,7 +197,7 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-// Endpoint pour envoyer le lien de réinitialisation 
+// Endpoint pour envoyer le lien de réinitialisation
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
 
@@ -186,7 +205,9 @@ exports.forgotPassword = async (req, res) => {
     // Vérifier si l'utilisateur existe
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ errors: "Aucun compte trouvé avec cet email." });
+      return res
+        .status(404)
+        .json({ errors: "Aucun compte trouvé avec cet email." });
     }
 
     // Générer un token de réinitialisation
@@ -199,7 +220,9 @@ exports.forgotPassword = async (req, res) => {
     await user.save();
 
     // Créer le lien de réinitialisation
-    const resetLink = `${req.protocol}://${req.get("host")}/reset-password/${resetToken}`;
+    const resetLink = `${req.protocol}://${req.get(
+      "host"
+    )}/reset-password/${resetToken}`;
 
     // Configuration du transporteur pour Outlook
     const transporter = nodemailer.createTransport({
@@ -226,14 +249,19 @@ exports.forgotPassword = async (req, res) => {
     // Envoyer l'email
     await transporter.sendMail(mailOptions);
 
-    res.status(200).json({ message: "Lien de réinitialisation envoyé avec succès." });
+    res
+      .status(200)
+      .json({ message: "Lien de réinitialisation envoyé avec succès." });
   } catch (error) {
-    console.error("Erreur lors de la réinitialisation du mot de passe :", error);
+    console.error(
+      "Erreur lors de la réinitialisation du mot de passe :",
+      error
+    );
     res.status(500).json({ errors: "Une erreur interne s'est produite." });
   }
 };
 
-// Endpoint pour définir un nouveau mot de passe 
+// Endpoint pour définir un nouveau mot de passe
 exports.resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
@@ -246,7 +274,11 @@ exports.resetPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).json({ errors: "Le lien de réinitialisation est invalide ou a expiré." });
+      return res
+        .status(400)
+        .json({
+          errors: "Le lien de réinitialisation est invalide ou a expiré.",
+        });
     }
 
     // Mettre à jour le mot de passe
@@ -259,11 +291,13 @@ exports.resetPassword = async (req, res) => {
 
     res.status(200).json({ message: "Mot de passe réinitialisé avec succès." });
   } catch (error) {
-    console.error("Erreur lors de la réinitialisation du mot de passe :", error);
+    console.error(
+      "Erreur lors de la réinitialisation du mot de passe :",
+      error
+    );
     res.status(500).json({ errors: "Une erreur interne s'est produite." });
   }
 };
-
 
 // fonction pour afficher la page profil
 let succesUpdatePassword = "";
@@ -301,7 +335,7 @@ exports.profil = async (req, res) => {
     user,
     succesUpdatePassword,
     messsageErrorUpdatepassword,
-    URL
+    URL,
   });
 };
 
@@ -426,88 +460,146 @@ exports.loginVendor = async (req, res) => {
 };
 
 // Page de gestion de connexion pour vendeur
+// exports.loginGestion = async (req, res) => {
+//   let error = "";
+//   try {
+//     const { email, password, rememberMe } = req.body;
+
+//     // Validation des champs obligatoires
+//     if (!email || !password) {
+//       error = "Email et mot de passe sont requis.";
+//       req.session.msgErrorConnVendor = {
+//         error,
+//         email,
+//         password,
+//       };
+
+//       return res.status(400).redirect("/deliver/loginVendor");
+//     }
+
+//     // Vérification de l'existence du vendeur
+//     const vendor = await Vendor.findOne({ email: email });
+//     if (!vendor) {
+//       error = "Email ou mot de passe incorrect.";
+
+//       req.session.msgErrorConnVendor = {
+//         error,
+//         email,
+//         password,
+//       };
+//       return res.status(400).redirect("/deliver/loginVendor");
+//     }
+
+//     // Comparaison du mot de passe avec le hash dans la base de données
+//     const isMatch = await bcrypt.compare(password, vendor.password);
+//     if (!isMatch) {
+//       error = "Email ou mot de passe incorrect.";
+
+//       req.session.msgErrorConnVendor = {
+//         error,
+//         email,
+//         password,
+//       };
+
+//       return res.status(400).redirect("/deliver/loginVendor");
+//     }
+
+//     if (vendor.status === "blocked") {
+//       return console.log("Utilisateur bloqué");
+//     }
+
+//     // Réinitialisation de la session
+//     req.session.regenerate((err) => {
+//       if (err) {
+//         console.error("Erreur lors de la régénération de la session :", err);
+//         return res.status(500).json({
+//           message: "Erreur serveur. Veuillez réessayer plus tard.",
+//           error: err.message,
+//         });
+//       }
+
+//       // Création de la nouvelle session pour le vendeur
+//       req.session.vendor = vendor;
+
+//       // Gestion de la durée de vie de la session
+//       if (rememberMe) {
+//         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 jours
+//       } else {
+//         req.session.cookie.maxAge = 7 * 24 * 60 * 60 * 1000; // 7 heures
+//       }
+
+//       // Redirection après connexion
+//       return res.status(200).redirect("/deliver/");
+//     });
+//   } catch (err) {
+//     console.error("Erreur lors de la connexion du vendeur :", err);
+
+//     // Gestion des erreurs
+//     return res.status(500).json({
+//       message: "Erreur serveur. Veuillez réessayer plus tard.",
+//       error: err.message,
+//     });
+//   }
+// };
+
+// Page de gestion de connexion pour vendeur
 exports.loginGestion = async (req, res) => {
-  let error = "";
   try {
     const { email, password, rememberMe } = req.body;
 
     // Validation des champs obligatoires
     if (!email || !password) {
-      error = "Email et mot de passe sont requis.";
-      req.session.msgErrorConnVendor = {
-        error,
-        email,
-        password,
-      };
-
-      return res.status(400).redirect("/deliver/loginVendor");
+      return res.status(400).json({
+        message: "Email et mot de passe sont requis.",
+      });
     }
 
     // Vérification de l'existence du vendeur
     const vendor = await Vendor.findOne({ email: email });
     if (!vendor) {
-      error = "Email ou mot de passe incorrect.";
-
-      req.session.msgErrorConnVendor = {
-        error,
-        email,
-        password,
-      };
-      return res.status(400).redirect("/deliver/loginVendor");
+      return res.status(400).json({
+        message: "Email ou mot de passe incorrect.",
+      });
     }
 
     // Comparaison du mot de passe avec le hash dans la base de données
     const isMatch = await bcrypt.compare(password, vendor.password);
     if (!isMatch) {
-      error = "Email ou mot de passe incorrect.";
-
-      req.session.msgErrorConnVendor = {
-        error,
-        email,
-        password,
-      };
-
-      return res.status(400).redirect("/deliver/loginVendor");
+      return res.status(400).json({
+        message: "Email ou mot de passe incorrect.",
+      });
     }
 
     if (vendor.status === "blocked") {
-      return console.log("Utilisateur bloqué");
+      return res.status(403).json({
+        message: "Votre compte est bloqué. Veuillez contacter le support.",
+      });
     }
 
-    // Réinitialisation de la session
-    req.session.regenerate((err) => {
-      if (err) {
-        console.error("Erreur lors de la régénération de la session :", err);
-        return res.status(500).json({
-          message: "Erreur serveur. Veuillez réessayer plus tard.",
-          error: err.message,
-        });
-      }
+    // Création de la nouvelle session pour le vendeur
+    req.session.vendor = vendor;
 
-      // Création de la nouvelle session pour le vendeur
-      req.session.vendor = vendor;
+    // Gestion de la durée de vie de la session (via cookie)
+    const sessionOptions = rememberMe
+      ? { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 jours
+      : { maxAge: 7 * 24 * 60 * 60 * 1000 }; // 7 jours
 
-      // Gestion de la durée de vie de la session
-      if (rememberMe) {
-        req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 jours
-      } else {
-        req.session.cookie.maxAge = 7 * 24 * 60 * 60 * 1000; // 7 heures
-      }
-
-      // Redirection après connexion
-      return res.status(200).redirect("/deliver/");
+    // Réponse avec succès
+    return res.status(200).json({
+      message: "Connexion réussie.",
+      redirectUrl: "/deliver/", // URL de redirection
+      sessionOptions, // Pour configurer la session côté client si nécessaire
     });
   } catch (err) {
     console.error("Erreur lors de la connexion du vendeur :", err);
 
-    // Gestion des erreurs
+    // Gestion des erreurs serveur
     return res.status(500).json({
       message: "Erreur serveur. Veuillez réessayer plus tard.",
       error: err.message,
     });
   }
 };
-
 
 // Déconnexion de l'utilisateur
 exports.logoutUser = (req, res) => {
@@ -521,26 +613,24 @@ exports.logoutUser = (req, res) => {
 };
 
 exports.productCateg = (req, res) => {
-  let user
-  let vendor
-  if (req.session?.user)  user = req.session.user
-  if (req.session?.vendor) vendor = req.session.vendor
-
+  let user;
+  let vendor;
+  if (req.session?.user) user = req.session.user;
+  if (req.session?.vendor) vendor = req.session.vendor;
 
   const category = req.params.category;
-  const navbarFooter = true
+  const navbarFooter = true;
   res.render("productCateg", { category, URL, navbarFooter, user, vendor });
 };
 
 exports.listChatUser = (req, res) => {
-  let user
-  let vendor
-  if (req.session?.user)  user = req.session.user
-  if (req.session?.vendor) vendor = req.session.vendor
+  let user;
+  let vendor;
+  if (req.session?.user) user = req.session.user;
+  if (req.session?.vendor) vendor = req.session.vendor;
 
- 
-  const navbarFooter = true
-  res.render("listChatUser", {navbarFooter, user, vendor});
+  const navbarFooter = true;
+  res.render("listChatUser", { navbarFooter, user, vendor });
 };
 
 /**
@@ -617,7 +707,8 @@ exports.getListChatUser = async (req, res) => {
         // Vérifier si l'utilisateur actuel ou l'autre utilisateur est bloqué
         if (
           currentUser?.listNoir.some(
-            (blockedUser) => blockedUser.userId.toString() === discussion.userId.toString()
+            (blockedUser) =>
+              blockedUser.userId.toString() === discussion.userId.toString()
           )
         ) {
           blocked = true;
@@ -656,7 +747,6 @@ exports.getListChatUser = async (req, res) => {
   }
 };
 
-
 // Route pour afficher un produit sur une une page
 // Backend Route for displaying a single product on a page
 exports.pageMonoProduit = async (req, res) => {
@@ -665,7 +755,9 @@ exports.pageMonoProduit = async (req, res) => {
 
     // Fetch product details from the database
     const product = await Product.findById(productId);
-    const seller = await Vendor.findById(product.seller) || await User.findById(product.seller);
+    const seller =
+      (await Vendor.findById(product.seller)) ||
+      (await User.findById(product.seller));
 
     if (!product) {
       return res.status(404).send("Product not found");
@@ -674,8 +766,8 @@ exports.pageMonoProduit = async (req, res) => {
     // Render the product page with the product data
     res.render("pageMonoProduit", {
       product: {
-        pickupLocation : product.pickupLocation,
-        id : productId,
+        pickupLocation: product.pickupLocation,
+        id: productId,
         name: product.name,
         category: product.category,
         price: product.price,
@@ -685,7 +777,7 @@ exports.pageMonoProduit = async (req, res) => {
         seller: seller,
         infoUser: product.infoUser,
         dateAdded: product.dateAdded,
-        URL
+        URL,
       },
     });
   } catch (error) {
@@ -696,18 +788,18 @@ exports.pageMonoProduit = async (req, res) => {
 
 // page payement
 exports.payement = async (req, res) => {
-  res.render("payement",{URL})
-}
+  res.render("payement", { URL });
+};
 
 // acceder à la page foire aux questions
 exports.foireQuestion = async (req, res) => {
-  res.render("foireQuestion", { URL})
-}
+  res.render("foireQuestion", { URL });
+};
 
 // acceder à la page suivipayement
 exports.suivipayement = async (req, res) => {
-  res.render("suivipayement", {URL})
-}
+  res.render("suivipayement", { URL });
+};
 
 // Fonction utilitaire pour formater l'horodatage
 function getFormattedTimestamp(timestamp) {
@@ -717,8 +809,6 @@ function getFormattedTimestamp(timestamp) {
   }
   return new Date(timestamp).toLocaleTimeString();
 }
-
-
 
 // /**
 //  * Fonction pour récupérer la liste des discussions triée par le message le plus récent
@@ -783,7 +873,6 @@ function getFormattedTimestamp(timestamp) {
 //           discussion.lastMessage.timestamp
 //         );
 
-  
 //         return {
 //           ...discussion,
 //           productName: product?.name || "Produit inconnu",
@@ -792,10 +881,9 @@ function getFormattedTimestamp(timestamp) {
 //             user?.username || user?.companyName || "Utilisateur inconnu",
 //           userImage: user?.profileImagePath || "/images/defaultUserProfil.jpg",
 //           lastMessageTime: formattedTimestamp,
-//           blocked 
+//           blocked
 //         };
 
-        
 //       })
 //     );
 

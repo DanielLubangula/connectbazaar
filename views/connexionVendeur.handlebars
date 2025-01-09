@@ -151,10 +151,125 @@
             font-size: 0.9rem;
         }
     }
+
+     .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .button-container {
+            display: flex;
+            align-items: center;
+        }
 </style>
 
 </head>
+
 <body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="seller-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>
+            <h2 class="login-title">Espace Vendeur</h2>
+
+            <form id="sellerLoginForm">
+                <div class="form-group">
+                    <label class="form-label">Email professionnel</label>
+                    <input type="email" class="form-input" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" class="form-input" name="password" required>
+                </div>
+
+                <div class="remember-me">
+                    <input type="checkbox" id="remember" name="rememberMe">
+                    <label for="remember">Se souvenir de moi</label>
+                </div>
+                <p class="msgError" style="color: red;"></p>
+
+                <div class="button-container">
+                    <button type="submit" class="login-button">Se connecter</button>
+                    <div class="spinner" style="display: none;"></div>
+                </div>
+
+                <div class="form-footer">
+                    <a href="/deliver/seller/forgot-password">Mot de passe oublié ?</a>
+                    <span style="margin: 5px;">|</span>
+                    <a href="/deliver/registerVendor">Devenir vendeur</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+      const form = document.getElementById('sellerLoginForm');
+const submitButton = form.querySelector('.login-button');
+const spinner = form.querySelector('.spinner');
+const msgError = document.querySelector('.msgError');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Empêche la soumission classique du formulaire
+
+    const formData = new FormData(form); // Récupère les données du formulaire
+    const jsonData = Object.fromEntries(formData.entries()); // Convertit en objet JSON
+
+    submitButton.style.disabled = true; // Désactiver le bouton
+    spinner.style.display = 'block'; // Afficher le spinner
+    msgError.textContent = ''; // Réinitialise les messages d'erreur
+
+    try {
+        const response = await fetch('/deliver/loginGestion', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(jsonData),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            // Afficher les erreurs si la réponse n'est pas OK
+            msgError.textContent = data.message || 'Une erreur est survenue.';
+            return;
+        }
+
+        // Redirection en cas de succès
+        if (data.redirectUrl) {
+            window.location.href = data.redirectUrl;
+        }
+    } catch (err) {
+        console.error('Erreur lors de la requête :', err);
+        msgError.textContent = 'Erreur réseau. Veuillez réessayer plus tard.';
+    } finally {
+        submitButton.disabled = false; // Réactiver le bouton
+        spinner.style.display = 'none'; // Masquer le spinner
+    }
+});
+
+    </script>
+
+</body>
+
+{{!-- <body>
     <div class="login-container">
         <div class="login-card">
             <div class="seller-icon">
@@ -192,4 +307,4 @@
             </form>
         </div>
     </div>
-</body>
+</body> --}}

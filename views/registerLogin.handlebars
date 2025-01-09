@@ -209,6 +209,26 @@ body {
     }
 }
 
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin: 10px auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
 </style>
 </head>
 
@@ -222,6 +242,7 @@ body {
             <label for="remember">Se souvenir de moi</label>
             <p class="messageErrorConn"></p>
             <button class="form-submit" type="submit">Se connecter</button>
+            <div class="spinner" style="display: none;"></div>
             </form>
             <p>
                 {{!-- <a href="/deliver/forgotPassword" class="forgot-password-link">Mot de passe oublié ?</a> --}}
@@ -251,6 +272,7 @@ body {
             <input class="form-input i" type="password" name="password" placeholder="Mot de passe" required>
             <input class="form-input i" type="password" name="confirmPassword" placeholder="Confirmer le mot de passe" required>
             <button class="form-submit" type="submit">S'inscrire</button>
+            <div class="spinner" style="display: none;"></div>
         </form>
         <p class="messageErrorInsc"></p>
 
@@ -274,6 +296,89 @@ body {
 
 <!-- Ton script client -->
 <script>
+    // Formulaire d'inscription
+    const signupForm = document.getElementById("signupForm");
+    const signupSpinner = signupForm.querySelector(".spinner");
+    const signupButton = signupForm.querySelector(".form-submit");
+    const messageErrorInsc = document.querySelector(".messageErrorInsc");
+
+    signupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(signupForm);
+        const data = Object.fromEntries(formData);
+
+        signupSpinner.style.display = "block"; // Afficher le spinner
+        signupButton.disabled = true; // Désactiver le bouton
+        try {
+            const response = await fetch("/deliver/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                messageErrorInsc.textContent = result.errors || "Erreur inconnue.";
+            } else {
+                window.location.href = "/deliver/";
+            }
+        } catch (error) {
+            console.error("Erreur :", error);
+            messageErrorInsc.textContent = "Une erreur interne s'est produite.";
+        } finally {
+            signupSpinner.style.display = "none"; // Masquer le spinner
+            signupButton.disabled = false; // Réactiver le bouton
+        }
+    });
+
+    // Formulaire de connexion
+    const loginForm = document.getElementById("loginForm");
+    const loginSpinner = loginForm.querySelector(".spinner");
+    const loginButton = loginForm.querySelector(".form-submit");
+    const messageErrorConn = document.querySelector(".messageErrorConn");
+
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(loginForm);
+        const data = Object.fromEntries(formData);
+
+        loginSpinner.style.display = "block"; // Afficher le spinner
+        loginButton.disabled = true; // Désactiver le bouton
+        try {
+            const response = await fetch("/deliver/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                messageErrorConn.textContent = result.errors || "Erreur inconnue.";
+            } else {
+                window.location.href = "/deliver/";
+            }
+        } catch (error) {
+            console.error("Erreur :", error);
+            messageErrorConn.textContent = "Une erreur interne s'est produite.";
+        } finally {
+            loginSpinner.style.display = "none"; // Masquer le spinner
+            loginButton.disabled = false; // Réactiver le bouton
+        }
+    });
+
+    function toggleForm() {
+        const forms = document.querySelectorAll('.form-container');
+        forms.forEach(form => {
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        });
+    }
+</script>
+
+{{!-- <script>
     // Requêtte pour acheminés le données vers le serveur pour l'inscription
     const form = document.getElementById("signupForm");
   const messageErrorInsc = document.querySelector(".messageErrorInsc");
@@ -350,4 +455,4 @@ body {
             form.style.display = form.style.display === 'none' ? 'block' : 'none';
         });
     }
-</script>
+</script> --}}
