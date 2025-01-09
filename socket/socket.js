@@ -111,24 +111,23 @@ module.exports = (io) => {
     socket.on("sendMessage", async (data, callback) => {
       const sender =
         socket.request.session.user?._id || socket.request.session.vendor?._id;
-
+    
       const { recipient, content, images, productId, audios, parentId } = data;
-
+    
       try {
         // Vérification des utilisateurs
         const senderUser =
           (await User.findById(sender)) || (await Vendor.findById(sender));
         const recipientUser =
-          (await User.findById(recipient)) ||
-          (await Vendor.findById(recipient));
-
+          (await User.findById(recipient)) || (await Vendor.findById(recipient));
+    
         if (!senderUser || !recipientUser) {
           return callback({
             success: false,
             error: "Utilisateur introuvable.",
           });
         }
-
+    
         // Vérification des blocages
         const isSenderBlocked = recipientUser.listNoir.some(
           (blockedUser) => blockedUser.userId.toString() === sender
@@ -136,14 +135,14 @@ module.exports = (io) => {
         const isRecipientBlocked = senderUser.listNoir.some(
           (blockedUser) => blockedUser.userId.toString() === recipient
         );
-
+    
         if (isSenderBlocked || isRecipientBlocked) {
           return callback({
             success: false,
             error: "Communication bloquée.",
           });
         }
-
+    
         // Traitement des images et upload sur S3
         const processedImages = images
           ? await Promise.all(
@@ -152,18 +151,18 @@ module.exports = (io) => {
                   .resize({ width: 320, height: 280 })
                   .jpeg({ quality: 70 })
                   .toBuffer();
-
+    
                 const filename = `messages/images/${Date.now()}_${index}.jpg`;
                 const fileUrl = await uploadFileToS3(
                   processedImageBuffer,
                   filename,
                   "image/jpeg"
                 );
-
+    
                 if (!fileUrl) {
                   throw new Error("Échec de l'upload S3 pour l'image.");
                 }
-
+    
                 return {
                   path: fileUrl, // URL retournée par `uploadFileToS3`
                   contentType: "image/jpeg",
@@ -171,38 +170,32 @@ module.exports = (io) => {
               })
             )
           : [];
-
-        // Traitement des audios (local, pas d'upload S3 ici)
+    
+        // Traitement des audios (désactivé pour l'instant, à activer si nécessaire)
         // let processedAudios;
         // if (audios && audios.length > 0) {
-        //   const audioUploadDir = path.join(uploadDirMessage, "audios");
-        //   if (!fs.existsSync(audioUploadDir)) {
-        //     fs.mkdirSync(audioUploadDir, { recursive: true });
-        //   }
-
         //   processedAudios = await Promise.all(
         //     audios.map(async (audioBuffer, index) => {
         //       const MAX_SIZE_MB = 10;
         //       const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
-
+    
         //       if (audioBuffer.length > MAX_SIZE_BYTES) {
         //         throw new Error(
         //           `L'audio dépasse la taille maximale de ${MAX_SIZE_MB} Mo.`
         //         );
         //       }
-
+    
         //       const filename = `audio_${Date.now()}_${index}.mp3`;
-        //       const filePath = path.join(audioUploadDir, filename);
-
-        //       //fs.writeFileSync(filePath, audioBuffer); // Écriture en local
+        //       const filePath = `/messages/audios/${filename}`;
+    
         //       return {
-        //         path: `/messages/audios/${filename}`,
+        //         path: filePath,
         //         contentType: "audio/mpeg",
         //       };
         //     })
         //   );
         // }
-
+    
         // Enregistrement du message dans MongoDB
         const newMessage = new Message({
           sender,
@@ -214,24 +207,60 @@ module.exports = (io) => {
           timestamp: new Date(),
           parentId,
         });
-
+    
         const savedMessage = await newMessage.save();
-
+    
         // Notification au destinataire
         const recipientFound = onlineUsers.get(recipient);
+        console.log("const recipientFound ", recipientFound)
+        const senderFound = onlineUsers.get(sender);
+    
         if (recipientFound) {
-          io.to(recipientFound.room).emit("newMessage", {
-            sender,
-            recipient,
-            content,
-            productId,
-            images: processedImages,
-            // audios: processedAudios,
-            timestamp: new Date(),
+          // io.to(roomNameGlobal).emit("newMessage", {
+          //   sender,
+          //   recipient,
+          //   content,
+          //   productId,
+          //   images: processedImages,
+          //   // audios: processedAudios,
+          //   timestamp: new Date(),
+          //   parentId,
+          // });
+    
+          const product = await Product.findById(productId);
+          const formattedTimestamp = getFormattedTimestamp(new Date());
+    
+          io.to(recipientFound.socketId).emit("newListChat", {
+            discussionsMap: {
+              productId: productId,
+              userId: sender,
+              lastMessage: content,
+            },
+            productName: product?.name || "Produit inconnu",
+            productImages: product?.images.map((image) => image.path) || [],
+            userName:
+              senderUser?.username || senderUser?.companyName || "Utilisateur inconnu",
+            userImage:
+              senderUser?.profileImagePath || "/images/defaultUserProfil.jpg",
+            lastMessageTime: formattedTimestamp,
+            productId: productId,
+            userId: sender,
             parentId,
           });
+    
+          const unreadMessages = await Message.find({
+            recipient: recipient,
+            unread: true,
+          });
+          io.to(recipientFound.socketId).emit("updateNotif", {
+            number: unreadMessages.length,
+            allInfo: unreadMessages,
+            room: roomNameGlobal,
+            infoUser: senderUser,
+          });
         }
-
+    
+        // Retourner le message sauvegardé au client émetteur
         callback({ success: true, data: savedMessage });
       } catch (error) {
         console.error("Erreur lors du traitement du message :", error);
@@ -241,7 +270,7 @@ module.exports = (io) => {
         });
       }
     });
-
+    
     function getFormattedTimestamp(timestamp) {
       const timeDiff = Date.now() - new Date(timestamp).getTime();
       if (timeDiff > 24 * 60 * 60 * 1000) {

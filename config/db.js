@@ -15,8 +15,8 @@ const connectDB = async () => {
         process.exit(1);  // Quitter l'application en cas d'échec de la connexion
     }
 }; 
-
-module.exports = { connect: connectDB };
+ 
+module.exports = { connect: connectDB }; 
 
 
 // const mongoose = require('mongoose');

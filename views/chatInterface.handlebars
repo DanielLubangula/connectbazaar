@@ -1971,7 +1971,7 @@ async function sendMessage(audioBuffer = null) {
     productId: productId,
     audios: audiosSend, // Inclure l'audio si présent
     parentId : replyMsgId
-};
+  };
 
 
 
@@ -1985,11 +1985,10 @@ async function sendMessage(audioBuffer = null) {
     parentnode.removeChild(parentMessage)
   }
 
-  console.log('parentMessage', parentMessage)
   if (response.success) {
     console.log('Message envoyé :', response.data);
-
-    if (otherUser) return
+    //console.log("other", otherUser)
+    // if (otherUser) return
     // Afficher le message envoyé dans l'interface
     displayMessage(response.data);
   } else {

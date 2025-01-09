@@ -201,7 +201,8 @@ mapMain.forEach((value, key) => {
 
         // Adapter le nombre de message notification
 socketMain.on("updateNotif", async (data) => {
-
+  console.log("data main", data)
+  console.log("data main room", data.room)
   const allInfo = data.allInfo;
   const infoUser = data.infoUser;
 
