@@ -108,61 +108,232 @@ module.exports = (io) => {
       }
     };
 
+    // socket.on("sendMessage", async (data, callback) => {
+    //   const sender =
+    //     socket.request.session.user?._id || socket.request.session.vendor?._id;
+
+    //   const { recipient, content, images, productId, audios, parentId } = data;
+
+    //   try {
+    //     // Vérification des utilisateurs
+    //     const senderUser =
+    //       (await User.findById(sender)) || (await Vendor.findById(sender));
+    //     const recipientUser =
+    //       (await User.findById(recipient)) || (await Vendor.findById(recipient));
+
+    //     if (!senderUser || !recipientUser) {
+    //       return callback({
+    //         success: false,
+    //         error: "Utilisateur introuvable.",
+    //       });
+    //     }
+
+    //     // Vérification des blocages
+    //     const isSenderBlocked = recipientUser.listNoir.some(
+    //       (blockedUser) => blockedUser.userId.toString() === sender
+    //     );
+    //     const isRecipientBlocked = senderUser.listNoir.some(
+    //       (blockedUser) => blockedUser.userId.toString() === recipient
+    //     );
+
+    //     if (isSenderBlocked || isRecipientBlocked) {
+    //       return callback({
+    //         success: false,
+    //         error: "Communication bloquée.",
+    //       });
+    //     }
+
+    //     // Traitement des images et upload sur S3
+    //     const processedImages = images
+    //       ? await Promise.all(
+    //           images.map(async (imageBuffer, index) => {
+    //             const processedImageBuffer = await sharp(imageBuffer)
+    //               .resize({ width: 320, height: 280 })
+    //               .jpeg({ quality: 80 })
+    //               .toBuffer();
+
+    //             const filename = `messages/images/${Date.now()}_${index}.jpg`;
+    //             const fileUrl = await uploadFileToS3(
+    //               processedImageBuffer,
+    //               filename,
+    //               "image/jpeg"
+    //             );
+
+    //             if (!fileUrl) {
+    //               throw new Error("Échec de l'upload S3 pour l'image.");
+    //             }
+
+    //             return {
+    //               path: fileUrl, // URL retournée par `uploadFileToS3`
+    //               contentType: "image/jpeg",
+    //             };
+    //           })
+    //         )
+    //       : [];
+
+    //     // Traitement des audios (désactivé pour l'instant, à activer si nécessaire)
+    //     // let processedAudios;
+    //     // if (audios && audios.length > 0) {
+    //     //   processedAudios = await Promise.all(
+    //     //     audios.map(async (audioBuffer, index) => {
+    //     //       const MAX_SIZE_MB = 10;
+    //     //       const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+    //     //       if (audioBuffer.length > MAX_SIZE_BYTES) {
+    //     //         throw new Error(
+    //     //           `L'audio dépasse la taille maximale de ${MAX_SIZE_MB} Mo.`
+    //     //         );
+    //     //       }
+
+    //     //       const filename = `audio_${Date.now()}_${index}.mp3`;
+    //     //       const filePath = `/messages/audios/${filename}`;
+
+    //     //       return {
+    //     //         path: filePath,
+    //     //         contentType: "audio/mpeg",
+    //     //       };
+    //     //     })
+    //     //   );
+    //     // }
+
+    //     // Enregistrement du message dans MongoDB
+    //     const newMessage = new Message({
+    //       sender,
+    //       recipient,
+    //       content,
+    //       productId,
+    //       images: processedImages,
+    //       // audios: processedAudios,
+    //       timestamp: new Date(),
+    //       parentId,
+    //     });
+
+    //     const savedMessage = await newMessage.save();
+
+    //     // Notification au destinataire
+    //     const recipientFound = onlineUsers.get(recipient);
+    //     console.log("const recipientFound ", recipientFound)
+    //     const senderFound = onlineUsers.get(sender);
+
+    //     if (recipientFound) {
+    //       io.to(roomNameGlobal).emit("newMessage", {
+    //         sender,
+    //         recipient,
+    //         content,
+    //         productId,
+    //         images: processedImages,
+    //         // audios: processedAudios,
+    //         timestamp: new Date(),
+    //         parentId,
+    //       });
+
+    //       const product = await Product.findById(productId);
+    //       const formattedTimestamp = getFormattedTimestamp(new Date());
+
+    //       io.to(recipientFound.socketId).emit("newListChat", {
+    //         discussionsMap: {
+    //           productId: productId,
+    //           userId: sender,
+    //           lastMessage: content,
+    //         },
+    //         productName: product?.name || "Produit inconnu",
+    //         productImages: product?.images.map((image) => image.path) || [],
+    //         userName:
+    //           senderUser?.username || senderUser?.companyName || "Utilisateur inconnu",
+    //         userImage:
+    //           senderUser?.profileImagePath || "/images/defaultUserProfil.jpg",
+    //         lastMessageTime: formattedTimestamp,
+    //         productId: productId,
+    //         userId: sender,
+    //         parentId,
+    //       });
+
+    //       const unreadMessages = await Message.find({
+    //         recipient: recipient,
+    //         unread: true,
+    //       });
+    //       io.to(recipientFound.socketId).emit("updateNotif", {
+    //         number: unreadMessages.length,
+    //         allInfo: unreadMessages,
+    //         room: roomNameGlobal,
+    //         infoUser: senderUser,
+    //       });
+    //     }
+
+    //     // Retourner le message sauvegardé au client émetteur
+    //     // callback({ success: true, data: savedMessage });
+    //   } catch (error) {
+    //     console.error("Erreur lors du traitement du message :", error);
+    //     callback({
+    //       success: false,
+    //       error: "Erreur lors du traitement du message.",
+    //     });
+    //   }
+    // });
+
     socket.on("sendMessage", async (data, callback) => {
       const sender =
         socket.request.session.user?._id || socket.request.session.vendor?._id;
-    
+
       const { recipient, content, images, productId, audios, parentId } = data;
-    
+      console.log("parentId", parentId);
+      // Vérifier si l'un des utilisateurs est dans la liste noire de l'autre
+      const senderUser =
+        (await User.findById(sender)) || (await Vendor.findById(sender));
+
+      const recipientUser =
+        (await User.findById(recipient)) || (await Vendor.findById(recipient));
+
+      if (!senderUser || !recipientUser) {
+        return callback({
+          success: false,
+          error: "Utilisateur introuvable.",
+        });
+      }
+
+      const isSenderBlocked = recipientUser.listNoir.some(
+        (blockedUser) => blockedUser.userId.toString() === sender
+      );
+      const isRecipientBlocked = senderUser.listNoir.some(
+        (blockedUser) => blockedUser.userId.toString() === recipient
+      );
+
+      if (isSenderBlocked || isRecipientBlocked) {
+        return callback({
+          success: false,
+          error: "communication break",
+        });
+      }
+
       try {
-        // Vérification des utilisateurs
-        const senderUser =
-          (await User.findById(sender)) || (await Vendor.findById(sender));
-        const recipientUser =
-          (await User.findById(recipient)) || (await Vendor.findById(recipient));
-    
-        if (!senderUser || !recipientUser) {
-          return callback({
-            success: false,
-            error: "Utilisateur introuvable.",
-          });
+        // Chemin du sous-dossier pour enregistrer les audios
+        const audioUploadDir = path.join(uploadDirMessage, "audios");
+        if (!fs.existsSync(audioUploadDir)) {
+          fs.mkdirSync(audioUploadDir, { recursive: true }); // Crée le dossier si inexistant
         }
-    
-        // Vérification des blocages
-        const isSenderBlocked = recipientUser.listNoir.some(
-          (blockedUser) => blockedUser.userId.toString() === sender
-        );
-        const isRecipientBlocked = senderUser.listNoir.some(
-          (blockedUser) => blockedUser.userId.toString() === recipient
-        );
-    
-        if (isSenderBlocked || isRecipientBlocked) {
-          return callback({
-            success: false,
-            error: "Communication bloquée.",
-          });
-        }
-    
+
+        // console.log('images', images)
+        // Traiter les images
         // Traitement des images et upload sur S3
         const processedImages = images
           ? await Promise.all(
               images.map(async (imageBuffer, index) => {
                 const processedImageBuffer = await sharp(imageBuffer)
                   .resize({ width: 320, height: 280 })
-                  .jpeg({ quality: 70 })
+                  .jpeg({ quality: 80 })
                   .toBuffer();
-    
+
                 const filename = `messages/images/${Date.now()}_${index}.jpg`;
                 const fileUrl = await uploadFileToS3(
                   processedImageBuffer,
                   filename,
                   "image/jpeg"
                 );
-    
+
                 if (!fileUrl) {
                   throw new Error("Échec de l'upload S3 pour l'image.");
                 }
-    
+
                 return {
                   path: fileUrl, // URL retournée par `uploadFileToS3`
                   contentType: "image/jpeg",
@@ -170,98 +341,129 @@ module.exports = (io) => {
               })
             )
           : [];
-    
-        // Traitement des audios (désactivé pour l'instant, à activer si nécessaire)
-        // let processedAudios;
-        // if (audios && audios.length > 0) {
-        //   processedAudios = await Promise.all(
-        //     audios.map(async (audioBuffer, index) => {
-        //       const MAX_SIZE_MB = 10;
-        //       const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
-    
-        //       if (audioBuffer.length > MAX_SIZE_BYTES) {
-        //         throw new Error(
-        //           `L'audio dépasse la taille maximale de ${MAX_SIZE_MB} Mo.`
-        //         );
-        //       }
-    
-        //       const filename = `audio_${Date.now()}_${index}.mp3`;
-        //       const filePath = `/messages/audios/${filename}`;
-    
-        //       return {
-        //         path: filePath,
-        //         contentType: "audio/mpeg",
-        //       };
-        //     })
-        //   );
-        // }
-    
-        // Enregistrement du message dans MongoDB
+
+        // Traiter les audios uniquement si audios est défini et non vide
+        //console.log("audios.isTrusted:", audios[0]);
+        let processedAudios;
+        if (!audios[0]?.isTrusted) {
+          processedAudios =
+            audios && audios.length > 0
+              ? await Promise.all(
+                  audios.map(async (audioBuffer, index) => {
+                    const MAX_SIZE_MB = 10; // Taille maximale en mégaoctets
+                    const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+                    if (audioBuffer.length > MAX_SIZE_BYTES) {
+                      throw new Error(
+                        `L'audio dépasse la taille maximale de ${MAX_SIZE_MB} Mo.`
+                      );
+                    }
+
+                    const filename = `audio_${Date.now()}_${index}.mp3`;
+                    const filePath = path.join(audioUploadDir, filename);
+
+                    fs.writeFileSync(filePath, audioBuffer);
+
+                    return {
+                      path: `/messages/audios/${filename}`, // Chemin accessible pour le client
+                      contentType: "audio/mpeg",
+                    };
+                  })
+                )
+              : []; // Si aucun audio, retourne un tableau vide
+        }
+
+        // Enregistrer le message dans MongoDB
         const newMessage = new Message({
           sender,
           recipient,
           content,
           productId,
           images: processedImages,
-          // audios: processedAudios,
+          audios: processedAudios,
           timestamp: new Date(),
           parentId,
         });
-    
+
         const savedMessage = await newMessage.save();
-    
-        // Notification au destinataire
+
+        // Émettre le message à l'utilisateur destinataire
         const recipientFound = onlineUsers.get(recipient);
-        console.log("const recipientFound ", recipientFound)
         const senderFound = onlineUsers.get(sender);
-    
+
         if (recipientFound) {
-          // io.to(roomNameGlobal).emit("newMessage", {
-          //   sender,
-          //   recipient,
-          //   content,
-          //   productId,
-          //   images: processedImages,
-          //   // audios: processedAudios,
-          //   timestamp: new Date(),
-          //   parentId,
-          // });
-    
-          const product = await Product.findById(productId);
-          const formattedTimestamp = getFormattedTimestamp(new Date());
-    
+          io.to(roomNameGlobal).emit("newMessage", {
+            sender,
+            recipient,
+            content,
+            productId,
+            images: processedImages,
+            audios: processedAudios,
+            timestamp: new Date(),
+            parentId,
+          });
+        }
+
+        const otherUser = recipient;
+        let discussionsMap = {};
+        const key = `${productId}-${otherUser}`;
+        //console.log(currentUserId, otherUser)
+        // if (otherUser == currentUserId) {
+        //   console.log("in in")
+        //   continue
+        // }
+
+        // Si la discussion n'existe pas, initialiser avec le premier message
+
+        discussionsMap = {
+          productId: productId,
+          userId: otherUser,
+          lastMessage: content,
+        };
+
+        // Mettre à jour avec le dernier message le plus récent
+
+        const product = await Product.findById(productId);
+        const user =
+          (await User.findById(sender)) || (await Vendor.findById(sender));
+
+        const formattedTimestamp = getFormattedTimestamp(new Date());
+
+        // Ici les données sont envoyées chez le destinateur du message afin de faire une mise à jour à temps réel de la liste des utilisateurs du chat
+
+        console.log("recipientFound", recipientFound);
+        if (recipientFound) {
           io.to(recipientFound.socketId).emit("newListChat", {
-            discussionsMap: {
-              productId: productId,
-              userId: sender,
-              lastMessage: content,
-            },
+            discussionsMap,
             productName: product?.name || "Produit inconnu",
             productImages: product?.images.map((image) => image.path) || [],
             userName:
-              senderUser?.username || senderUser?.companyName || "Utilisateur inconnu",
+              user?.username || user?.companyName || "Utilisateur inconnu",
             userImage:
-              senderUser?.profileImagePath || "/images/defaultUserProfil.jpg",
+              user?.profileImagePath || "/images/defaultUserProfil.jpg",
             lastMessageTime: formattedTimestamp,
             productId: productId,
             userId: sender,
             parentId,
           });
-    
-          const unreadMessages = await Message.find({
-            recipient: recipient,
-            unread: true,
+
+          const numberNotifAcceuil = await Message.find({
+            recipient: recipient, // Destinataire (l'utilisateur connecté)
+            unread: true, // Seulement les messages non lus
           });
+
           io.to(recipientFound.socketId).emit("updateNotif", {
-            number: unreadMessages.length,
-            allInfo: unreadMessages,
+            number: numberNotifAcceuil.length,
+            allInfo: numberNotifAcceuil,
             room: roomNameGlobal,
             infoUser: senderUser,
           });
         }
-    
+
+        //console.log(savedMessage);
+
         // Retourner le message sauvegardé au client émetteur
-        callback({ success: true, data: savedMessage });
+        // callback({ success: true, data: savedMessage });
       } catch (error) {
         console.error("Erreur lors du traitement du message :", error);
         callback({
@@ -270,7 +472,7 @@ module.exports = (io) => {
         });
       }
     });
-    
+
     function getFormattedTimestamp(timestamp) {
       const timeDiff = Date.now() - new Date(timestamp).getTime();
       if (timeDiff > 24 * 60 * 60 * 1000) {
@@ -595,7 +797,7 @@ module.exports = (io) => {
         const user =
           (await User.findById(dataId)) || (await Vendor.findById(dataId));
         const lastSeen = user?.lastSeen;
-        socket.emit("userStatusResp", { 
+        socket.emit("userStatusResp", {
           userId: dataId,
           status: "Hors ligne",
           lastSeen,

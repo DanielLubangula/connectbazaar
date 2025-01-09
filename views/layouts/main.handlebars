@@ -194,15 +194,15 @@ mapMain.set("2",{{{json user}}})
 
 mapMain.forEach((value, key) => {
   if (value){
-    console.log(value)
+   // console.log(value)
     utilisateurIdMain = value._id
   }
 })
 
         // Adapter le nombre de message notification
 socketMain.on("updateNotif", async (data) => {
-  console.log("data main", data)
-  console.log("data main room", data.room)
+  //console.log("data main", data)
+  //console.log("data main room", data.room)
   const allInfo = data.allInfo;
   const infoUser = data.infoUser;
 
@@ -235,7 +235,7 @@ socketMain.on("updateNotif", async (data) => {
   const message = formatMessage(latestNotification, contentType);
 
   // Mettre à jour le compteur de notifications
-  console.log('numberNotif', document.querySelector('.numberNotif'))
+  //console.log('numberNotif', document.querySelector('.numberNotif'))
    if (document.querySelector('.numberNotif')) document.querySelector('.numberNotif').innerHTML = data.number;
 
    // Réajuster le nom au cas où il s'agit d'un acheteur
@@ -267,7 +267,7 @@ function showNotification(name, message, link, imagePath) {
 
   // Afficher l'image de profil si elle est disponible
   if (imagePath) {
-    console.log('.profile-pic', document.querySelector('.profile-pic'))
+    //console.log('.profile-pic', document.querySelector('.profile-pic'))
     //profilePic.style.display = "none";
     notification.querySelector('.profile-pic').innerHTML = `<img src="${imagePath}" alt="${name}" />`;
   } else {

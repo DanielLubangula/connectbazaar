@@ -65,6 +65,7 @@
     font-size: 12px;
     font-weight: bold;
     animation: bounce 1s infinite;
+    text-align: center;
 }
 
 @keyframes bounce {

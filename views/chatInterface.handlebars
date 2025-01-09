@@ -1956,7 +1956,7 @@ fetchChatMessages()
 
 async function sendMessage(audioBuffer = null) {
   const messageText = messageInput.value.trim();
-  if (!messageText && attachedFiles.length === 0 && audioBuffer.isTrusted) return;
+  if (!messageText && attachedFiles.length === 0 && audioBuffer?.isTrusted) return;
 
   const userId = document.querySelector('.user-name').getAttribute('data-userId')
   const productId = document.querySelector('.product').getAttribute('data-productId')

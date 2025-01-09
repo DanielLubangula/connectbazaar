@@ -37,4 +37,4 @@ const MessageSchema = new mongoose.Schema({
   isDelete : { type : Boolean , default : false}
 });
 
-module.exports = mongoose.model('Message', MessageSchema);
+module.exports = mongoose.model('Message1', MessageSchema);
