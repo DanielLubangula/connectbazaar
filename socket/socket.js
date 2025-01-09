@@ -226,7 +226,7 @@ module.exports = (io) => {
             content,
             productId,
             images: processedImages,
-            audios: processedAudios,
+            // audios: processedAudios,
             timestamp: new Date(),
             parentId,
           });
