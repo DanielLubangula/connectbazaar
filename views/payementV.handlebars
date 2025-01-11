@@ -1,0 +1,120 @@
+<html><head><base href="/"><!--for consistency-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page de Paiement</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  }
+
+  .payment-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+    margin-top: 20px;
+  }
+
+  button:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+  }
+
+  .amount {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .secure-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    color: #666;
+  }
+</style>
+</head>
+<body><div class="payment-container">
+  <h2>Paiement Sécurisé</h2>
+  <div class="amount">Montant: 1000</div>
+
+  <form id="paymentForm" method="POST">
+    <input type="hidden" name="amount" value="1000">
+    <input type="hidden" name="transactionId" value="{{transactionId}}">
+    <input type="hidden" name="description" value="Paiement de produit">
+    <input type="hidden" name="customerName" value="{{customerName}}">
+    <input type="hidden" name="customerEmail" value="{{customerEmail}}">
+    <button type="submit">Payer maintenant</button>
+  </form>
+
+  <div class="secure-badge">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+      <path d="M7 11V7a5 5 0 0110 0v4"></path>
+    </svg>
+    Paiement sécurisé
+  </div>
+</div>
+
+<script>
+  document.querySelector('#paymentForm').addEventListener('submit', async function (e) {
+    e.preventDefault(); // Empêche le rechargement de la page
+
+    const form = this;
+    const button = form.querySelector('button');
+    button.disabled = true; // Désactive le bouton pour éviter les doubles soumissions
+    button.textContent = 'Traitement en cours...';
+
+    const formData = new FormData(form); // Récupère les données du formulaire
+    const data = Object.fromEntries(formData.entries()); // Convertit en objet JSON
+
+    try {
+      // Envoie les données au serveur
+      const response = await fetch('/deliver/initiate-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const result = await response.json(); // Parse la réponse JSON
+        if (result.payment_url) {
+          // Redirige vers l'URL de paiement
+          window.location.href = result.payment_url;
+        } else {
+          throw new Error('URL de paiement non disponible');
+        }
+      } else {
+        throw new Error('Erreur lors de la soumission du formulaire');
+      }
+    } catch (error) {
+      // Affiche une erreur si quelque chose tourne mal
+      alert(`Erreur : ${error.message}`);
+      button.disabled = false; // Réactive le bouton
+      button.textContent = 'Payer maintenant';
+    }
+  });
+</script>
+
+</body>
+</html>

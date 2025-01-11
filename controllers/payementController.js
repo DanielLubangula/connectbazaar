@@ -1,5 +1,78 @@
 // controllers/paymentController.js
  const Payment = require('../models/payement');
+ const cinetpayConfig = require('../config/cinetpy');
+ const axios = require('axios')
+
+ exports.initiatePayment = async (req, res) => {
+    const { amount, description, transactionId, currency, customerName, customerEmail } = req.body;
+    console.log("Arrivé", req.body)
+
+    const paymentData = {
+        apikey: cinetpayConfig.apiKey,
+        site_id: cinetpayConfig.siteId,
+        transaction_id: transactionId,
+        amount,
+        currency: currency || "CDF", // Default to XOF
+        description,
+        return_url: "https://connectbazaar.onrender.com/deliver/payment-success",
+        notify_url: "https://connectbazaar.onrender.com/deliver/payment-notify",
+        customer_name: customerName,
+        customer_email: customerEmail,
+        mode : "PRODUCTION"
+    };
+
+    try {
+        const response = await axios.post(cinetpayConfig.baseUrl, paymentData);
+        if (response.data && response.data.code === '201') {
+            res.json({ payment_url: response.data.data.payment_url });
+        } else {
+            res.status(400).json({ error: response.data.message || "Erreur lors de l'initialisation du paiement" });
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Erreur serveur", details: error.message });
+        console.log(error.message)
+    }
+};
+
+exports.payementV = (req, res) => {
+    res.render('payementV', {
+        transactionId: `TXN-${Date.now()}`, // Génère un ID unique basé sur l'horodatage
+        customerName: req.session.vendor?.companyName ,
+        customerEmail: req.session.vendor?.email 
+    });
+}
+
+exports.paymentNotify = (req, res) => {
+    const { transaction_id, status, message } = req.body;
+
+    // Vérifiez le statut du paiement et mettez à jour votre base de données
+    console.log("Traitement en cas de succès")
+    if (status === 'SUCCESS') {
+        // Traitement en cas de succès
+    } else {
+        // Gestion des erreurs
+    }
+
+    res.status(200).send('Notification reçue');
+}
+exports.paymentNotify = (req, res) => {
+    const { transaction_id, status, message } = req.body;
+
+    // Vérifiez le statut du paiement et mettez à jour votre base de données
+    console.log("Traitement en cas de succès")
+    if (status === 'SUCCESS') {
+        // Traitement en cas de succès
+    } else {
+        // Gestion des erreurs
+    }
+
+    res.status(200).send('Notification reçue');
+}
+exports.paymentSuccess = (req, res) => {
+    console.log('page succès')
+    //res.render('payment-success', { message: 'Paiement réussi !' });
+}
+
 
 // Obtenir tous les paiements
 exports.getPayments = async (req, res) => {

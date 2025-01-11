@@ -304,6 +304,14 @@ router.get("/api/countries", apiController.allContries)
 // Route pour récupérer le nombre de notification
 router.post("/api/numberNotifMessage", userController.numberNotifMessage)
 
+router.post('/initiate-payment/', paymentController.initiatePayment)
+
+router.get('/payementV', paymentController.payementV)
+
+router.post('/payment-notify', paymentController.paymentNotify)
+
+router.get('/payment-success', paymentController.paymentSuccess)
+
 function checkAuthentication(req, res, next) {
   if (req.session.user || req.session.vendor) {
     // Si une session existe (user ou vendor), continuer
