@@ -280,66 +280,73 @@ exports.reinitialise = (req, res) => {
 //   }
 // };
 
+
 exports.traitementMotdepasseoublie = async (req, res) => {
   const { email } = req.body;
 
+  if (!email) {
+    return res.json({
+      message: 'Veuillez fournir une adresse e-mail valide.',
+    });
+  }
+
   try {
-    console.log(email);
     // Vérifier si l'utilisateur existe
-    const vendor = await Vendor.findOne({ email });
-    if (!vendor) {
-      return res.status(404).json({ message: "Aucun utilisateur trouvé avec cet e-mail." });
+    const user = await Vendor.findOne({ email });
+    if (!user) {
+      return res.json({
+        error: "Aucun utilisateur trouvé avec cette adresse e-mail.",
+      });
     }
 
-    // Générer un token sécurisé
-    const token = crypto.randomBytes(20).toString('hex');
+    // Générer un jeton unique et sécurisé
+    const resetToken = crypto.randomBytes(32).toString('hex');
 
-    // Enregistrer le token et son expiration dans l'utilisateur
-    vendor.resetPasswordToken = token;
-    vendor.resetPasswordExpires = Date.now() + 3600000; // 1 heure
-    await vendor.save();
+    // Ajouter le jeton dans la base de données avec une expiration (1 heure)
+    const resetTokenExpires = Date.now() + 3600000; // 1 heure 
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = resetTokenExpires;
+    await user.save();
 
-    // Créer le lien de réinitialisation
-    const resetUrl = `http://${req.headers.host}/deliver/seller/reset-password/${token}`;
+    // Créer un lien de réinitialisation
+    const resetLink = `https://votre-domaine.com/reset-password/${resetToken}`;
 
-    // Configurer le transporteur Nodemailer pour Amazon SES
-    const transporter = nodemailer.createTransport({
-      host: 'email-smtp.eu-north-1.amazonaws.com', // Point de terminaison SES
-      port: 587, // Port SMTP standard pour STARTTLS
-      secure: false, // Utiliser STARTTLS
-      auth: {
-        user: process.env.AWS_USER_SMTP, // ID d'utilisateur SMTP
-        pass: process.env.AWS_USER_SMTP_PASSWORD, // Mot de passe SMTP
+    // Envoi via Formspree
+    const formspreeResponse = await fetch('https://formspree.io/f/xlddawaa', {
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
+      body: JSON.stringify({
+        email,
+        message: `Bonjour, voici le lien pour réinitialiser votre mot de passe : ${resetLink}. Ce lien expirera dans 1 heure.`,
+      }),
     });
-  
-    // Définir les options de l'email
-    const mailOptions = {
-      from: '"ConnectBazaar" <connectbazaar01@gmail.com>', // Adresse de l'expéditeur (vérifiée dans SES)
-      to: email, // Destinataire
-      subject: 'Réinitialisation de mot de passe',
-      html: `
-        <p>Vous avez demandé une réinitialisation de votre mot de passe.</p>
-        <p>Cliquez sur le lien suivant pour créer un nouveau mot de passe :</p>
-        <a href="${resetUrl}">${resetUrl}</a>
-      `,
-    };
 
-    // Envoyer l'email
-    await transporter.sendMail(mailOptions);
-
-    res.status(200).json({ message: "E-mail de réinitialisation envoyé !" });
-  } catch (err) {
-    console.error("Erreur lors de l'envoi de l'e-mail de réinitialisation : ", err);
-    res.status(500).json({ message: "Erreur serveur." });
+    if (formspreeResponse.ok) {
+      res.json({
+        success: `Un lien de réinitialisation a été envoyé à ${email}.`,
+      });
+    } else {
+      res.json({
+        error: 'Une erreur est survenue lors de l\'envoi de l\'email. Veuillez réessayer.',
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.json({
+      error: 'Erreur serveur. Veuillez réessayer plus tard.',
+    });
   }
 };
 
 
 
+ 
 
 exports.resetPassword = async (req, res) => {
-  const { token } = req.params;
+  const { token } = req.params; 
   try {
     const vendor = await Vendor.findOne({
       resetPasswordToken: token,

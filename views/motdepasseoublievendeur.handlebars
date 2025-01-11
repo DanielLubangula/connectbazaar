@@ -120,73 +120,100 @@
 </style>
 </head>
 <body>
-    {{!-- <div class="container">
+    <div class="container">
         <div class="icon">
             <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
         </div>
-        <h1>Mot de passe oublié ?</h1>
+        <h1>Mot de passe oublié ?</h1>
         <p>Entrez votre adresse e-mail pour réinitialiser votre mot de passe</p>
-        <form id="resetForm" action="/deliver/seller/forgot-password" method="POST">
+        <form id="resetForm">
             <div class="form-group">
                 <input type="email" id="email" name="email" required placeholder="Votre adresse e-mail">
             </div>
-            <button type="submit">Envoyer le lien de réinitialisation</button>
+            <button type="submit" id="submitButton">Envoyer le lien de réinitialisation</button>
         </form>
         <div id="message" class="message"></div>
-    </div> --}}
-
-    <div class="container">
-    <div class="icon">
-        <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-        </svg>
-    </div>
-    <h1>Mot de passe oublié ?</h1>
-    <p>Entrez votre adresse e-mail pour réinitialiser votre mot de passe</p>
-    <form id="resetForm" action="/deliver/seller/forgot-password" method="POST">
-        <div class="form-group">
-            <input type="email" id="email" name="email" required placeholder="Votre adresse e-mail">
+        <!-- Spinner caché par défaut -->
+        <div id="spinner" style="display: none; text-align: center; margin-top: 10px;">
+            <img src="/images/spinner.gif" alt="Chargement..." style="width: 50px; height: 50px; margin : auto">
         </div>
-        <button type="submit">Envoyer le lien de réinitialisation</button>
-    </form>
-    <div id="message" class="message"></div>
-</div>
-
+    </div>
 
     <script>
-  const form = document.getElementById('resetForm');
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
 
-    try {
-      const res = await fetch(form.action, {
+          // Fonction pour valider l'adresse e-mail
+    function validateEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+
+  document.getElementById('resetForm').addEventListener('submit', function (event) {
+    event.preventDefault(); // Empêche le rechargement de la page
+
+    const emailInput = document.getElementById('email');
+    const messageDiv = document.getElementById('message');
+    const submitButton = document.getElementById('submitButton');
+    const spinner = document.getElementById('spinner');
+    const email = emailInput.value.trim();
+
+    // Réinitialiser les messages
+    messageDiv.textContent = '';
+    messageDiv.style.color = '';
+
+    // Validation de l'e-mail
+    if (!validateEmail(email)) {
+        messageDiv.textContent = 'Veuillez entrer une adresse e-mail valide.';
+        messageDiv.style.color = 'red';
+        return;
+    }
+
+    // Afficher le spinner et masquer le bouton
+    spinner.style.display = 'block';
+    submitButton.style.display = 'none';
+
+    // Préparation des données
+    const requestData = { email };
+
+    // Envoi des données via Fetch
+    fetch('/deliver/seller/forgot-password', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
-      });
+        body: JSON.stringify(requestData),
+    })
+        .then((response) => response.json()) // Traite toutes les réponses JSON
+        .then((data) => {
+            if (data.success) {
+                messageDiv.textContent = data.success;
+                messageDiv.style.color = 'green';
+                emailInput.value = ''; // Réinitialiser le champ
+            } else if (data.error) {
+                messageDiv.textContent = data.error;
+                messageDiv.style.color = 'red';
+            } else {
+                messageDiv.textContent = 'Réponse inattendue du serveur.';
+                messageDiv.style.color = 'orange';
+            }
+        })
+        .catch((error) => {
+            messageDiv.textContent = 'Erreur réseau. Veuillez réessayer.';
+            messageDiv.style.color = 'red';
+        })
+        .finally(() => {
+            // Réafficher le bouton et cacher le spinner
+            spinner.style.display = 'none';
+            submitButton.style.display = 'block';
+            messageDiv.style.display = 'block';
+        });
+});
 
-      const messageElement = document.getElementById('message');
-      if (res.ok) {
-        messageElement.innerHTML = 'Un lien de réinitialisation vous a été envoyé !';
-        messageElement.style.color = 'green';
-      } else {
-        const result = await res.json();
-        messageElement.innerHTML = result.message || 'Une erreur est survenue.';
-        messageElement.style.color = 'red';
-      }
-    } catch (err) {
-      console.error('Erreur lors de la soumission :', err);
-      document.getElementById('message').innerHTML = 'Erreur lors de la soumission du formulaire.';
-    }
-  });
 </script>
 
 </body>
+
+
 </html>

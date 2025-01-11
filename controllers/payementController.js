@@ -4,35 +4,66 @@
  const axios = require('axios')
 
  exports.initiatePayment = async (req, res) => {
-    const { amount, description, transactionId, currency, customerName, customerEmail } = req.body;
-    console.log("Arrivé", req.body)
-
-    const paymentData = {
-        apikey: cinetpayConfig.apiKey,
-        site_id: cinetpayConfig.siteId,
-        transaction_id: transactionId,
-        amount,
-        currency: currency || "CDF", // Default to XOF
-        description,
-        return_url: "https://connectbazaar.onrender.com/deliver/payment-success",
-        notify_url: "https://connectbazaar.onrender.com/deliver/payment-notify",
-        customer_name: customerName,
-        customer_email: customerEmail,
-        mode : "PRODUCTION"
-    };
-
     try {
+        const { amount, description, transactionId, currency, customerName, customerEmail } = req.body;
+
+        // Validation des paramètres
+        if (!amount || isNaN(amount) || amount <= 0) {
+            return res.status(400).json({ error: "Le montant est invalide ou manquant." });
+        }
+
+        if (!transactionId || typeof transactionId !== "string") {
+            return res.status(400).json({ error: "L'ID de la transaction est invalide ou manquant." });
+        }
+
+        if (!description || typeof description !== "string") {
+            return res.status(400).json({ error: "La description est invalide ou manquante." });
+        }
+
+        if (!customerName || typeof customerName !== "string") {
+            return res.status(400).json({ error: "Le nom du client est invalide ou manquant." });
+        }
+
+        if (customerEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail)) {
+            return res.status(400).json({ error: "L'adresse e-mail du client est invalide." });
+        }
+
+        const paymentData = {
+            apikey: cinetpayConfig.apiKey,
+            site_id: cinetpayConfig.siteId,
+            transaction_id: transactionId,
+            amount,
+            currency: currency || "CDF", // Par défaut, utilise "CDF"
+            description,
+            return_url: "https://connectbazaar.onrender.com/deliver/payment-success",
+            notify_url: "https://connectbazaar.onrender.com/deliver/payment-notify",
+            customer_name: customerName,
+            customer_email: customerEmail || "", // Mettre un champ vide si email non fourni
+            mode: "PRODUCTION"
+        };
+
+        console.log("Données envoyées à CinetPay :", paymentData);
+
+        // Appel à l'API CinetPay
         const response = await axios.post(cinetpayConfig.baseUrl, paymentData);
-        if (response.data && response.data.code === '201') {
+
+        // Vérification de la réponse de CinetPay
+        if (response.data && response.data.code === '201' && response.data.data.payment_url) {
+            console.log("Réponse réussie de CinetPay :", response.data);
             res.json({ payment_url: response.data.data.payment_url });
         } else {
-            res.status(400).json({ error: response.data.message || "Erreur lors de l'initialisation du paiement" });
+            console.error("Erreur de CinetPay :", response.data);
+            res.status(400).json({
+                error: response.data.message || "Erreur lors de l'initialisation du paiement.",
+                details: response.data
+            });
         }
     } catch (error) {
-        res.status(500).json({ error: "Erreur serveur", details: error.message });
-        console.log(error.message)
+        console.error("Erreur serveur :", error.message);
+        res.status(500).json({ error: "Erreur interne du serveur.", details: error.message });
     }
 };
+
 
 exports.payementV = (req, res) => {
     res.render('payementV', {
@@ -55,19 +86,19 @@ exports.paymentNotify = (req, res) => {
 
     res.status(200).send('Notification reçue');
 }
-exports.paymentNotify = (req, res) => {
-    const { transaction_id, status, message } = req.body;
+// exports.paymentNotify = (req, res) => {
+//     const { transaction_id, status, message } = req.body;
 
-    // Vérifiez le statut du paiement et mettez à jour votre base de données
-    console.log("Traitement en cas de succès")
-    if (status === 'SUCCESS') {
-        // Traitement en cas de succès
-    } else {
-        // Gestion des erreurs
-    }
+//     // Vérifiez le statut du paiement et mettez à jour votre base de données
+//     console.log("Traitement en cas de succès")
+//     if (status === 'SUCCESS') {
+//         // Traitement en cas de succès
+//     } else {
+//         // Gestion des erreurs
+//     }
 
-    res.status(200).send('Notification reçue');
-}
+//     res.status(200).send('Notification reçue');
+// }
 exports.paymentSuccess = (req, res) => {
     console.log('page succès')
     //res.render('payment-success', { message: 'Paiement réussi !' });

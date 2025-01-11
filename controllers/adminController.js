@@ -183,62 +183,77 @@ exports.payement = async (req, res) => {
   }
 };
 
-// Configuration de stockage
-const storage = multer.memoryStorage()
+const multerS3 = require("multer-s3");
+const { S3Client, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+const s3 = require("../config/aws");
 
-const upload = multer({ 
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
-}).single('proof');
-
-// Dossier de sauvegarde des images
-const uploadDir =path.join(__dirname, "../uploads/preuvePayement");
-
+// Configuration de Multer pour S3
+const uploadImg = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.AWS_BUCKET_NAME, // Nom de votre bucket
+    metadata: (req, file, cb) => {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: (req, file, cb) => {
+      const filename = `preuvePayement/${Date.now()}-${Math.round(
+        Math.random() * 1e9
+      )}.jpg`; // Générer un nom unique
+      cb(null, filename);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limite de 5 Mo
+}).single("proof");
 
 // Soumettre un paiement avec preuve (image)
 exports.gestionPayement = async (req, res) => {
-    upload(req, res, async (err) => {
-        if (err) {
-            console.error("Erreur Multer:", err);
-            if (err.code === 'LIMIT_FILE_SIZE') {
-                return res.status(413).json({ message: "Le fichier est trop volumineux (max 5MB)." });
-            }
-            return res.status(400).json({ message: err.message });
-        }
+  uploadImg(req, res, async function (err) {
+    if (err) {
+      console.error("Erreur Multer:", err);
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(413).json({ message: "Le fichier est trop volumineux (max 5MB)." });
+      }
+      return res.status(400).json({ message: err.message });
+    }
 
-        if (!req.file) {
-            return res.status(400).json({ message: "Veuillez télécharger une preuve de paiement." });
-        }
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "Veuillez télécharger une preuve de paiement." });
+      }
 
-        const { name, email, amount, phone} = req.body;
-        console.log(req.body)
+      const { name, email, amount, phone } = req.body;
+      console.log(req.body);
 
-        try {
-            // Construction du chemin complet
-            const filename = `image_${Date.now()}_.jpg`;
-            const filePath = path.join(uploadDir, filename);
+      // Envoie dans l'email
+      // Envoi via Formspree
+      const formspreeResponse = await fetch('https://formspree.io/f/xlddawaa', {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          name,
+          amount,
+          phone,
+          message: `payement abonnement connectbazaar`,
+        }),
+      });
 
-            // Traitement et compression avec sharp
-            const processedImageBuffer = await sharp(req.file.buffer)
-              .resize({ width: 250, height: 250 }) // Redimensionner l'image
-              .jpeg({ quality: 90 }) // Compresser l'image en qualité 10
-              .toBuffer();
+      const payment = new Payment({
+        phone,
+        name,
+        email,
+        amount,
+        paymentProof: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${req.file.key}` // URL complète de l'image
+      });
+      await payment.save();
 
-            // Enregistrer le fichier traité sur le disque
-            fs.writeFileSync(filePath, processedImageBuffer);
-
-            const payment = new Payment({
-                phone,
-                name,
-                email,
-                amount,
-                paymentProof: `/preuvePayement/${path.basename(filename)}`, // Stocke le chemin complet
-            });
-            await payment.save();
-            res.status(201).json({ message: "Paiement soumis avec succès !" });
-        } catch (dbError) {
-            console.error("Erreur lors de l'enregistrement en base de données :", dbError);
-            res.status(500).json({ message: "Erreur lors de l'enregistrement du paiement." });
-        }
-    });
+      res.status(201).json({ message: "Paiement soumis avec succès !" });
+    } catch (dbError) {
+      console.error("Erreur lors de l'enregistrement en base de données :", dbError);
+      res.status(500).json({ message: "Erreur lors de l'enregistrement du paiement." });
+    }
+  });
 };

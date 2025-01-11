@@ -4,6 +4,12 @@
   .one{
     color: #f1c40f;
   }
+
+  .column{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
 </style>
 <link rel="stylesheet" href="/style/acceuil.css">
 <script>
@@ -80,7 +86,7 @@ tailwind.config = {
       {{/if}}
 
       <!-- Profil utilisateur ou espace vendeur -->
-      <li>
+      <li class="column">
         {{#if user}}
         <div id="userStatus" class="user-status">
           <a href="/deliver/profil">

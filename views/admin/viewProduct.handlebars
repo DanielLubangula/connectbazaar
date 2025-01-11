@@ -187,6 +187,7 @@ body {
         productContainer.innerHTML = ""; // Réinitialiser le contenu
 
         products.forEach((product) => {
+          console.log("product", product)
           const productRow = document.createElement("div");
           productRow.className = "product-row";
 
@@ -205,8 +206,8 @@ body {
               <p class="price">${product.price} €</p>
             </div>
             <div class="seller-info">
-              <img src="${product.user.profileImagePath}" alt="Photo Vendeur" class="seller-photo">
-              <span>${product.user.companyName}</span>
+              <img src="${product?.user?.profileImagePath ? product?.user?.profileImagePath : "/images/defaultUserProfil.jpg" }" alt="Photo Vendeur" class="seller-photo">
+              <span>${product?.user?.companyName ? product?.user?.companyName : "Not name"}</span>
             </div>
             <button class="btn-delete" onclick="deleteProduct('${product._id}')">Supprimer</button>
           `;

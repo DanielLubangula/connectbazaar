@@ -948,7 +948,7 @@ const ApiProduct = async (orgine) => {
     // Afficher les produits dans le tableau
     if (orgine !== "app1") {
       console.log("app1")
-      productTable.innerHTML = "";
+      document.getElementById("productTable").innerHTML = "";
       scrollInfinite = true;
     }
 

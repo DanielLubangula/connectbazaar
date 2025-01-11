@@ -247,91 +247,90 @@
 
      
 <script>
-     const baseURL =
-          window.location.origin.includes('localhost')
+    const baseURL =
+        window.location.origin.includes('localhost')
             ? 'http://localhost:5000'
             : 'https://connectbazaar.onrender.com';
 
-    const API_URL = await fetch(`${baseURL}/deliver/api/findAlluser`);
-    //const API_URL = "http://192.168.43.14:5000/deliver/api/findAlluser";
-    const socket = io()
-    
-    socket.on('userConnect', (nbrUser) => {
-        console.log(nbrUser)
-      document.getElementById('userConnect').innerHTML = nbrUser
-    })
-    // Charger les utilisateurs
-    async function loadUsers() {
-      const response = await fetch(`${API_URL}`);
-      const users = await response.json();
-    
-      // Statistiques
-      const totalUsers = users.length;
-      const totalBuyers = users.filter(u => u.type === "Acheteur").length;
-      const totalSellers = users.filter(u => u.type === "vendeur").length;
-    
-      document.getElementById("totalUsers").textContent = totalUsers;
-      document.getElementById("totalBuyers").textContent = totalBuyers;
-      document.getElementById("totalSellers").textContent = totalSellers;
-    
-      // Tableau des utilisateurs
-      const tbody = document.getElementById("userTableBody");
-      tbody.innerHTML = "";
-    
-      users.forEach((user, index) => {
-    
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${user._id}</td>
-          <td>${user.username || user.companyName}</td>
-          <td>${user.email}</td>
-          <td><span class="badge ${user.type==="vendeur" ? "badge-seller" : "badge-buyer"}">${user.type === "vendeur" ? "Vendeur" :  "Acheteur"}</span></td>
-          <td class="${user.status === "active" ? "blue" : "red"}">${user.status === "active" ? "Actif" : "Bloqué"}</td>
-          <td>
-            <button onclick="toggleUserStatus('${user._id}')" class="action-btn ${user.status === "active" ? "btn-block" : ""}">
-              ${user.status === "active" ? "Bloquer" : "Débloquer"}
-            </button>
-            <button onclick="deleteUser('${user._id}')" class="action-btn btn-delete">Supprimer</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
+    // Charger les données depuis l'API
+    async function initializeApp() {
+        try {
+            const response = await fetch(`${baseURL}/deliver/api/findAlluser`);
+            const users = await response.json();
+
+            // Statistiques
+            const totalUsers = users.length;
+            const totalBuyers = users.filter(u => u.type === "Acheteur").length;
+            const totalSellers = users.filter(u => u.type === "vendeur").length;
+
+            document.getElementById("totalUsers").textContent = totalUsers;
+            document.getElementById("totalBuyers").textContent = totalBuyers;
+            document.getElementById("totalSellers").textContent = totalSellers;
+
+            // Tableau des utilisateurs
+            const tbody = document.getElementById("userTableBody");
+            tbody.innerHTML = "";
+
+            users.forEach((user, index) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${user._id}</td>
+                    <td>${user.username || user.companyName}</td>
+                    <td>${user.email}</td>
+                    <td><span class="badge ${user.type === "vendeur" ? "badge-seller" : "badge-buyer"}">${user.type === "vendeur" ? "Vendeur" : "Acheteur"}</span></td>
+                    <td class="${user.status === "active" ? "blue" : "red"}">${user.status === "active" ? "Actif" : "Bloqué"}</td>
+                    <td>
+                        <button onclick="toggleUserStatus('${user._id}')" class="action-btn ${user.status === "active" ? "btn-block" : ""}">
+                            ${user.status === "active" ? "Bloquer" : "Débloquer"}
+                        </button>
+                        <button onclick="deleteUser('${user._id}')" class="action-btn btn-delete">Supprimer</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (error) {
+            console.error("Erreur lors du chargement des utilisateurs :", error);
+        }
     }
-    
+
     // Bloquer/Débloquer un utilisateur
     async function toggleUserStatus(userId) {
-      console.log('ICI', userId)
-      await fetch(`${API_URL}/users/${userId}/toggle-status`, { method: "PUT" });
-      loadUsers();
+        try {
+            await fetch(`${baseURL}/deliver/api/users/${userId}/toggle-status`, { method: "PUT" });
+            initializeApp();
+        } catch (error) {
+            console.error("Erreur lors du changement de statut de l'utilisateur :", error);
+        }
     }
-    
+
     // Supprimer un utilisateur
     async function deleteUser(userId) {
-      if (confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
-        await fetch(`${API_URL}/users/${userId}`, { method: "DELETE" });
-        loadUsers();
-      }
-    }
-    
-    // Charger les données au démarrage
-    document.addEventListener("DOMContentLoaded", loadUsers);
-
-      // Événement sur le champ de saisie
-    emailFilter.addEventListener('input', () => {
-      const filterValue = emailFilter.value.trim().toLowerCase(); // Récupère la valeur du champ
-      const rows = document.querySelector('table').getElementsByTagName('tr'); // Toutes les lignes du tableau
-
-      for (let row of rows) {
-        const emailCell = row.cells[2]; // Colonne des e-mails
-        if (emailCell) {
-          const emailText = emailCell.textContent.trim().toLowerCase(); // Valeur de l'email dans la cellule
-          // Afficher la ligne si l'e-mail contient la valeur saisie
-          if (emailText.includes(filterValue)) {
-            row.style.display = ''; // Affiche la ligne
-          } else {
-            row.style.display = 'none'; // Masque la ligne
-          }
+        if (confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
+            try {
+                await fetch(`${baseURL}/deliver/api/users/${userId}`, { method: "DELETE" });
+                initializeApp();
+            } catch (error) {
+                console.error("Erreur lors de la suppression de l'utilisateur :", error);
+            }
         }
-      }
+    }
+
+    // Charger les données au démarrage
+    document.addEventListener("DOMContentLoaded", initializeApp);
+
+    // Filtrer par email
+    const emailFilter = document.getElementById('emailFilter');
+    emailFilter.addEventListener('input', () => {
+        const filterValue = emailFilter.value.trim().toLowerCase();
+        const rows = document.querySelector('table').getElementsByTagName('tr');
+
+        for (let row of rows) {
+            const emailCell = row.cells[2];
+            if (emailCell) {
+                const emailText = emailCell.textContent.trim().toLowerCase();
+                row.style.display = emailText.includes(filterValue) ? '' : 'none';
+            }
+        }
     });
-    </script>
+</script>
+
