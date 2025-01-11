@@ -87,14 +87,14 @@ tailwind.config = {
             <img src="{{user.profileImagePath}}" alt="Photo de profil" class="user-avatar" onerror="this.src='/images/defaultUserProfil.jpg';">
           </a>
           <span class="status-indicator"></span>&nbsp;&nbsp;
-          <span style="color: whitesmoke;">{{user.username}}</span>
+          <span style="color: whitesmoke; font-size : 11px">{{user.username}}</span>
         </div>
         {{else if vendor}}
             <a href="/deliver/profilVendor">
               <img src="{{vendor.profileImagePath}}" alt="Photo de profil" class="user-avatar" onerror="this.src='/images/defaultUserProfil.jpg';">
             </a>
             <span class="status-indicator"></span>&nbsp;&nbsp;
-          <span style="color: whitesmoke;">{{vendor.companyName}}</span>
+          <span style="color: whitesmoke; font-size : 11px">{{vendor.companyName}}</span>
         {{!-- <a href="/deliver/productVendor" class="vendor-icon">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
@@ -117,8 +117,8 @@ tailwind.config = {
   <!-- Début Présentation du site -->
  <section class="hero" role="img" aria-label="Image générée par IA d'un vendeur et d'un acheteur discutant avec enthousiasme">
   <div class="hero-content">
-    <h1>Bienvenue sur ConnectBazaar</h1>
-    <p class="hero-subtitle">La plateforme qui rapproche vendeurs et acheteurs</p>
+    <h1 class="fontS30">Bienvenue sur ConnectBazaar</h1>
+    <p class="hero-subtitle font20">La plateforme qui rapproche vendeurs et acheteurs</p>
     <p class="hero-description">Découvrez un espace où vendeurs et acheteurs peuvent échanger directement pour conclure des affaires en toute simplicité et sans intermédiaires.</p>
     <div class="hero-features">
       <div class="hero-feature">

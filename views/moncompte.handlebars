@@ -541,10 +541,10 @@
         <p class="profile-email">{{user.email}}</p>
         <ul class="profile-menu">
           <li><a href="#personal-info" class="active">Informations personnelles</a></li>
-          <li><a href="#order-history">Historique des commandes</a></li>
+          {{!-- <li><a href="#order-history">Historique des commandes</a></li> --}}
           <li><a class="securite" href="#securite">Sécurité</a></li>
-          <li><a href="#settings-section">Notifications</a></li>
-          <li><a href="#preferences">Préférences</a></li>
+          {{!-- <li><a href="#settings-section">Notifications</a></li> --}}
+          {{!-- <li><a href="#preferences">Préférences</a></li> --}}
           <li><a class="deconnexion" style="color: white;" href="/deliver/logout">Déconnexion</a></li>
         </ul>
       </div>
@@ -564,10 +564,10 @@
           <label for="phone">Numéro de téléphone</label>
           <input type="tel" id="phone" name="phone" placeholder="Insérer votre numéro de téléphone" value="{{user.numberPhone}}">
         </div>
-        <div class="form-group">
+        {{!-- <div class="form-group">
           <label for="address">Adresses de livraison</label>
           <textarea id="address" name="address" placeholder="Saisissez votre adresse ici..." rows="4">{{user.address}}</textarea>
-        </div>
+        </div> --}}
         <div class="form-group">
           <label for="bio">À propos de moi</label>
           <textarea id="bio" name="bio" rows="4">{{user.bio}}</textarea>
@@ -577,7 +577,7 @@
       </div>
 
         
-        <div id="order-history" class="order-history niv1">
+        {{!-- <div id="order-history" class="order-history niv1">
           <h2>Historique des commandes</h2>
           <div class="order-item">
             <h3>Commande #1234</h3>
@@ -593,7 +593,7 @@
             <p><strong>Total :</strong> 28,50 €</p>
             <p><strong>Statut :</strong> Livrée</p>
           </div>
-        </div>
+        </div> --}}
 
         <div id="securite" class="niv1">
           <h1>Sécurité</h1>
@@ -617,7 +617,7 @@
               <button type="submit" class="save-btn">Changer le mot de passe</button>
           </form>
         </div>
-
+{{!-- 
         <div id="settings-section" class="niv1">
           <h1>Notifications</h1>
           <div class="form-group notification-settings">
@@ -634,9 +634,9 @@
               <span class="slider"></span>
             </label>
           </div>
-        </div>
+        </div> --}}
 
-        <div id="preferences" class="preferences-container">
+        {{!-- <div id="preferences" class="preferences-container">
         <h1>Mes Préférences</h1>
 
         <div class="preference-section">
@@ -686,7 +686,7 @@
         </div>
 
         <button class="save-btn">Enregistrer mes préférences</button>
-        </div>
+        </div> --}}
       </div>
     </div>
   </main>

@@ -120,7 +120,7 @@
 </style>
 </head>
 <body>
-    <div class="container">
+    {{!-- <div class="container">
         <div class="icon">
             <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -136,10 +136,57 @@
             <button type="submit">Envoyer le lien de réinitialisation</button>
         </form>
         <div id="message" class="message"></div>
+    </div> --}}
+
+    <div class="container">
+    <div class="icon">
+        <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
     </div>
+    <h1>Mot de passe oublié ?</h1>
+    <p>Entrez votre adresse e-mail pour réinitialiser votre mot de passe</p>
+    <form id="resetForm" action="/deliver/seller/forgot-password" method="POST">
+        <div class="form-group">
+            <input type="email" id="email" name="email" required placeholder="Votre adresse e-mail">
+        </div>
+        <button type="submit">Envoyer le lien de réinitialisation</button>
+    </form>
+    <div id="message" class="message"></div>
+</div>
+
 
     <script>
-        
-    </script>
+  const form = document.getElementById('resetForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const messageElement = document.getElementById('message');
+      if (res.ok) {
+        messageElement.innerHTML = 'Un lien de réinitialisation vous a été envoyé !';
+        messageElement.style.color = 'green';
+      } else {
+        const result = await res.json();
+        messageElement.innerHTML = result.message || 'Une erreur est survenue.';
+        messageElement.style.color = 'red';
+      }
+    } catch (err) {
+      console.error('Erreur lors de la soumission :', err);
+      document.getElementById('message').innerHTML = 'Erreur lors de la soumission du formulaire.';
+    }
+  });
+</script>
+
 </body>
 </html>

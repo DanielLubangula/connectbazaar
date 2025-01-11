@@ -1631,15 +1631,15 @@ li {
   }
 
   .hero h1 {
-    font-size: 2.5rem;
+    font-size:30px;
   }
 
   .hero-subtitle {
-    font-size: 1.2rem;
+    font-size: 20px;
   }
 
   .hero-description {
-    font-size: 1rem;
+    font-size: 15px;
   }
 
   .modal {
@@ -1714,4 +1714,5 @@ li {
   .mediaScreen{
     padding: 5px ;
   }
-}
+
+ }

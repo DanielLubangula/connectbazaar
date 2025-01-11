@@ -130,7 +130,6 @@ body {
 }
 
 .product-price::before {
-  content: '€';
   font-size: 1rem;
   color: var(--secondary-color);
 }
@@ -373,10 +372,10 @@ body {
       <div class="filter-group ">
         <label for="sort">Trier par</label>
         <select id="sort">
-          <option value="popular">Popularité</option>
+          {{!-- <option value="popular">Popularité</option> --}}
           <option value="price-asc">Prix croissant</option>
           <option value="price-desc">Prix décroissant</option>
-          <option value="newest">Plus récent</option>
+          {{!-- <option value="newest">Plus récent</option> --}}
         </select>
       </div>
     </div>
@@ -603,7 +602,7 @@ card.innerHTML = `
    <div class="flex items-center justify-between w-full my-4 px-6 py-4 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
   <!-- Prix du produit -->
   <p class="text-lg font-semibold text-primary bg-white bg-opacity-70 rounded-md px-2 py-1 shadow-md">
-  ${product.price} €
+  ${product.price} 
 </p>
 
   <!-- Bouton pour discuter -->
@@ -1112,9 +1111,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const priceValue = document.getElementById('priceValue');
   
   priceInput.addEventListener('input', function(e) {
-    priceValue.textContent = `${e.target.value}€`;
+    priceValue.textContent = `${e.target.value}`;
     const maxPrice = parseFloat(e.target.value);
-    const filteredProducts = prod.products.filter(p => p.price <= maxPrice);
+    const filteredProducts = prod.products.filter(p => {
+      const price = p.price.split(' ')[0]
+        console.log(price)
+      return price <= maxPrice
+    });
     const objectfilteredProducts = {
       products : filteredProducts
     }
@@ -1143,6 +1146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('sort').addEventListener('change', function(e) {
     const sortValue = e.target.value;
+    console.log("sortValue", sortValue)
 
 
     let sortedProducts = [...prod.products];
@@ -1152,10 +1156,17 @@ document.addEventListener('DOMContentLoaded', () => {
         sortedProducts.sort((a, b) => a.price - b.price);
         break;
       case 'price-desc':
-        sortedProducts.sort((a, b) => b.price - a.price);
+        sortedProducts.sort((a, b) => {
+          const aa = a.price.split(' ')[0]
+          const bb = b.price.split(' ')[0]
+          console.log( aa, "\n", bb)
+          return bb - aa
+        });
         break;
       // Ajoutez d'autres cas de tri si nécessaire
     }
+
+    console.log('sortedProducts', sortedProducts)
 
     const objectsortedProducts = {
       products : sortedProducts

@@ -233,7 +233,7 @@ form.addEventListener('submit', async (e) => {
     const formData = new FormData(form); // Récupère les données du formulaire
     const jsonData = Object.fromEntries(formData.entries()); // Convertit en objet JSON
 
-    submitButton.style.disabled = true; // Désactiver le bouton
+    submitButton.disabled = true; // Désactiver le bouton
     spinner.style.display = 'block'; // Afficher le spinner
     msgError.textContent = ''; // Réinitialise les messages d'erreur
 

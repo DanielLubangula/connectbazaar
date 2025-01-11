@@ -7,6 +7,8 @@ const sgMail = require("@sendgrid/mail");
 const crypto = require("crypto");
 const Payment = require("../models/payement")
 const URL = "localhost"
+const axios = require('axios');
+const nodemailer = require('nodemailer');
 
 // console.log("process.env.SENDGRID_API_KEY", process.env.SENDGRID_API_KEY)
 
@@ -126,46 +128,215 @@ exports.reinitialise = (req, res) => {
   res.render("motdepasseoublievendeur", {URL});
 };
 
+// exports.traitementMotdepasseoublie = async (req, res) => {
+//   const { email } = req.body;
+//   try {
+//     console.log(email);
+//     const vendor = await Vendor.findOne({ email });
+//     if (!vendor) {
+//       return res.status(404).send("Aucun utilisateur trouvé avec cet e-mail.");
+//     }
+
+//     // Générer un token sécurisé
+//     const token = crypto.randomBytes(20).toString("hex");
+
+//     // Enregistrer le token et son expiration
+//     vendor.resetPasswordToken = token;
+//     vendor.resetPasswordExpires = Date.now() + 3600000; // 1 heure
+//     await vendor.save();
+
+//     // Envoyer l'e-mail avec SendGrid
+//     const resetUrl = `http://${req.headers.host}/deliver/seller/reset-password/${token}`;
+//     const msg = {
+//       to: email,
+//       from: "chataidedaniel@gmail.com",
+//       subject: "Réinitialisation de mot de passe",
+//       html: `
+//         <p>Vous avez demandé une réinitialisation de votre mot de passe.</p>
+//         <p>Cliquez sur le lien suivant pour créer un nouveau mot de passe :</p>
+//         <a href="${resetUrl}">${resetUrl}</a>
+//       `,
+//     };
+//     await sgMail.send(msg);
+
+//     res.status(200).send("E-mail de réinitialisation envoyé !");
+//   } catch (err) {
+//     // res.status(500).send("Erreur serveur.", err);
+//     console.log(
+//       "Erreur lors de l'envoie de l'email de réinitialisation: ",
+//       err
+//     );
+//   }
+// };
+
+// exports.traitementMotdepasseoublie = async (req, res) => {
+//   const { email } = req.body;
+
+//   try {
+//     console.log(email);
+//     const vendor = await Vendor.findOne({ email });
+//     if (!vendor) {
+//       return res.status(404).json({ message: "Aucun utilisateur trouvé avec cet e-mail." });
+//     }
+
+//     // Générer un token sécurisé
+//     const token = crypto.randomBytes(20).toString('hex');
+
+//     // Enregistrer le token et son expiration
+//     vendor.resetPasswordToken = token;
+//     vendor.resetPasswordExpires = Date.now() + 3600000; // 1 heure
+//     await vendor.save();
+
+//     // Créer le lien de réinitialisation
+//     const resetUrl = `http://${req.headers.host}/deliver/seller/reset-password/${token}`;
+
+//     // Préparer les données pour l'API d'email
+//     const emailData = {
+//       to: email,
+//       from: 'your-email@example.com', // Adresse de l'expéditeur
+//       subject: 'Réinitialisation de mot de passe',
+//       html: `
+//         <p>Vous avez demandé une réinitialisation de votre mot de passe.</p>
+//         <p>Cliquez sur le lien suivant pour créer un nouveau mot de passe :</p>
+//         <a href="${resetUrl}">${resetUrl}</a>
+//       `,
+//     };
+
+//     // Utiliser l'API MailConnectBazaar (ou autre)
+//     const apiKey = process.env.ELASTICEMAIL;  // Clé API dans .env
+//     const apiUrl = 'https://api.mailconnectbazaar.com/v1/send'; // Exemple d'URL de l'API, remplacez si nécessaire
+
+//     const response = await axios.post(apiUrl, emailData, {
+//       headers: {
+//         'Authorization': `Bearer ${apiKey}`,
+//         'Content-Type': 'application/json',
+//       },
+//     });
+
+//     if (response.status === 200) {
+//       res.status(200).json({ message: "E-mail de réinitialisation envoyé !" });
+//     } else {
+//       res.status(500).json({ message: "Erreur lors de l'envoi de l'email." });
+//     }
+//   } catch (err) {
+//     console.error("Erreur lors de l'envoi de l'email de réinitialisation: ", err);
+//     res.status(500).json({ message: "Erreur serveur." });
+//   }
+// };
+
+
+// exports.traitementMotdepasseoublie = async (req, res) => {
+//   const { email } = req.body;
+
+//   try {
+//     console.log(email);
+//     // Vérifier si l'utilisateur existe
+//     const vendor = await Vendor.findOne({ email });
+//     if (!vendor) {
+//       return res.status(404).json({ message: "Aucun utilisateur trouvé avec cet e-mail." });
+//     }
+
+//     // Générer un token sécurisé
+//     const token = crypto.randomBytes(20).toString('hex');
+
+//     // Enregistrer le token et son expiration dans l'utilisateur
+//     vendor.resetPasswordToken = token;
+//     vendor.resetPasswordExpires = Date.now() + 3600000; // 1 heure
+//     await vendor.save();
+
+//     // Créer le lien de réinitialisation
+//     const resetUrl = `http://${req.headers.host}/deliver/seller/reset-password/${token}`;
+
+//     // Configurer le transporteur Nodemailer pour Outlook
+//     const transporter = nodemailer.createTransport({
+//       host: 'smtp.office365.com', // Serveur SMTP pour Outlook
+//       port: 587, // Port SMTP standard
+//       secure: false, // false pour STARTTLS
+//       auth: {
+//         user: 'outlook_CB0B0502A48317F1@outlook.com', // Remplacez par votre adresse Outlook
+//         pass: '2025,@ConnectB', // Remplacez par votre mot de passe
+//       },
+//     });
+
+//     // Définir les options de l'email
+//     const mailOptions = {
+//       from: '"ConnectBazaar" <votre-adresse-outlook@outlook.com>', // Adresse de l'expéditeur
+//       to: email, // Destinataire
+//       subject: 'Réinitialisation de mot de passe',
+//       html: `
+//         <p>Vous avez demandé une réinitialisation de votre mot de passe.</p>
+//         <p>Cliquez sur le lien suivant pour créer un nouveau mot de passe :</p>
+//         <a href="${resetUrl}">${resetUrl}</a>
+//       `,
+//     };
+
+//     // Envoyer l'email
+//     await transporter.sendMail(mailOptions);
+
+//     res.status(200).json({ message: "E-mail de réinitialisation envoyé !" });
+//   } catch (err) {
+//     console.error("Erreur lors de l'envoi de l'e-mail de réinitialisation : ", err);
+//     res.status(500).json({ message: "Erreur serveur." });
+//   }
+// };
+
 exports.traitementMotdepasseoublie = async (req, res) => {
   const { email } = req.body;
+
   try {
     console.log(email);
+    // Vérifier si l'utilisateur existe
     const vendor = await Vendor.findOne({ email });
     if (!vendor) {
-      return res.status(404).send("Aucun utilisateur trouvé avec cet e-mail.");
+      return res.status(404).json({ message: "Aucun utilisateur trouvé avec cet e-mail." });
     }
 
     // Générer un token sécurisé
-    const token = crypto.randomBytes(20).toString("hex");
+    const token = crypto.randomBytes(20).toString('hex');
 
-    // Enregistrer le token et son expiration
+    // Enregistrer le token et son expiration dans l'utilisateur
     vendor.resetPasswordToken = token;
     vendor.resetPasswordExpires = Date.now() + 3600000; // 1 heure
     await vendor.save();
 
-    // Envoyer l'e-mail avec SendGrid
+    // Créer le lien de réinitialisation
     const resetUrl = `http://${req.headers.host}/deliver/seller/reset-password/${token}`;
-    const msg = {
-      to: email,
-      from: "chataidedaniel@gmail.com",
-      subject: "Réinitialisation de mot de passe",
+
+    // Configurer le transporteur Nodemailer pour Amazon SES
+    const transporter = nodemailer.createTransport({
+      host: 'email-smtp.eu-north-1.amazonaws.com', // Point de terminaison SES
+      port: 587, // Port SMTP standard pour STARTTLS
+      secure: false, // Utiliser STARTTLS
+      auth: {
+        user: process.env.AWS_USER_SMTP, // ID d'utilisateur SMTP
+        pass: process.env.AWS_USER_SMTP_PASSWORD, // Mot de passe SMTP
+      },
+    });
+  
+    // Définir les options de l'email
+    const mailOptions = {
+      from: '"ConnectBazaar" <connectbazaar01@gmail.com>', // Adresse de l'expéditeur (vérifiée dans SES)
+      to: email, // Destinataire
+      subject: 'Réinitialisation de mot de passe',
       html: `
         <p>Vous avez demandé une réinitialisation de votre mot de passe.</p>
-        <p>Cliquez sur le lien suivant pour créer un nouveau mot de passe :</p>
+        <p>Cliquez sur le lien suivant pour créer un nouveau mot de passe :</p>
         <a href="${resetUrl}">${resetUrl}</a>
       `,
     };
-    await sgMail.send(msg);
 
-    res.status(200).send("E-mail de réinitialisation envoyé !");
+    // Envoyer l'email
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: "E-mail de réinitialisation envoyé !" });
   } catch (err) {
-    // res.status(500).send("Erreur serveur.", err);
-    console.log(
-      "Erreur lors de l'envoie de l'email de réinitialisation: ",
-      err
-    );
+    console.error("Erreur lors de l'envoi de l'e-mail de réinitialisation : ", err);
+    res.status(500).json({ message: "Erreur serveur." });
   }
 };
+
+
+
 
 exports.resetPassword = async (req, res) => {
   const { token } = req.params;

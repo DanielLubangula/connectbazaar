@@ -60,6 +60,7 @@
     border-bottom: 1px solid #eee;
     cursor: pointer;
     transition: all 0.3s ease;
+    height: 100px;
     position: relative;
   }
 
@@ -572,6 +573,81 @@ body {
  .three{
     color: #f1c40f;
   }
+
+/* begin No message**/
+ .empty-state-container {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    margin: auto;
+    max-width: 500px;
+    width: 100%;
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .icon-container {
+    margin-bottom: 1.5rem;
+    margin: auto;
+  }
+
+  .message-title {
+    color: #2d3748;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .message-description {
+    color: #718096;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
+
+  .start-chat-btn {
+    background: #4f46e5;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .start-chat-btn:hover {
+    background: #4338ca;
+    transform: translateY(-2px);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .empty-state-container {
+      padding: 1.5rem;
+    }
+
+    .message-title {
+      font-size: 1.25rem;
+    }
+
+    .message-description {
+      font-size: 1rem;
+    }
+  }
+/* end No message**/
   
 </style>
 <body>
@@ -896,7 +972,7 @@ function displayUserList(datas){
           ${data.productImages.length > 0 
               ? data.productImages.map((image, index) => `
                   <div onclick='showImg(this)' class="product-image" data-index="${index}">
-                    <img style="width:100%; object-fit: cover; border-radius: 5px;" src="${image}" alt="Produit ${index + 1}" />
+                    <img style="width:100%; height : 100%; object-fit: cover; border-radius: 5px;" src="${image}" alt="Produit ${index + 1}" />
                   </div>
                 `).join('') 
               : '<div class="no-images">Pas d\'images disponibles</div>'
@@ -1241,6 +1317,25 @@ const fetchChatList = async () => {
     console.log('Messages fetched:', messagesReceive);
     container.innerHTML = ""
     displayUserList(messagesReceive)
+    if (messagesReceive.length === 0){
+      console.log('rien')
+      document.querySelector('.chat-list').innerHTML = `
+     <div class="empty-state-container">
+  <div class="icon-container">
+    <svg style="margin: auto" width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="40" r="40" fill="#EEF2FF"/>
+      <path d="M55 30H25C23.3431 30 22 31.3431 22 33V53C22 54.6569 23.3431 56 25 56H55C56.6569 56 58 54.6569 58 53V33C58 31.3431 56.6569 30 55 30Z" stroke="#4F46E5" stroke-width="2"/>
+      <path d="M22 33L40 44L58 33" stroke="#4F46E5" stroke-width="2"/>
+    </svg>
+  </div>
+  <h2 class="message-title">Aucune conversation pour le moment</h2>
+  <p class="message-description">
+    Aucun message n'est encore disponible. Lorsqu'un utilisateur vous enverra un message, il apparaîtra ici.
+  </p>
+</div>
+
+      `
+    }
 
   } catch (error) {
     console.error('Error fetching messages:', error);

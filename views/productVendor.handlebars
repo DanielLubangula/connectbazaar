@@ -261,11 +261,108 @@
   .price-input {
     padding-right: 60px !important;
   }
+
+/* Début Auncun produit publié*/
+.empty-state-container {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  margin: auto;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 500px;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: slideUp 0.6s ease forwards;
+}
+
+@keyframes slideUp {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.icon-container {
+  margin-bottom: 20px;
+}
+
+.empty-box {
+  width: 120px;
+  height: 120px;
+  margin: auto;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.title {
+  color: #2d3748;
+  font-size: 24px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.description {
+  color: #718096;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.action-button {
+  background: #4299e1;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.action-button:hover {
+  background: #3182ce;
+  transform: translateY(-2px);
+}
+/* Fin Auncun produit publié*/
+
 /* Responsive : Mobile (max 480px) */
 @media screen and (max-width: 480px) {
+  .mediaScreen{
+    font-size: 12px;
+  }
+
   .modal {
     width: 85%;
     padding: 15px;
+  }
+
+  .title{
+    font-size: 15px;
+  }
+
+  .empty-box{
+    width: 90px;
+    height: 90px;
+  }
+
+  .action-button{
+    font-size: 12px;
+  } 
+
+  .description{
+    font-size: 12px;
   }
 
   .premium-banner {
@@ -299,9 +396,9 @@
   }
 
   #searchInputProduct {
-    max-width: 100%;
+    max-width: 90%;
     margin: auto;
-    font-size: 14px;
+    font-size: 12px;
     padding: 8px;
   }
 
@@ -444,7 +541,7 @@
             <!-- Actions Bar -->
             <div class="paddingD element table-responsive bg-white p-4 rounded-lg shadow mb-6 flex justify-between items-center wrap">
                 <div class="flex space-x-4">
-                    <button id="addProductBtn" class="secondaryColor text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+                    <button onclick="addProductBtn()" class="mediaScreen secondaryColor text-white px-4 py-2 rounded-lg flex items-center space-x-2">
                         <i class="fas fa-plus"></i>
                         <span>Ajouter un Produit</span>
                     </button>
@@ -475,7 +572,7 @@
             <!-- Products List -->
             <div class=" bg-white rounded-lg shadow overflowScroll">
                     
-                <table  class="w-full">
+                <table  class="w-full" id="table">
                     <thead >
                         <tr class="border-b">
                             <th class="th text-left p-4">Image</th>
@@ -628,7 +725,7 @@
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <div class="space-y-4">
+                {{!-- <div class="space-y-4">
                     <video id="cameraPreview" autoplay playsinline class="w-full h-64 bg-black rounded-lg"></video>
                     <div class="flex justify-center">
                         <button id="captureButton" class="secondaryColor text-white px-4 py-2 rounded-lg flex items-center space-x-2">
@@ -636,7 +733,7 @@
                             <span>Capturer</span>
                         </button>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -818,6 +915,29 @@ const ApiProduct = async (orgine) => {
         ".information"
       ).innerHTML = `Vous n'avez publié aucun produit`;
 
+      document.getElementById("table").innerHTML = `
+      <div class="empty-state-container">
+  <div class="icon-container">
+    <svg class="empty-box" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M21 15.9999V7.9999C20.9996 7.64918 20.9071 7.30471 20.7315 7.00106C20.556 6.69742 20.3037 6.44526 20 6.2699L13 2.2699C12.696 2.09437 12.3511 2.00195 12 2.00195C11.6489 2.00195 11.304 2.09437 11 2.2699L4 6.2699C3.69626 6.44526 3.44398 6.69742 3.26846 7.00106C3.09294 7.30471 3.00036 7.64918 3 7.9999V15.9999C3.00036 16.3506 3.09294 16.6951 3.26846 16.9987C3.44398 17.3024 3.69626 17.5545 4 17.7299L11 21.7299C11.304 21.9054 11.6489 21.9979 12 21.9979C12.3511 21.9979 12.696 21.9054 13 21.7299L20 17.7299C20.3037 17.5545 20.556 17.3024 20.7315 16.9987C20.9071 16.6951 20.9996 16.3506 21 15.9999Z" stroke="#4299e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M7.5 4.20996L12 6.80996L16.5 4.20996" stroke="#4299e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M7.5 19.7899V14.5999L3 12" stroke="#4299e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 12L16.5 14.5999V19.7899" stroke="#4299e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M3.27002 6.95996L12 12.0099L20.73 6.95996" stroke="#4299e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 22.08V12" stroke="#4299e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  
+  <h1 class="title">Aucun produit publié</h1>
+  <p class="description">
+    Vous n'avez pas encore publié de produits dans votre boutique. Commencez à ajouter des produits pour développer votre activité !
+  </p>
+  
+  <button class="action-button " onclick="addProductBtn()">
+    Ajouter un produit
+  </button>
+</div>
+      `
       //console.log(document.querySelector(".afficherPlus"));
       document.querySelector(".afficherPlus").style.display = "none";
     } else {
@@ -827,6 +947,7 @@ const ApiProduct = async (orgine) => {
 
     // Afficher les produits dans le tableau
     if (orgine !== "app1") {
+      console.log("app1")
       productTable.innerHTML = "";
       scrollInfinite = true;
     }
@@ -1068,9 +1189,8 @@ const modal = document.getElementById("productModal");
 
 const cameraModal = document.getElementById("cameraModal");
 const filterModal = document.getElementById("filterModal");
-const addProductBtn = document.getElementById("addProductBtn");
 
-addProductBtn.addEventListener("click", () => {
+function addProductBtn () {
   //document.querySelector(".header").classList.add('zIndex')
   document.querySelector(".btnUpload").style.display = "block";
   document.querySelector(".btnEdit").style.display = "none";
@@ -1078,7 +1198,7 @@ addProductBtn.addEventListener("click", () => {
 
   modal.classList.add("active");
   // document.querySelector(".headerVendor").style.display = "none";
-});
+};
 
 function closeButton() {
   document.getElementById("imagePreview").innerHTML = "";
@@ -1140,7 +1260,7 @@ function closeCameraModal() {
   }
   cameraModal.classList.remove("active");
 }
-
+/*
 captureButton.addEventListener("click", () => {
   // Check if we already have 3 images
   if (imagePreview.children.length >= 3) {
@@ -1176,7 +1296,7 @@ captureButton.addEventListener("click", () => {
 
   closeCameraModal();
 });
-
+*/
 // Image preview handling
 const fileInput = document.getElementById("fileInput");
 const cameraInput = document.getElementById("cameraInput");
@@ -1722,7 +1842,7 @@ function AfficherProduit(products) {
 </td>
 `;
 
-    productTable.appendChild(row);
+    document.getElementById("productTable").appendChild(row);
   });
 }
 

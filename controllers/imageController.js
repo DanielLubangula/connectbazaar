@@ -174,14 +174,16 @@ exports.registerGestion = async (req, res) => {
       const vendor = new Vendor({
         companyName,
         companyAddress,
-        phone,
+        phone, 
         email,
         password: hashedPassword,
         profileImagePath: profileImagePath || null,
       });
 
-      // Sauvegarde dans la base de données
+      // Sauvegarde dans la base de 
+      console.log("avant**************************************")
       await vendor.save();
+      console.log("après**************************************")
 
       // Mise à jour de la session
       req.session.vendor = vendor;
