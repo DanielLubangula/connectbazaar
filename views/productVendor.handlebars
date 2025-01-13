@@ -539,6 +539,7 @@
     <main class="width flex-1 ml-6">
         <input type="hidden" class="idVendor" value = "{{vendor._id}}">
             <!-- Actions Bar -->
+       
             <div class="paddingD element table-responsive bg-white p-4 rounded-lg shadow mb-6 flex justify-between items-center wrap">
                 <div class="flex space-x-4">
                     <button onclick="addProductBtn()" class="mediaScreen secondaryColor text-white px-4 py-2 rounded-lg flex items-center space-x-2">
@@ -550,6 +551,7 @@
                         <span>Filtrer</span>
                     </button> --}}
                 </div>
+                
                 <div style="display: flex; align-items:center;border-radius : 30px; border : 1px solid gray; margin-top:10px" >
                     <label for="searchInputProduct"><i class="fas fa-search text-gray-400" style="padding-left:10px;"></i></label>
                     <input type="text" id="searchInputProduct" style="outline:none;padding:10px;border-radius : 30px; " placeholder="Rechercher un produit..." >  
@@ -584,7 +586,7 @@
                             <th class="th text-left p-4">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="productTable">
+                    <tbody id="productTable" class="productTable">
 
                     </tbody>
                 </table>
@@ -947,8 +949,8 @@ const ApiProduct = async (orgine) => {
 
     // Afficher les produits dans le tableau
     if (orgine !== "app1") {
-      console.log("app1")
-      document.getElementById("productTable").innerHTML = "";
+      console.log("app1", document.querySelector(".productTable"))
+      //document.querySelector(".productTable").innerHTML = "";
       scrollInfinite = true;
     }
 
@@ -1507,7 +1509,7 @@ async function confirmDelete() {
     } catch (error) {
       console.error("Erreur réseau lors de la suppression du produit :", error);
       productRow.classList.remove("opacity-50");
-      //document.querySelector("#productTable").classList.remove("disabled");
+      document.querySelector("#productTable").classList.remove("disabled");
       spinner.remove();
     }
   }
@@ -1841,7 +1843,7 @@ function AfficherProduit(products) {
 </div>
 </td>
 `;
-
+    console.log("passe")
     document.getElementById("productTable").appendChild(row);
   });
 }

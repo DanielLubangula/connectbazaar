@@ -382,9 +382,21 @@
                         </form>
                     </div>
 
+                     <!-- Section des paiements -->
+        <div class="payment-status bg-gray-50 border border-gray-200 rounded-lg p-4 mt-6">
+            <h2 class="text-xl font-semibold text-gray-700 mb-3">Suivi de vos paiements</h2>
+            <p class="text-gray-600 mb-4">
+                Si vous avez effectué un paiement, vous pouvez vérifier le statut en cliquant sur le bouton ci-dessous :
+            </p>
+            <a href="/deliver/suivipayement" 
+               style="color: cornflowerblue;">
+                Voir le statut du paiement
+            </a>
+        </div>
+
                     <!-- Sécurité -->
                     <div class="security bg-white rounded-lg shadow p-6 mt-6 marginProfil">
-                        <div class="messagePassword"></div>
+                        {{!-- <div class="messagePassword"></div> --}}
                         <h2 class="text-xl font-semibold mb-6">Déconnexion</h2>
                         <form action="/deliver/logout/vendor" method="post" class="space-y-6">
                             <button type="submit" style="background-color: #e74c3c;" type="submit" class="btnUpdateVendor changePasswordVendor bg-red-600 text-white px-4 py-2 rounded-lg">
@@ -393,6 +405,7 @@
                         </form>
 
                     </div>
+
                 </div>
             
         </main>

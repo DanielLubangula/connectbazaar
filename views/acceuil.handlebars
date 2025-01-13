@@ -86,7 +86,7 @@ tailwind.config = {
       {{/if}}
 
       <!-- Profil utilisateur ou espace vendeur -->
-      <li class="column">
+      <li>
         {{#if user}}
         <div id="userStatus" class="user-status">
           <a href="/deliver/profil">
@@ -653,6 +653,7 @@ async function fetchCatalogue() {
         container.innerHTML = ''; // Efface le contenu pour éviter la duplication
 
         // Itère sur chaque catégorie pour créer les cartes de produits
+        console.log("Produit venu du serveur", data)
         data.forEach(category => {
             createCategorySection(category, container);
         });

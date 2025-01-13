@@ -755,9 +755,13 @@ exports.pageMonoProduit = async (req, res) => {
 
     // Fetch product details from the database
     const product = await Product.findById(productId);
-    const seller =
-      (await Vendor.findById(product.seller)) ||
-      (await User.findById(product.seller));
+    console.log("product", product) 
+    const sellerId = new mongoose.Types.ObjectId(product.seller);
+    console.log("sellerId toString", sellerId.toString())
+    const IdString = sellerId.toString()
+    const seller = await Vendor.findById(IdString) || await User.findById(IdString);
+     
+    console.log("Seller", seller) 
 
     if (!product) {
       return res.status(404).send("Product not found");

@@ -607,7 +607,7 @@ card.innerHTML = `
 
   <!-- Bouton pour discuter -->
       ${utilisateurId ? 
-      `<a href="/deliver/chat/${product.vendorInfo.userId}/${product._id}" 
+      `<a href="/deliver/chat/${product.infoUser.userId}/${product._id}" 
     style="background-color : rgba(5, 5, 255, 0.5); font-size : 15px"
      class="mediaScreen text-white px-6 py-2 rounded-full shadow-lg hover:bg-primary/80 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary/70 focus:ring-opacity-50 transition-transform duration-300">
       Discuter avec le vendeur
@@ -629,9 +629,9 @@ card.innerHTML = `
     <div style="padding:0px 15px; ">
 
         <div class="flex items-center border-t border-gray-100">
-            <img src="${product.vendorInfo.profileImagePath ? product.vendorInfo.profileImagePath : "/images/defaultUserProfil.jpg"}" data-user="${product.vendorInfo.userId}"  onclick="showUserInfo(this)"alt="Seller avatar" class="w-10 h-10 rounded-full mr-3">
+            <img src="${product.infoUser.profileImagePath ? product.infoUser.profileImagePath : "/images/defaultUserProfil.jpg"}" data-user="${product.infoUser.userId}"  onclick="showUserInfo(this)"alt="Seller avatar" class="w-10 h-10 rounded-full mr-3">
             <div>
-                <div style="text-align:left" class="font-medium text-gray-800">${product.vendorInfo.companyName}</div>
+                <div style="text-align:left" class="font-medium text-gray-800">${product.infoUser.username}</div>
                 {{!-- <div class="text-secondary">★★★★★ (${product.seller.rating})</div> --}}
             </div>
         </div>
@@ -1575,7 +1575,7 @@ function showUserInfo(info) {
 
         userInfo.innerHTML = `
         <a href="${data.infoUser.profileImagePath}">
-          <img style='margin: 0px auto' src="${data.infoUser.profileImagePath}" alt="Photo de profil de ${data.infoUser.companyName}">
+          <img style='margin: 0px auto' src="${data.infoUser.profileImagePath ? data.infoUser.profileImagePath : "/images/defaultUserProfil.jpg"}" alt="Photo de profil de ${data.infoUser.companyName}">
         </a>
         <h2 style='font-weight : bold;'>${data.infoUser.companyName}</h2>
         <p>Passionné de technologie et amateur de bonnes affaires</p>

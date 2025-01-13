@@ -619,14 +619,6 @@ exports.allCatalogue = async (req, res) => {
 };
 
 
-
-
-
-
-
-
-
-// Fonction pour recupérer le nombre de commentaire
 exports.numberComment = async (req, res) => {
   const { id } = req.body;
   const comment = await ProductComment.find({
