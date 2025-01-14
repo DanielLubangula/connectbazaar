@@ -10,7 +10,7 @@ async function testS3() {
     console.log("Liste des objets dans le bucket :", data);
   } catch (err) {
     console.error("Erreur S3 :", err);
-  }
+  } 
 }
 
 testS3();

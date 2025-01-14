@@ -814,6 +814,13 @@ function getFormattedTimestamp(timestamp) {
   return new Date(timestamp).toLocaleTimeString();
 }
 
+exports.legalNotice = (req, res) => {
+  res.render('legal-notice', { title: 'Mentions légales' });
+}
+exports.privacyPolicy = (req, res) => {
+  res.render('privacy-policy', { title: 'Politique de confidentialité' });
+}
+
 // /**
 //  * Fonction pour récupérer la liste des discussions triée par le message le plus récent
 //  * @param {String} currentUserId - ID de l'utilisateur actuel (acheteur ou vendeur)

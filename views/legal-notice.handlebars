@@ -1,0 +1,185 @@
+<html><head><meta charset="UTF-8"><title>Mentions Légales - ConnectBazaar</title><style>
+:root {
+  --primary: #2c3e50;
+  --secondary: #3498db;
+  --bg: #f8f9fa;
+  --text: #333;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+header {
+  background: var(--primary);
+  color: white;
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+h1, h2, h3 {
+  color: var(--primary);
+  margin: 1.5rem 0 1rem;
+}
+
+header h1 {
+  color: white;
+}
+
+section {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.highlight {
+  background: #e1f0fa;
+  padding: 1rem;
+  border-left: 4px solid var(--secondary);
+  margin: 1rem 0;
+}
+
+.info-box {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  margin: 1rem 0;
+}
+
+.contact-info {
+  background: #edf7ff;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  section {
+    padding: 1rem;
+  }
+}
+</style></head><body>
+
+<header>
+  <div class="container">
+    <h1>Mentions Légales</h1>
+  </div>
+</header>
+
+<div class="container">
+  <section id="editeur">
+    <h2>1. Éditeur du Site</h2>
+    <div class="info-box">
+      <p><strong>ConnectBazaar SARL</strong></p>
+      <p>Siège social : 12 Rue des Entrepreneurs, Kinshasa, RDC</p>
+      <p>Numéro d'enregistrement : RC123456789</p>
+      <p>Capital social : 10 000 $</p>
+      <p>Responsable de la publication : M. Daniel T.</p>
+    </div>
+  </section>
+
+  <section id="hebergeur">
+    <h2>2. Hébergeur</h2>
+    <div class="info-box">
+      <p><strong>Render (Render, Inc.)</strong></p>
+      <p>123 Mission St, San Francisco, CA 94105, USA</p>
+      <p>Email : support@render.com</p>
+    </div>
+  </section>
+
+  <section id="conditions">
+    <h2>3. Conditions d'Utilisation</h2>
+    <p>L'utilisation de ce site implique l'acceptation pleine et entière des conditions générales d'utilisation décrites ci-après.</p>
+    <p>Consultez nos <a href="https://connectbazaar.com/cgu">Conditions Générales d'Utilisation</a>.</p>
+  </section>
+
+  <section id="propriete">
+    <h2>4. Propriété Intellectuelle</h2>
+    <div class="highlight">
+      <p>L'ensemble du contenu de ce site (textes, images, logos, bases de données, marques, etc.) est la propriété exclusive de ConnectBazaar. Toute reproduction, représentation, modification, publication, adaptation totale ou partielle des éléments du site est strictement interdite sans autorisation écrite préalable.</p>
+    </div>
+  </section>
+
+  <section id="responsabilite">
+    <h2>5. Responsabilité</h2>
+    <p>ConnectBazaar s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées sur ce site, dont elle se réserve le droit de corriger le contenu à tout moment et sans préavis.</p>
+    <div class="highlight">
+      <p>ConnectBazaar ne peut être tenu responsable :</p>
+      <ul>
+        <li>Des erreurs ou omissions dans les informations diffusées</li>
+        <li>Des problèmes techniques rencontrés sur le site</li>
+        <li>Des transactions effectuées entre utilisateurs</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="donnees">
+    <h2>6. Protection des Données</h2>
+    <p>Le traitement de vos données personnelles est effectué conformément à la législation en vigueur.</p>
+    <p>Pour plus d'informations, consultez notre <a href="/deliver/privacy-policy">Politique de Confidentialité</a>.</p>
+  </section>
+
+  <section id="contact">
+    <h2>7. Contact</h2>
+    <div class="contact-info">
+      <p>Pour toute question juridique ou signalement :</p>
+      <p>Email : <a href="mailto:legal@connectbazaar.com">legal@connectbazaar.com</a></p>
+      <p>Téléphone : +243 99 14 64 230</p>
+    </div>
+  </section>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Smooth scroll pour les ancres
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+
+  // Animation des sections au scroll
+  const sections = document.querySelectorAll('section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = 1;
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  });
+
+  sections.forEach(section => {
+    section.style.opacity = 0;
+    section.style.transform = 'translateY(20px)';
+    section.style.transition = 'all 0.5s ease-out';
+    observer.observe(section);
+  });
+});
+</script>
+
+</body></html>

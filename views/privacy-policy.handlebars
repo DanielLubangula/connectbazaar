@@ -1,0 +1,155 @@
+<html><head><meta charset="UTF-8"><title>Politique de Confidentialité - ConnectBazaar</title><style>
+:root {
+  --primary: #2c3e50;
+  --secondary: #3498db;
+  --bg: #f8f9fa;
+  --text: #333;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+header {
+  background: var(--primary);
+  color: white;
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+h1, h2, h3 {
+  color: var(--primary);
+  margin: 1.5rem 0 1rem;
+}
+
+header h1 {
+  color: white;
+}
+
+section {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.highlight {
+  background: #e1f0fa;
+  padding: 1rem;
+  border-left: 4px solid var(--secondary);
+  margin: 1rem 0;
+}
+
+.contact-info {
+  background: #edf7ff;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  section {
+    padding: 1rem;
+  }
+}
+</style></head><body>
+
+<header>
+  <div class="container">
+    <h1>Politique de Confidentialité</h1>
+  </div>
+</header>
+
+<div class="container">
+  <section id="introduction">
+    <h2>1. Introduction</h2>
+    <p>ConnectBazaar s'engage à protéger vos informations personnelles. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons les données que vous partagez avec nous lors de l'utilisation de notre plateforme d'échange entre acheteurs et vendeurs.</p>
+    <div class="highlight">
+      <p>Notre priorité est de garantir la sécurité et la confidentialité de vos données tout en vous offrant une expérience optimale.</p>
+    </div>
+  </section>
+
+  <section id="informations-collectees">
+    <h2>2. Les Informations Collectées</h2>
+    <h3>Données personnelles fournies directement :</h3>
+    <ul>
+      <li>Nom et prénom</li>
+      <li>Adresse email</li>
+      <li>Numéro de téléphone</li>
+      <li>Adresse postale</li>
+      <li>Informations de paiement</li>
+    </ul>
+    
+    <h3>Données collectées automatiquement :</h3>
+    <ul>
+      <li>Adresse IP</li>
+      <li>Type de navigateur</li>
+      <li>Pages consultées</li>
+      <li>Temps passé sur le site</li>
+    </ul>
+  </section>
+
+  <!-- Sections suivantes similaires -->
+
+  <section id="contact">
+    <h2>9. Contact</h2>
+    <div class="contact-info">
+      <p>Pour toute question concernant cette politique de confidentialité, vous pouvez nous contacter :</p>
+      <p>Email : <a href="mailto:support@connectbazaar.com">support@connectbazaar.com</a></p>
+      <p>Téléphone : +243 99 14 64 230</p>
+    </div>
+  </section>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Smooth scroll pour les ancres
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+
+  // Animation simple pour les sections au scroll
+  const sections = document.querySelectorAll('section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = 1;
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  });
+
+  sections.forEach(section => {
+    section.style.opacity = 0;
+    section.style.transform = 'translateY(20px)';
+    section.style.transition = 'all 0.5s ease-out';
+    observer.observe(section);
+  });
+});
+</script>
+
+</body></html>
