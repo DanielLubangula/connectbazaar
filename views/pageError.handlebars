@@ -1,0 +1,301 @@
+{{!-- <html><head><title>404 - Page Non Trouvée</title><style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1e2030, #2a2d43);
+  color: #fff;
+  overflow: hidden;
+}
+
+.container {
+  text-align: center;
+  position: relative;
+}
+
+.error-code {
+  font-size: 150px;
+  font-weight: bold;
+  margin: 0;
+  background: linear-gradient(45deg, #ff6b6b, #ff9999);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: pulse 2s infinite;
+}
+
+.message {
+  font-size: 24px;
+  margin: 20px 0;
+  color: #a4a8b4;
+}
+
+.astronaut {
+  width: 200px;
+  height: 200px;
+  margin: 30px auto;
+}
+
+.home-button {
+  padding: 12px 24px;
+  font-size: 18px;
+  background: linear-gradient(45deg, #ff6b6b, #ff9999);
+  border: none;
+  border-radius: 25px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.home-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+</style></head><body>
+<div class="container">
+  <h1 class="error-code">404</h1>
+  <div class="astronaut">
+    <svg viewBox="0 0 200 200">
+      <!-- Astronaute perdu dans l'espace -->
+      <g fill="none" stroke="#fff" stroke-width="2" style="animation: float 6s ease-in-out infinite">
+        <circle cx="100" cy="100" r="40" fill="#ff6b6b"/>
+        <circle cx="100" cy="85" r="20" fill="#fff"/>
+        <path d="M 85 100 Q 100 120 115 100" stroke="#fff" fill="none"/>
+        <line x1="60" y1="90" x2="80" y2="100" stroke="#fff"/>
+        <line x1="140" y1="90" x2="120" y2="100" stroke="#fff"/>
+      </g>
+    </svg>
+  </div>
+  <p class="message">Oups ! On dirait que cette page s'est perdue dans l'espace ! 🚀<br>
+  Même notre astronaute n'arrive pas à la retrouver...</p>
+  <a href="https://votresite.com" class="home-button">Retour à la Terre 🌍</a>
+</div>
+
+<script>
+// Création d'étoiles en arrière-plan
+const createStars = () => {
+  const container = document.createElement('div');
+  container.className = 'stars';
+  
+  for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.style.position = 'absolute';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.width = Math.random() * 3 + 'px';
+    star.style.height = star.style.width;
+    star.style.backgroundColor = '#fff';
+    star.style.borderRadius = '50%';
+    star.style.opacity = Math.random();
+    star.style.animation = `twinkle ${Math.random() * 5 + 3}s infinite`;
+    
+    container.appendChild(star);
+  }
+  
+  document.body.appendChild(container);
+};
+
+// Animation du scintillement des étoiles
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes twinkle {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+`;
+document.head.appendChild(style);
+
+createStars();
+</script>
+</body></html> --}}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Non Trouvée</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e2030, #2a2d43);
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+      padding: 0 1em;
+    }
+
+    .error-code {
+      font-size: 12vw; /* S'adapte à la largeur de l'écran */
+      font-weight: bold;
+      margin: 0;
+      background: linear-gradient(45deg, #ff6b6b, #ff9999);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: pulse 2s infinite;
+    }
+
+    .message {
+      font-size: 1.5em;
+      margin: 20px 0;
+      color: #a4a8b4;
+    }
+
+    .astronaut {
+      width: 40vw;
+      max-width: 200px;
+      margin: 30px auto;
+    }
+
+    .home-button {
+      padding: 0.8em 2em;
+      font-size: 1em;
+      background: linear-gradient(45deg, #ff6b6b, #ff9999);
+      border: none;
+      border-radius: 25px;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .home-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .error-code {
+        font-size: 18vw;
+      }
+
+      .message {
+        font-size: 1.2em;
+      }
+
+      .astronaut {
+        width: 60vw;
+      }
+
+      .home-button {
+        font-size: 0.9em;
+        padding: 0.6em 1.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="error-code">404</h1>
+    <div class="astronaut">
+      <svg viewBox="0 0 200 200">
+        <g fill="none" stroke="#fff" stroke-width="2" style="animation: float 6s ease-in-out infinite">
+          <circle cx="100" cy="100" r="40" fill="#ff6b6b"/>
+          <circle cx="100" cy="85" r="20" fill="#fff"/>
+          <path d="M 85 100 Q 100 120 115 100" stroke="#fff" fill="none"/>
+          <line x1="60" y1="90" x2="80" y2="100" stroke="#fff"/>
+          <line x1="140" y1="90" x2="120" y2="100" stroke="#fff"/>
+        </g>
+      </svg>
+    </div>
+    <p class="message">Oups ! On dirait que cette page s'est perdue dans l'espace ! 🚀<br>
+      Même notre astronaute n'arrive pas à la retrouver...</p>
+    <a href="/deliver/" class="home-button">Retour à la Terre 🌍</a>
+  </div>
+
+  <script>
+    // Création d'étoiles en arrière-plan
+    const createStars = () => {
+      const container = document.createElement('div');
+      container.className = 'stars';
+      
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.style.position = 'absolute';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.width = Math.random() * 3 + 'px';
+        star.style.height = star.style.width;
+        star.style.backgroundColor = '#fff';
+        star.style.borderRadius = '50%';
+        star.style.opacity = Math.random();
+        star.style.animation = `twinkle ${Math.random() * 5 + 3}s infinite`;
+        
+        container.appendChild(star);
+      }
+      
+      document.body.appendChild(container);
+    };
+
+    // Animation du scintillement des étoiles
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes twinkle {
+        0% { opacity: 0; }
+        50% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    createStars();
+  </script>
+</body>
+</html>

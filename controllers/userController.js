@@ -821,6 +821,10 @@ exports.privacyPolicy = (req, res) => {
   res.render('privacy-policy', { title: 'Politique de confidentialité' });
 }
 
+exports.PageError = (req, res) => {
+  res.render('PageError')
+}
+
 // /**
 //  * Fonction pour récupérer la liste des discussions triée par le message le plus récent
 //  * @param {String} currentUserId - ID de l'utilisateur actuel (acheteur ou vendeur)

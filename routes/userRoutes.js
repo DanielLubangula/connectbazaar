@@ -316,6 +316,8 @@ router.get("/privacy-policy", userController.privacyPolicy)
 
 router.get("/legal-notice", userController.legalNotice)
 
+router.get("/*", userController.PageError)
+
 function checkAuthentication(req, res, next) {
   if (req.session.user || req.session.vendor) {
     // Si une session existe (user ou vendor), continuer
