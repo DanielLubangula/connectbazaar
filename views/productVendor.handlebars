@@ -1047,6 +1047,8 @@ table.appendChild(container);
       //console.log(document.querySelector(".afficherPlus"));
       document.querySelector(".afficherPlus").style.display = "none";
     } else {
+      document.getElementById("table").querySelector('.productTable').innerHTML = ""
+     // document.getElementById("table").textContent = ""
       document.querySelector(".information").innerHTML = ``;
       document.querySelector(".afficherPlus").style.display = "block";
       if (document.querySelector(".empty-state-container")) document.querySelector(".empty-state-container").style.display = "none";
