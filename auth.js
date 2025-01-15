@@ -12,21 +12,16 @@ passport.use(
     },
     async (request, accessToken, refreshToken, profile, done) => {
       try {
-        console.log("here")
         let user = await User.findOne({ email: profile.email });
+        let isNewUser = false;
 
         // Si l'utilisateur n'existe pas, on le crée
         if (!user) {
-          user = new User({
-            username: profile.displayName,
-            email: profile.email,
-            googleId: profile.id,
-          });
-          await user.save();
+          isNewUser = true;
         }
 
-        // Terminer l'authentification
-        return done(null, user);
+        // Attacher `isNewUser` pour la redirection
+        return done(null, { user, isNewUser });
       } catch (err) {
         console.error("Erreur OAuth:", err);
         return done(err, null);
@@ -35,15 +30,15 @@ passport.use(
   )
 );
 
-// Sérialisation de l'utilisateur dans la session
-passport.serializeUser((user, done) => {
-  done(null, user.id);
+
+passport.serializeUser((userObject, done) => {
+  done(null, { id: userObject.user.id, isNewUser: userObject.isNewUser });
 });
 
-passport.deserializeUser(async (id, done) => {
+passport.deserializeUser(async (obj, done) => {
   try {
-    const user = await User.findById(id);
-    done(null, user);
+    const user = await User.findById(obj.id);
+    done(null, { user, isNewUser: obj.isNewUser });
   } catch (err) {
     done(err, null);
   }

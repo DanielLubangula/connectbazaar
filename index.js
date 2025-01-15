@@ -39,28 +39,31 @@ app.use(passport.session());
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 // Callback après l'authentification
+// Callback après l'authentification
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google", { 
-    failureRedirect : '/auth/failure',
-}),
+  passport.authenticate("google", { failureRedirect: "/auth/failure" }),
   async (req, res) => {
-    // Si l'authentification réussit, rediriger l'utilisateur
-    const user = req.user
-    const userExist = await User.findOne({ email : req.user.email} );
+    // Vérifiez si l'utilisateur est nouveau
+    if (req.user.isNewUser) {
+      console.log("Nouvel utilisateur détecté :", req.user.user);
+      // Redirigez vers une page d'inscription ou d'informations supplémentaires
+      return res.redirect("/deliver/registerLogin"); 
+    }
 
-    req.session.user = req.user
-    console.log("Utilisateur connecté :", req.user); // Doit afficher l'utilisateur
+    // Si l'utilisateur existe déjà, connectez-le
+    req.session.user = req.user.user;
+    console.log("Utilisateur connecté :", req.user.user); // Doit afficher l'utilisateur
     res.redirect("/deliver");
-
   }
 );
 
 app.get("/auth/failure", (req, res) => {
-  req.logOut()
-  req.session.destroy()
-  res.send('Il y a une erreur')
-})
+  req.logout();
+  req.session.destroy();
+  res.send("Il y a une erreur");
+});
+
 
 // Initialisation de l'application
 const http = require('http').createServer(app); // Création d'un serveur HTTP
