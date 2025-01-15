@@ -7,11 +7,12 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://deliver-jvwl.onrender.com/auth/google/callback",
+      callbackURL: "https://connectbazaar.onrender.com/auth/google/callback",
       passReqToCallback: true,
     },
     async (request, accessToken, refreshToken, profile, done) => {
       try {
+        console.log("here")
         let user = await User.findOne({ email: profile.email });
 
         // Si l'utilisateur n'existe pas, on le crée
